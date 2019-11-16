@@ -16,11 +16,13 @@ class Nontext extends StatefulWidget {
 }
 
 class _NontextState extends State<Nontext> {
+  List<User> _list = [];
   Token tokens = null;
   User users= null;
   String api;
 String output="";
 String b;
+int pan;
    var f = NumberFormat("#,##0", "en_US");
 
   _token(){
@@ -38,9 +40,15 @@ for(int i = 0; i<tokens.length;i++)
   }
    
 _loop(){
-    User.getUsers("").then((users){
+   
+    }
+  _gambar(){
+    b="";
+     User.getUsers("").then((users){
       for(int i = 0; i<users.length;i++)
-     output = users[i].nama;
+     b = users[0].user_foto;
+
+    
      
     //  a=output.toString();
      setState(() {
@@ -48,17 +56,19 @@ _loop(){
                          });
 
                       });
-     
-    }
-  _gambar(){
-    b="";
+  }
+  _panjang(){
+    
      User.getUsers("").then((users){
-      for(int i = 0; i<users.length;i++)
-     b = users[i].gambar;
+     
+   
+
+     
      
     //  a=output.toString();
      setState(() {
-                        
+
+                          pan = users.length;
                          });
 
                       });
@@ -68,7 +78,7 @@ _loop(){
     _token();
 _loop();
 _gambar();
-
+_panjang();
     return Container(
       height: 300,
       decoration: BoxDecoration(
@@ -144,12 +154,23 @@ _gambar();
   _kanan() {
     return Container(
       height: 230,
-      child: ListView.builder(
-        itemCount: 5,
+      child: pan == 800 ? Container() : ListView.builder(
+        itemCount: 2,
         scrollDirection: Axis.horizontal,
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, i) {
+           User.getUsers("").then((users){
+      
+     output = users[i].produk;
+     
+    //  a=output.toString();
+     setState(() {
+                        
+                         });
+
+                      });
+     
           return Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: GestureDetector(
@@ -194,7 +215,7 @@ _gambar();
   //edit
 
 
-                      child: Text(b,
+                      child: Text(output,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,

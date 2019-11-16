@@ -28,6 +28,7 @@ class _CartsPageState extends State<CartsPage> {
           Center(child: Text("hapus")),
           SizedBox(width: 10,)
         ],
+         automaticallyImplyLeading: false,
         title: Text("Keranjang"),
         bottom: PreferredSize(
           child: Container(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:siplah_jpmall/src/ui/login.dart';
+import 'package:siplah_jpmall/src/ui/mainpage.dart';
 
 void main(){
   SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF6BB8E3), //top bar color
+        statusBarColor: Color(0xFF6BB83), //top bar color
         statusBarIconBrightness: Brightness.light, //top bar icons
         systemNavigationBarColor: Colors.black12, //bottom bar color
         systemNavigationBarIconBrightness: Brightness.dark, //bottom bar icons
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Color(0xFF6BB8E3),
           accentColor: Color(0xFF3FCB9B),
     ),
-    home: WelcomePage()
+    home: MainPage()
     );
   }
 }

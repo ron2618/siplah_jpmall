@@ -9,7 +9,6 @@ import 'package:siplah_jpmall/src/models/provinsi_model.dart';
 import 'dart:async';
 import 'package:siplah_jpmall/src/ui/mainpage.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:siplah_jpmall/src/models/model_nontext.dart';
@@ -320,7 +319,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
     Future<http.Response> login_api() async {
       var url = 'https://siplah.mascitra.co.id/api/user/login';
-      User users = null;
+   
      
       Map data = {'email': username.text, 'password': password.text};
       //encode Map to JSON
