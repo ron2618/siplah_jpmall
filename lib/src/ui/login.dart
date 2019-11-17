@@ -9,25 +9,25 @@ import 'package:siplah_jpmall/src/models/provinsi_model.dart';
 import 'dart:async';
 import 'package:siplah_jpmall/src/ui/mainpage.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:siplah_jpmall/src/models/model_nontext.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/ui/page_home.dart';
-
 class WelcomePage extends StatefulWidget {
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
-
-final username = TextEditingController();
-final password = TextEditingController();
+ final username = TextEditingController();
+    final password = TextEditingController();
+    SharedPreferences sharedPreferences;
 
 class _WelcomePageState extends State<WelcomePage> {
-  var token;
+  var token ;
   PageController _pageController;
   bool lastPage = false;
   int initialPage = 0;
+  String usernama = null;
 
   final page = <ListPage>[
     ListPage(0, PagePertama()),
@@ -35,32 +35,54 @@ class _WelcomePageState extends State<WelcomePage> {
     ListPage(2, PageKetiga()),
   ];
 
-  Future<http.Response> postRequest() async {
-    var url = 'https://siplah.mascitra.co.id/api/api/get_token';
 
-    Map data = {'app': 'siplah_jpmall.id'};
-    //encode Map to JSON
-    var body = json.encode(data);
+  Future<http.Response> postRequest () async {
+  var url ='https://siplah.mascitra.co.id/api/api/get_token';
 
-    var response = await http.post(url,
-        headers: {"Content-Type": "application/json"}, body: body);
-    print("${response.statusCode}");
+  Map data = {
+    'app': 'siplah_jpmall.id'
+  };
+  //encode Map to JSON
+  var body = json.encode(data);
 
-    print("${response.body}");
-    Map<String, dynamic> map = jsonDecode(response.body);
-    token = map["Data"][0]["api_token"];
-    return response;
-  }
+  var response = await http.post(url,
+      headers: {"Content-Type": "application/json"},
+      body: body
+  );
+  print("${response.statusCode}");
+  
+  print("${response.body}");
+  Map<String, dynamic> map = jsonDecode(response.body);
+  token  = map["Data"][0]["api_token"];
+  
+  return response;
+}
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: 0, keepPage: true);
     postRequest();
+    getCredential();
   }
+  getCredential() async {
+     final pref = await SharedPreferences.getInstance();
+    setState(() {
+          usernama = pref.getString("username");
+          if(usernama != null){
+            Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute(
+              builder: (BuildContext context) => new MainPage()),
+          (Route<dynamic> route) => false);
+
+          }          
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       bottomNavigationBar: initialPage == page.length - 1
           ? Container(
@@ -290,62 +312,66 @@ class PageKetiga extends StatelessWidget {
   }
 }
 
-
 class LoginPage extends StatefulWidget {
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
- 
   @override
   void initState() {
     super.initState();
-  
-    
   }
 
   @override
   Widget build(BuildContext context) {
+   void savedata() async {
+   sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      
+      sharedPreferences.setString("username", username.text);
+   
+      sharedPreferences.commit();
+    });
+ Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute(
+              builder: (BuildContext context) => new MainPage()),
+          (Route<dynamic> route) => false);
+}
     void _showAlert(BuildContext context) {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text("Peringatan"),
-                content: Text("Password atau Email Kamu Salah"),
-              ));
-    }
+            title: Text("Peringatan"),
+            content: Text("Password atau Email Kamu Salah"),
+          )
+      );}
+      Future<http.Response> login_api () async {
+  var url ='https://siplah.mascitra.co.id/api/user/login';
 
-    Future<http.Response> login_api() async {
-      var url = 'https://siplah.mascitra.co.id/api/user/login';
+  Map data = {
+    'email': username.text,
+    'password': password.text
+  };
+  //encode Map to JSON
+  var body = json.encode(data);
+
+  var response = await http.post(url,
+      headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"e6e282930dd7eda4fc32a7a82274351d60ab1874"},
+      body: body
+  );
+  print("${response.statusCode}");
+  
+  print("${response.body}");
+  Map<String, dynamic> map = jsonDecode(response.body);
+  if(map["Error"] == true || map["Error"] == "true"){
+    _showAlert(context);
+  }else{
+    savedata();
    
-     
-      Map data = {'email': username.text, 'password': password.text};
-      //encode Map to JSON
-      var body = json.encode(data);
-
-      var response = await http.post(url,
-          headers: {
-            "Content-Type": "application/json",
-            "API-App": "siplah_jpmall.id",
-            "Api-Key": "4P1_7Pm411_51p114h",
-            "API-Token": "e6e282930dd7eda4fc32a7a82274351d60ab1874"
-          },
-          body: body);
-      print("${response.statusCode}");
-
-      print("${response.body}");
-      Map<String, dynamic> map = jsonDecode(response.body);
-      if (map["Error"] == true || map["Error"] == "true") {
-        _showAlert(context);
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MainPage()));
-            
-      }
-      return response;
-    }
+  }
+  return response;
+}
 
     return Scaffold(
       body: ListView(
@@ -359,6 +385,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   color: Color(0xFF6BB8E3),
                   child: Stack(
                     children: <Widget>[
+
                       Positioned(
                         bottom: MediaQuery.of(context).size.width / 5,
                         right: 10,
@@ -421,6 +448,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                         contentPadding:
                                             const EdgeInsets.all(5.0),
                                         border: InputBorder.none,
+                                        
                                         hintText: "Username"),
                                   ),
                                 ),
@@ -444,10 +472,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               ),
                               SizedBox(height: 10),
                               MaterialButton(
-                                onPressed: () {
-                                 
+                                onPressed: (){
                                   login_api();
-                                  
                                 },
                                 color: Color(0xFF3FCB9B),
                                 shape: RoundedRectangleBorder(
@@ -509,6 +535,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                               fontWeight: FontWeight.w500),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () => Navigator.push(
+
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
@@ -562,141 +589,166 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
 class Register extends StatefulWidget {
   @override
-  
   _RegisterState createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
-  var katPel = ['Badan Hukum','Perseorangan'];
+  var katPel = ['Sekolah', 'Umum'];
   var codetlp = ['+62', '+81'];
-  var placeholder = ['Loading...', 'Loading...', 'Loading...'];
-  
 
-  String prop, kab, kec;
   String slctdKatPel, code;
-
   @override
   Widget build(BuildContext context) {
-    provinceBloc.provinceFetchAll();
     return Scaffold(
-        backgroundColor: Color(0xFF6BB8E3),
-        body: ListView(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      "Register JPMALL",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600),
+      backgroundColor: Color(0xFF6BB8E3),
+      body: ListView(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text("Register JPMALL", style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600
+                  ),),
+                ),
+                SizedBox(height: 10,),
+                CustomTile(
+                  "Kategori Pelanggan",
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      isExpanded: true,
+                      value: slctdKatPel,
+                        items: List.generate(katPel.length,
+                                (i) => DropdownMenuItem<String>(child: Text(katPel[i]), value: katPel[i],)),
+                        onChanged: (item){
+                          setState((){
+                            slctdKatPel = item;
+                          });
+                        }),
+                  ),
+                ),
+                CustomTile("NPSN", child: TextField(
+                  enabled: slctdKatPel == katPel[0] ? true : false,
+                  decoration: InputDecoration(
+                    border: InputBorder.none
+                  ),
+                ),enable: slctdKatPel == katPel[0] ? true : false,),
+                CustomTile("Nama", child: TextField(
+                  enabled: slctdKatPel == katPel[0] ? false : true,
+                  decoration: InputDecoration(
+                    border: InputBorder.none
+                  ),
+                ),enable: slctdKatPel == katPel[0] ? false : true,),
+                CustomTile("Email", child: TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none
+                  ),
+                ),),
+                CustomTile("Password", child: TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none
+                  ),
+                ),),
+                CustomTile("Konfirmasi Password", child: TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none
+                  ),
+                ),),
+                SizedBox(height: 15),
+                CustomTile("Telp", style: 2, child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(width: 70,
+                    decoration: BoxDecoration(
+                      border: Border(right: BorderSide(
+                        color: Colors.black54
+                      ))
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CustomTile(
-                    "Kategori Mitra",
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
                         isExpanded: true,
-                        value: slctdKatPel,
-                          items: List.generate(katPel.length,
-                                  (i) => DropdownMenuItem<String>(child: Text(katPel[i]), value: katPel[i],)),
-                          onChanged: (item){
-                            setState((){
-                              slctdKatPel = item;
-                            });
-                          }),
-                    ),
-                  ),
-                  CustomTile(
-                    "Nama",
-                    child: TextField(
-                      decoration: InputDecoration(border: InputBorder.none),
-                    ),
-                  ),
-                  CustomTile(
-                    "Email",
-                    child: TextField(
-                      decoration: InputDecoration(border: InputBorder.none),
-                    ),
-                  ),
-                  CustomTile(
-                    "Password",
-                    child: TextField(
-                      decoration: InputDecoration(border: InputBorder.none),
-                    ),
-                  ),
-                  CustomTile(
-                    "Konfirmasi Password",
-                    child: TextField(
-                      decoration: InputDecoration(border: InputBorder.none),
-                     
-                    ),
-                  ),
-              
-                ],
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: Container(
-          height: 50,
-          width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        value: code,
+                          items: List.generate(codetlp.length, (f) => DropdownMenuItem(child: Text(codetlp[f]))), onChanged: (item){
+                          setState((){
+                            code = item;
+                          });
+                      }),
+                    ),),
+                    Container(
+                      width: MediaQuery.of(context).size.width-200,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(5.0),
+                            border: InputBorder.none
+                        ),
+                      ),
+                    )
+                  ],
+                ),)
+              ],
+            ),
+          )
+        ],
+      ),
+    bottomNavigationBar: Container(
+      height: 50,
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black12,
-                      child: Text(
-                        "1",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 30,
-                    width: 1,
-                    color: Colors.white,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      child: Text(
-                        "2",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.black12,
+                  child: Text("1", style: TextStyle(
+                      color: Colors.white
+                  ),),
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-               
-                  MaterialButton(
-                    onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register2()), (_) => false),
-                    child: Text(
-                      "Next",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
+              Container(
+                height: 30,
+                width: 1,
+                color: Colors.white,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Text("2", style: TextStyle(
+                      color: Colors.white
+                  ),),
+                ),
               ),
             ],
           ),
-        ));
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              MaterialButton(
+                child: Text("Cancel", style: TextStyle(
+                  color: Colors.white
+                ),),
+              ),
+              MaterialButton(
+                onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register2()), (_) => false),
+                child: Text("Next", style: TextStyle(
+                    color: Colors.white
+                ),),
+              ),
+            ],
+          ),
+        ],
+      ),
+    )
+    );
   }
 }
 
@@ -706,8 +758,7 @@ class CustomTile extends StatelessWidget {
   final int style; // 1 normal, 2 telp
   final bool enable;
 
-  const CustomTile(this.title,
-      {Key key, this.child, this.style = 1, this.enable = true})
+  const CustomTile(this.title, {Key key, this.child, this.style = 1, this.enable = true})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -720,18 +771,22 @@ class CustomTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                ),
+                child: Text(title, style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white
+                ),),
               ),
               SizedBox(height: 5.0),
               Container(
                 height: 50,
                 padding: const EdgeInsets.all(5.0),
                 decoration: BoxDecoration(
-                    color: enable == true ? Colors.white : Colors.grey,
-                    border: Border.all(color: Colors.black54, width: 2.0)),
+                  color: enable == true ? Colors.white : Colors.grey,
+                  border: Border.all(
+                    color: Colors.black54,
+                    width: 2.0
+                  )
+                ),
                 child: child,
               )
             ],
@@ -745,14 +800,12 @@ class CustomTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(
-                width: 3.0,
-              ),
+              SizedBox(width: 3.0,),
               Container(
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
+                child:  Text(title, style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white
+                ),),
               ),
               SizedBox(width: 5.0),
               Container(
@@ -760,7 +813,11 @@ class CustomTile extends StatelessWidget {
                 padding: const EdgeInsets.all(5.0),
                 decoration: BoxDecoration(
                     color: enable == true ? Colors.white : Colors.grey,
-                    border: Border.all(color: Colors.black54, width: 2.0)),
+                    border: Border.all(
+                        color: Colors.black54,
+                        width: 2.0
+                    )
+                ),
                 child: child,
               ),
             ],
@@ -778,15 +835,19 @@ class Register2 extends StatefulWidget {
 }
 
 class _Register2State extends State<Register2> {
-  var codetlp = ['+62', '+81'];
   var placeholder = ['Loading...', 'Loading...', 'Loading...'];
-  String prop, kab, kec,code;
-
+  String prop, kab, kec;
+  
   @override
   void initState() {
     super.initState();
     provinceBloc.provinceFetchAll();
+   
+
+  
+
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(child: Scaffold(
@@ -807,7 +868,7 @@ class _Register2State extends State<Register2> {
                     ),),
                   ),
                   SizedBox(height: 10,),
-                  CustomTile("Domisili", child: StreamBuilder<Province>(
+                  CustomTile("Provinsi", child: StreamBuilder<Province>(
                     stream: provinceBloc.allProvince,
                     builder: (context, snapshot) {
                       return DropdownButtonHideUnderline(
@@ -826,72 +887,44 @@ class _Register2State extends State<Register2> {
                       );
                     }
                   ),),
-                  CustomTile(
-                    "Kabupaten/Kota",
-                    child: StreamBuilder<Kabupaten>(
-                        stream: kabupatenBloc.allKabupaten,
-                        builder: (context, snapshot) {
-                          return DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              value: kab,
-                              isExpanded: true,
-                              items: List.generate(
-                                  snapshot.hasData
-                                      ? snapshot.data.results.length
-                                      : placeholder.length,
-                                  (i) => DropdownMenuItem(
-                                        child: Text(snapshot.hasData
-                                            ? snapshot
-                                                .data.results[i].namaKabupaten
-                                            : placeholder[i]),
-                                        value: snapshot.hasData
-                                            ? snapshot
-                                                .data.results[i].kabupatenId
-                                            : placeholder[i],
-                                      )),
-                              onChanged: (item) {
-                                setState(() {
-                                  kab = item;
-                                });
-                                kecamatanBloc.fetchKecamatan(kab);
-                              },
-                            ),
-                          );
-                        }),
-                  ),
-                  CustomTile(
-                    "Kecamatan",
-                    child: StreamBuilder<Kecamatan>(
-                        stream: kecamatanBloc.allKecamatan,
-                        builder: (context, snapshot) {
-                          return DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              value: kec,
-                              isExpanded: true,
-                              items: List.generate(
-                                  snapshot.hasData
-                                      ? snapshot.data.results.length
-                                      : placeholder.length,
-                                  (i) => DropdownMenuItem(
-                                        child: Text(snapshot.hasData
-                                            ? snapshot
-                                                .data.results[i].namaKecamatan
-                                            : placeholder[i]),
-                                        value: snapshot.hasData
-                                            ? snapshot
-                                                .data.results[i].kecamatanId
-                                            : placeholder[i],
-                                      )),
-                              onChanged: (item) {
-                                setState(() {
-                                  kec = item;
-                                });
-                              },
-                            ),
-                          );
-                        }),
-                  ),
-                   Container(
+                  CustomTile("Kabupaten/Kota", child: StreamBuilder<Kabupaten>(
+                    stream: kabupatenBloc.allKabupaten,
+                    builder: (context, snapshot) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: kab,
+                          isExpanded: true,
+                          items: List.generate(snapshot.hasData ? snapshot.data.results.length : placeholder.length, (i) => DropdownMenuItem(
+                            child: Text(snapshot.hasData ? snapshot.data.results[i].namaKabupaten : placeholder[i]), value: snapshot.hasData ? snapshot.data.results[i].kabupatenId : placeholder[i],)),
+                          onChanged: (item){
+                            setState(() {
+                              kab = item;
+                            });
+                            kecamatanBloc.fetchKecamatan(kab);
+                          },
+                        ),
+                      );
+                    }
+                  ),),
+                  CustomTile("Kecamatan", child: StreamBuilder<Kecamatan>(
+                    stream: kecamatanBloc.allKecamatan,
+                    builder: (context, snapshot) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: kec,
+                          isExpanded: true,
+                          items: List.generate(snapshot.hasData ? snapshot.data.results.length : placeholder.length, (i) => DropdownMenuItem(
+                            child: Text(snapshot.hasData ? snapshot.data.results[i].namaKecamatan  : placeholder[i]), value: snapshot.hasData ? snapshot.data.results[i].kecamatanId : placeholder[i],)),
+                          onChanged: (item){
+                            setState(() {
+                              kec = item;
+                            });
+                          },
+                        ),
+                      );
+                    }
+                  ),),
+                  Container(
                     padding: const EdgeInsets.all(3.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -919,45 +952,6 @@ class _Register2State extends State<Register2> {
                             decoration: InputDecoration(
                               border: InputBorder.none,
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                     
-                  CustomTile(
-                    "Telp",
-                    style: 2,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Container(
-                          width: 70,
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  right: BorderSide(color: Colors.black54))),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                                isExpanded: true,
-                                value: code,
-                                items: List.generate(
-                                    codetlp.length,
-                                    (f) => DropdownMenuItem(
-                                        child: Text(codetlp[f]))),
-                                onChanged: (item) {
-                                  setState(() {
-                                    code = item;
-                                  });
-                                }),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width - 200,
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.all(5.0),
-                                border: InputBorder.none),
                           ),
                         )
                       ],
@@ -1014,12 +1008,9 @@ class _Register2State extends State<Register2> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   MaterialButton(
-                    onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register()), (_) => false),
-                    child: Text("Back", style: TextStyle(
+                    child: Text("Cancel", style: TextStyle(
                         color: Colors.white
-                    ),
-                    
-                    ),
+                    ),),
                   ),
                   MaterialButton(
                     child: Text("Selesai", style: TextStyle(
@@ -1045,24 +1036,25 @@ class _Register2State extends State<Register2> {
 }
 class Data {
   final String api_token;
-
+  
   Data({this.api_token});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return new Data(
       api_token: json['api_token'],
+     
     );
   }
 }
-
 class Par {
   final String api_token;
-
+  
   Par({this.api_token});
 
   factory Par.fromJson(Map<String, dynamic> json) {
     return new Par(
       api_token: json['api_token'],
+     
     );
   }
 }
