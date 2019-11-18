@@ -50,8 +50,8 @@ class CateList {
 }
 
 List<CateList> _listcate = <CateList>[
-  CateList(title: "Paket Utama K13", index: 1, color: Colors.blue[100]),
+  //CateList(title: "Paket Utama K13", index: 1, color: Colors.blue[100]),
   CateList(title: "Non Text", index: 1, color: Colors.purple[100]),
-  CateList(title: "Pendamping K13", index: 1, color: Colors.pink[100]),
+  //CateList(title: "Pendamping K13", index: 1, color: Colors.pink[100]),
   CateList(title: "Alat Peraga", index: 1, color: Colors.red[100]),
 ];

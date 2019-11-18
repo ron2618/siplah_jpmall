@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                FlashDeal(data: _listProduk),
+                //FlashDeal(data: _listProduk),
                 SizedBox(
                   height: 10,
                 ),
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                Pendamping(data: _listProduk),
+               // Pendamping(data: _listProduk),
                 SizedBox(
                   height: 10,
                 ),
