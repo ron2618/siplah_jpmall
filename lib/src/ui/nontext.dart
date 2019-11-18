@@ -38,7 +38,7 @@ for(int i = 0; i<tokens.length;i++)
   }
    
 _loop(){
-    User.getUsers("").then((users){
+    User.getUsers("7").then((users){
       for(int i = 0; i<users.length;i++)
      output = users[i].nama;
      
@@ -194,7 +194,7 @@ _gambar();
   //edit
 
 
-                      child: Text(b,
+                      child: Text(output,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,

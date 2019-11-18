@@ -21,7 +21,7 @@ class User {
   }
 
   static Future<List<User>> getUsers(String id) async{
-    String apiURL = "https://siplah.mascitra.co.id/api/home/list?id=7" + id;
+    String apiURL = "https://siplah.mascitra.co.id/api/home/list?id=" + id;
     
     var apiResult = await http.post(apiURL,headers: {
       "API-App":"siplah_jpmall.id",
