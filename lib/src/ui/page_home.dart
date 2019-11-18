@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
           headerSliverBuilder: (context, inner) {
             return [
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 title: AnimatedCrossFade(
                     duration: const Duration(milliseconds: 200),
                     firstChild: MyAppBarNormal(),

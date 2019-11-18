@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'login.dart';
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -11,13 +13,14 @@ class _ProfilePageState extends State<ProfilePage>
   TabController controller;
   ScrollController _controller;
   double position = 0;
-
+  String namauser = null;
   @override
   void initState() {
     _controller = ScrollController();
     _controller.addListener(onScroll);
     controller = TabController(length: 1, vsync: this);
     super.initState();
+    getCredential();
   }
 
   onScroll() {
@@ -25,6 +28,12 @@ class _ProfilePageState extends State<ProfilePage>
       position = _controller.offset;
     });
 //    print(position);
+  }
+  getCredential() async {
+     final pref = await SharedPreferences.getInstance();
+    setState(() {
+          namauser = pref.getString("username");
+    });
   }
 
   @override
@@ -57,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage>
                 backgroundImage: NetworkImage("https://static-2.gumroad.com/res/gumroad/1654647495106/asset_previews/df232360d4f186e2672d177431a77a68/retina/Animation_207.png"),
               ),
               SizedBox(width: 10,),
-              Text("Himiko Toga", style: TextStyle(color: Colors.white),)
+              Text(namauser != null ? namauser : "waiting...", style: TextStyle(color: Colors.white),)
             ],
           ),
         ),
@@ -173,7 +182,35 @@ class _ProfilePageState extends State<ProfilePage>
 class PageBeli extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  
+   void _showAlert(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Peringatan"),
+            content: Text("Yakin Mau Keluar"),
+            actions: <Widget>[
+              new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              ),
+              new FlatButton(
+              child: new Text("OK"),
+              onPressed: () async {
+               
+                final pref = await SharedPreferences.getInstance();
+                await pref.clear();
+                Navigator.of(context).pushAndRemoveUntil(
+                    new MaterialPageRoute(
+                        builder: (BuildContext context) => new LoginPage()),
+                    (Route<dynamic> route) => false);
+
+              },
+              ),
+            ],
+          )
+      );}
     return Container(
       color: Colors.grey[200],
       height:  MediaQuery.of(context).size.height,
@@ -263,6 +300,9 @@ class PageBeli extends StatelessWidget {
                     Container(
                     color: Colors.white,
                     child: ListTile(
+                      onTap: (){
+                       _showAlert(context);
+                      },
                       title: Column(
                         children: <Widget>[
                           Text("LOGOUT",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
