@@ -9,7 +9,6 @@ import 'package:siplah_jpmall/src/models/provinsi_model.dart';
 import 'dart:async';
 import 'package:siplah_jpmall/src/ui/mainpage.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -593,7 +592,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  var katPel = ['Sekolah', 'Umum'];
+  var katPel = ['Berbadan Hukum', 'Perseorangan'];
   var codetlp = ['+62', '+81'];
 
   String slctdKatPel, code;
@@ -632,18 +631,14 @@ class _RegisterState extends State<Register> {
                         }),
                   ),
                 ),
-                CustomTile("NPSN", child: TextField(
-                  enabled: slctdKatPel == katPel[0] ? true : false,
-                  decoration: InputDecoration(
-                    border: InputBorder.none
-                  ),
-                ),enable: slctdKatPel == katPel[0] ? true : false,),
+              
                 CustomTile("Nama", child: TextField(
-                  enabled: slctdKatPel == katPel[0] ? false : true,
+                
                   decoration: InputDecoration(
                     border: InputBorder.none
                   ),
-                ),enable: slctdKatPel == katPel[0] ? false : true,),
+                ),
+                ),
                 CustomTile("Email", child: TextField(
                   decoration: InputDecoration(
                     border: InputBorder.none
@@ -1008,6 +1003,7 @@ class _Register2State extends State<Register2> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   MaterialButton(
+                  onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register()), (_) => false),
                     child: Text("Cancel", style: TextStyle(
                         color: Colors.white
                     ),),
