@@ -41,7 +41,7 @@ class User {
     List<User> users =[];
     for (int i = 0; i<listUser.length; i++)
     users.add(User.createUser(listUser[0]["produk"][i]));
-    print(["Data"]);
+
     
     return users;
   }

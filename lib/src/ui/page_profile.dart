@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:siplah_jpmall/src/models/profile1.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
+import 'package:siplah_jpmall/src/models/profile1.dart';
 
 import 'login.dart';
 class ProfilePage extends StatefulWidget {
@@ -84,8 +88,35 @@ class _ProfilePageState extends State<ProfilePage>
 }
 
 class PageBeli extends StatelessWidget {
-  @override
+  Profile1 profile1 = null;
+  String output;
+  String api;
+  _token() {
+    api = "";
+    Token.getTokens("2").then((tokens) {
+      for (int i = 0; i < tokens.length; i++)
+        api = tokens[i].apitoken;
+
+      //  a=output.toString();
+
+    });
+  }
+  _loop(){
+    Profile1.getProfile1().then((profile1){
+      for(int i = 0; i<profile1.length;i++)
+        output = profile1[i].judul;
+
+      //  a=output.toString();
+
+
+    });
+
+  }
+    @override
   Widget build(BuildContext context) {
+_token();
+_loop();
+print(output);
    void _showAlert(BuildContext context) {
       showDialog(
           context: context,
@@ -137,7 +168,8 @@ class PageBeli extends StatelessWidget {
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Tentang Kami"),                 
+                      title: Text("Tentang Kami"),
+                onTap: ()=> launch('https://siplah.mascitra.co.id/blog/page/1'),
                 leading: Icon(Icons.people),
                     ),
                   ),
