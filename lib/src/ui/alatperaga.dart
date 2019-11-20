@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:siplah_jpmall/src/models/produk_sample.dart';
 import 'package:siplah_jpmall/src/ui/produk_detail.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
 
 // class Alatperaga extends StatefulWidget {
 //   @override
@@ -198,9 +199,11 @@ import 'package:siplah_jpmall/src/ui/produk_detail.dart';
 //   }
 // }
 
+
+
 class Alatperaga extends StatefulWidget {
   final List<Produk> data;
-
+  
   const Alatperaga({Key key, this.data}) : super(key: key);
   @override
   _AlatperagaState createState() => _AlatperagaState();
@@ -208,9 +211,25 @@ class Alatperaga extends StatefulWidget {
 
 class _AlatperagaState extends State<Alatperaga> {
   var f = NumberFormat("#,##0", "en_US");
+  String api;
   List<String> satu = ["Buku Guru Pendidikan Jasmani Olahraga dan Kesehatan Kelas VII","","Third","4"];
+  
+   _token(){
+    api="";
+    Token.getTokens("2").then((tokens){
+for(int i = 0; i<tokens.length;i++)
+     api = tokens[i].apitoken;
+
+    //  a=output.toString();
+     setState(() {
+                        
+                         });
+
+                      });
+  }
   @override
   Widget build(BuildContext context) {
+    _token();
     return Container(
       height: 300,
       decoration: BoxDecoration(

@@ -20,7 +20,7 @@ class _NontextState extends State<Nontext> {
   Token tokens = null;
   User users= null;
   String api;
-String b;
+String b="";
    var f = NumberFormat("#,##0", "en_US");
 
   _token(){
@@ -39,35 +39,35 @@ for(int i = 0; i<tokens.length;i++)
    
 _loop(){
     User.getUsers().then((users){
-      for(int i = 0; i<users.length;i++)
-     output = users[i].produk;
+      
      
     //  a=output.toString();
      setState(() {
-                        
+              for(int i = 0; i<users.length;i++)
+     output = users[i].produk;          
                          });
 
                       });
      
     }
-//   _gambar(){
-//     b="";
-//      User.getUsers("").then((users){
-//       for(int i = 0; i<users.length;i++)
-//      b = users[i].user_foto;
+  _gambar(){
+    
+     User.getUsers().then((users){
      
-//     //  a=output.toString();
-//      setState(() {
-                        
-//                          });
+     
+    //  a=output.toString();
+     setState(() {
+               for(int i = 0; i<users.length;i++)
+     b = users[i].user_foto;          
+                         });
 
-//                       });
-//   }
+                      });
+  }
   @override
   Widget build(BuildContext context) {  
     _token();
 _loop();
-//_gambar();
+_gambar();
 
     return Container(
       height: 300,
@@ -146,11 +146,13 @@ _loop();
     return Container(
       height: 230,
       child: ListView.builder(
-      itemCount:4,
+      itemCount:6,
         scrollDirection: Axis.horizontal,
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemBuilder: (context, i) {
+        itemBuilder: (context, i)  {
+        
+     
           return Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: GestureDetector(
@@ -176,7 +178,7 @@ _loop();
      //edit gambar
 
 
-                        child: Image.network(""),
+                        child: Image.network(""+b),
                        // child: Image.network("http://www.bukubali.co.id/wp-content/uploads/cover_dak/ekatalog/spkn/17SPKN-00357.jpg", fit: BoxFit.cover,),
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[

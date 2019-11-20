@@ -4,7 +4,6 @@ import 'package:siplah_jpmall/src/models/produk_sample.dart';
 import 'package:siplah_jpmall/src/ui/flashdeal.dart';
 import 'package:siplah_jpmall/src/ui/nontext.dart';
 import 'package:siplah_jpmall/src/ui/alatperaga.dart';
-import 'package:siplah_jpmall/src/ui/Pendamping.dart';
 import 'package:siplah_jpmall/src/ui/gridkategori.dart';
 import 'package:siplah_jpmall/src/ui/gridproduk.dart';
 import 'package:siplah_jpmall/src/ui/imageslider.dart';

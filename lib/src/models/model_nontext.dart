@@ -39,12 +39,11 @@ class User {
     List<dynamic> listUser = (jsonObject as Map<String, dynamic>)["Data"];  
     
     List<User> users =[];
-    for (int i = 0; i<listUser.length; i = i+1){
-   
-    users.add(User.createUser(listUser[i]["produk"][0]));
+    for (int i = 0; i<listUser.length; i++)
+    users.add(User.createUser(listUser[0]["produk"][i]));
+    print(["Data"]);
     
-     return users;
-    }
+    return users;
   }
   
 }
