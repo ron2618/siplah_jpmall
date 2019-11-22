@@ -4,7 +4,7 @@ import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
-import 'package:siplah_jpmall/src/models/profile1.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 import 'login.dart';
 class ProfilePage extends StatefulWidget {
@@ -85,10 +85,16 @@ class _ProfilePageState extends State<ProfilePage>
 
         );
   }
-}
 
+    }
+
+  
 class PageBeli extends StatelessWidget {
-  Profile1 profile1 = null;
+
+  
+  
+
+  Profile1 profiles = null;
   String output;
   String api;
   _token() {
@@ -102,10 +108,12 @@ class PageBeli extends StatelessWidget {
     });
   }
   _loop(){
-    Profile1.getProfile1().then((profile1){
-      for(int i = 0; i<profile1.length;i++)
-        output = profile1[i].judul;
-
+    output="";
+    Profile1.getProfile1().then((profiles){
+      
+      for(int i = 0; i<profiles.length;i++)
+        output = profiles[i].judul;
+      
       //  a=output.toString();
 
 
@@ -114,9 +122,11 @@ class PageBeli extends StatelessWidget {
   }
     @override
   Widget build(BuildContext context) {
+
+
 _token();
 _loop();
-print(output);
+//print(output);
    void _showAlert(BuildContext context) {
       showDialog(
           context: context,
@@ -168,8 +178,12 @@ print(output);
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Tentang Kami"),
-                onTap: ()=> launch('https://siplah.mascitra.co.id/blog/page/1'),
+                      title: Text(output),
+                onTap: ()=> Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => SecondScreen(),
+                  )),
                 leading: Icon(Icons.people),
                     ),
                   ),
@@ -180,7 +194,12 @@ print(output);
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Cara Belanja"),                 
+                      title: Text("Cara Belanja"), 
+                      onTap: ()=>    Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Pagekedua(),
+                  )),             
                 leading: Icon(Icons.shopping_basket),
                     ),
                   ),
@@ -224,7 +243,12 @@ print(output);
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Syarat Dan Ketentuan"),                 
+                      title: Text("Syarat Dan Ketentuan"),
+                      onTap: ()=> Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Pageketiga(),
+                  )),               
                 leading: Icon(Icons.book),
                     ),
                   ),
@@ -528,6 +552,79 @@ class PageJual extends StatelessWidget {
               child: Text("Buat Toko", style: TextStyle(color: Colors.white),) ,onPressed: (){})
         ],
       ),
+    );
+  }
+}
+class Pagekedua extends StatefulWidget {
+  @override
+  _Pagekedua createState() => _Pagekedua();
+}
+  class _Pagekedua extends State<Pagekedua> {
+
+ 
+@override
+  void initState() {
+    super.initState();
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebviewScaffold(
+      appBar: AppBar(
+       title: Text("10 kata bijak"),
+          
+        
+      ), url: "https://siplah.mascitra.co.id/blog/page/2",
+    );
+  }
+}
+
+class SecondScreen extends StatefulWidget {
+  @override
+  _SecondScreen createState() => _SecondScreen();
+}
+class _SecondScreen extends State<SecondScreen> {
+
+ 
+@override
+  void initState() {
+    super.initState();
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebviewScaffold(
+      appBar: AppBar(
+       title: Text("10 kata bijak"),
+          
+        
+      ), url: "https://siplah.mascitra.co.id/blog/page/1",
+    );
+  }
+}
+class Pageketiga extends StatefulWidget {
+  @override
+  _Pageketiga createState() => _Pageketiga();
+}
+  class _Pageketiga extends State<Pageketiga> {
+
+ 
+@override
+  void initState() {
+    super.initState();
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WebviewScaffold(
+      appBar: AppBar(
+       title: Text("10 kata bijak"),
+          
+        
+      ), url: "https://siplah.mascitra.co.id/blog/page/2",
     );
   }
 }
