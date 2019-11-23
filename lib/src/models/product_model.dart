@@ -1,181 +1,168 @@
+// To parse this JSON data, do
+//
+//     final products = productsFromJson(jsonString);
+
 import 'dart:convert';
 
 List<Products> productsFromJson(String str) => new List<Products>.from(json.decode(str).map((x) => Products.fromJson(x)));
-
-String productsToJson(List<Products> data) => json.encode(new List<dynamic>.from(data.map((x) => x.toJson())));
+String productsToJson(Products data) => json.encode(data.toJson());
 
 class Products {
-  int index;
-  String title;
-  String kodeProduk;
-  List<Spesifikasi> spesifikasi;
-  String deskripsi;
-  int harga;
-  int discount;
-  Rating rating;
-  Toko toko;
-  List<Gambar> gambar;
-  int stock;
-  List<Kategori> kategori;
+    bool error;
+    dynamic pesanSys;
+    dynamic pesanUsr;
+    List<Datum> data;
+    Paging paging;
 
-  Products({
-    this.index,
-    this.title,
-    this.kodeProduk,
-    this.spesifikasi,
-    this.deskripsi,
-    this.harga,
-    this.discount,
-    this.rating,
-    this.toko,
-    this.gambar,
-    this.stock,
-    this.kategori,
-  });
+    Products({
+        this.error,
+        this.pesanSys,
+        this.pesanUsr,
+        this.data,
+        this.paging,
+    });
 
-  factory Products.fromJson(Map<String, dynamic> json) => new Products(
-    index: json["index"] == null ? null : json["index"],
-    title: json["title"] == null ? null : json["title"],
-    kodeProduk: json["kode_produk"] == null ? null : json["kode_produk"],
-    spesifikasi: json["spesifikasi"] == null ? null : new List<Spesifikasi>.from(json["spesifikasi"].map((x) => Spesifikasi.fromJson(x))),
-    deskripsi: json["deskripsi"] == null ? null : json["deskripsi"],
-    harga: json["harga"] == null ? null : json["harga"],
-    discount: json["discount"] == null ? null : json["discount"],
-    rating: json["rating"] == null ? null : Rating.fromJson(json["rating"]),
-    toko: json["toko"] == null ? null : Toko.fromJson(json["toko"]),
-    gambar: json["gambar"] == null ? null : new List<Gambar>.from(json["gambar"].map((x) => Gambar.fromJson(x))),
-    stock: json["stock"] == null ? null : json["stock"],
-    kategori: json["kategori"] == null ? null : new List<Kategori>.from(json["kategori"].map((x) => Kategori.fromJson(x))),
-  );
+    factory Products.fromJson(Map<String, dynamic> json) => Products(
+        error: json["Error"],
+        pesanSys: json["Pesan_sys"],
+        pesanUsr: json["Pesan_usr"],
+        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        paging: Paging.fromJson(json["Paging"]),
+    );
 
-  Map<String, dynamic> toJson() => {
-    "index": index == null ? null : index,
-    "title": title == null ? null : title,
-    "kode_produk": kodeProduk == null ? null : kodeProduk,
-    "spesifikasi": spesifikasi == null ? null : new List<dynamic>.from(spesifikasi.map((x) => x.toJson())),
-    "deskripsi": deskripsi == null ? null : deskripsi,
-    "harga": harga == null ? null : harga,
-    "discount": discount == null ? null : discount,
-    "rating": rating == null ? null : rating.toJson(),
-    "toko": toko == null ? null : toko.toJson(),
-    "gambar": gambar == null ? null : new List<dynamic>.from(gambar.map((x) => x.toJson())),
-    "stock": stock == null ? null : stock,
-    "kategori": kategori == null ? null : new List<dynamic>.from(kategori.map((x) => x.toJson())),
-  };
+    Map<String, dynamic> toJson() => {
+        "Error": error,
+        "Pesan_sys": pesanSys,
+        "Pesan_usr": pesanUsr,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "Paging": paging.toJson(),
+    };
 }
 
-class Gambar {
-  String url;
+class Datum {
+    String id;
+    String gambar;
+    String nama;
+    DateTime createdAt;
+    DateTime updatedAt;
+    List<Produk> produk;
 
-  Gambar({
-    this.url,
-  });
+    Datum({
+        this.id,
+        this.gambar,
+        this.nama,
+        this.createdAt,
+        this.updatedAt,
+        this.produk,
+    });
 
-  factory Gambar.fromJson(Map<String, dynamic> json) => new Gambar(
-    url: json["url"] == null ? null : json["url"],
-  );
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["id"],
+        gambar: json["gambar"],
+        nama: json["nama"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        produk: List<Produk>.from(json["produk"].map((x) => Produk.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() => {
-    "url": url == null ? null : url,
-  };
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "gambar": gambar,
+        "nama": nama,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "produk": List<dynamic>.from(produk.map((x) => x.toJson())),
+    };
 }
 
-class Kategori {
-  int index;
-  int sub;
-  String nama;
+class Produk {
+    String id;
+    List<Foto> foto;
+    String produk;
+    String harga;
+    String userId;
+    String userFoto;
+    String userNama;
+    String kabupatenId;
+    String kabupatenNama;
 
-  Kategori({
-    this.index,
-    this.sub,
-    this.nama,
-  });
+    Produk({
+        this.id,
+        this.foto,
+        this.produk,
+        this.harga,
+        this.userId,
+        this.userFoto,
+        this.userNama,
+        this.kabupatenId,
+        this.kabupatenNama,
+    });
 
-  factory Kategori.fromJson(Map<String, dynamic> json) => new Kategori(
-    index: json["index"] == null ? null : json["index"],
-    sub: json["sub"] == null ? null : json["sub"],
-    nama: json["nama"] == null ? null : json["nama"],
-  );
+    factory Produk.fromJson(Map<String, dynamic> json) => Produk(
+        id: json["id"],
+        foto: json["foto"] == null ? null : List<Foto>.from(json["foto"].map((x) => Foto.fromJson(x))),
+        produk: json["produk"],
+        harga: json["harga"],
+        userId: json["user_id"],
+        userFoto: json["user_foto"],
+        userNama: json["user_nama"],
+        kabupatenId: json["kabupaten_id"],
+        kabupatenNama: json["kabupaten_nama"],
+    );
 
-  Map<String, dynamic> toJson() => {
-    "index": index == null ? null : index,
-    "sub": sub == null ? null : sub,
-    "nama": nama == null ? null : nama,
-  };
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "foto": foto == null ? null : List<dynamic>.from(foto.map((x) => x.toJson())),
+        "produk": produk,
+        "harga": harga,
+        "user_id": userId,
+        "user_foto": userFoto,
+        "user_nama": userNama,
+        "kabupaten_id": kabupatenId,
+        "kabupaten_nama": kabupatenNama,
+    };
 }
 
-class Rating {
-  int jumlahStar;
-  int jumlahVote;
+class Foto {
+    String id;
+    String foto;
+    DateTime createdAt;
+    DateTime updatedAt;
 
-  Rating({
-    this.jumlahStar,
-    this.jumlahVote,
-  });
+    Foto({
+        this.id,
+        this.foto,
+        this.createdAt,
+        this.updatedAt,
+    });
 
-  factory Rating.fromJson(Map<String, dynamic> json) => new Rating(
-    jumlahStar: json["jumlah_star"] == null ? null : json["jumlah_star"],
-    jumlahVote: json["jumlah_vote"] == null ? null : json["jumlah_vote"],
-  );
+    factory Foto.fromJson(Map<String, dynamic> json) => Foto(
+        id: json["id"],
+        foto: json["foto"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+    );
 
-  Map<String, dynamic> toJson() => {
-    "jumlah_star": jumlahStar == null ? null : jumlahStar,
-    "jumlah_vote": jumlahVote == null ? null : jumlahVote,
-  };
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "foto": foto,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+    };
 }
 
-class Spesifikasi {
-  String title;
-  String value;
+class Paging {
+    bool pagination;
 
-  Spesifikasi({
-    this.title,
-    this.value,
-  });
+    Paging({
+        this.pagination,
+    });
 
-  factory Spesifikasi.fromJson(Map<String, dynamic> json) => new Spesifikasi(
-    title: json["title"] == null ? null : json["title"],
-    value: json["value"] == null ? null : json["value"],
-  );
+    factory Paging.fromJson(Map<String, dynamic> json) => Paging(
+        pagination: json["Pagination"],
+    );
 
-  Map<String, dynamic> toJson() => {
-    "title": title == null ? null : title,
-    "value": value == null ? null : value,
-  };
-}
-
-class Toko {
-  int index;
-  String nama;
-  String lokasi;
-  String alamat;
-  bool official;
-  Rating rating;
-
-  Toko({
-    this.index,
-    this.nama,
-    this.lokasi,
-    this.alamat,
-    this.official,
-    this.rating,
-  });
-
-  factory Toko.fromJson(Map<String, dynamic> json) => new Toko(
-    index: json["index"] == null ? null : json["index"],
-    nama: json["nama"] == null ? null : json["nama"],
-    lokasi: json["lokasi"] == null ? null : json["lokasi"],
-    alamat: json["alamat"] == null ? null : json["alamat"],
-    official: json["official"] == null ? null : json["official"],
-    rating: json["rating"] == null ? null : Rating.fromJson(json["rating"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "index": index == null ? null : index,
-    "nama": nama == null ? null : nama,
-    "lokasi": lokasi == null ? null : lokasi,
-    "alamat": alamat == null ? null : alamat,
-    "official": official == null ? null : official,
-    "rating": rating == null ? null : rating.toJson(),
-  };
+    Map<String, dynamic> toJson() => {
+        "Pagination": pagination,
+    };
 }

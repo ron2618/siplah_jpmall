@@ -4,72 +4,243 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:siplah_jpmall/src/models/produk_sample.dart';
 import 'package:siplah_jpmall/src/ui/produk_detail.dart';
-import 'package:siplah_jpmall/src/models/model_nontext.dart';
-import 'package:siplah_jpmall/src/models/get_token.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+// class Nontext extends StatefulWidget {
+//   @override
+//   _NontextState createState() => _NontextState();
+// }
+
+// class _NontextState extends State<Nontext> {
+//   var v = NumberFormat("en_US", "#,##0");
+//   ScrollController controller;
+
+//   double posisi = 0;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     controller = ScrollController();
+//     controller.addListener(onScroll);
+//   }
+
+//   onScroll() {
+//     setState(() {
+//       posisi = controller.offset;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: 320,
+//       child: Stack(
+//         children: <Widget>[
+//           bawah(),
+//           posisi >= 150 ? atas() : Container(),
+//         ],
+//       ),
+//     );
+//   }
+
+//   atas() {
+//     return Container(
+//       child: Positioned(
+//         top: 10,
+//         left: 10,
+//         child: Text(
+//           "Nontext " +
+//               DateTime.now().hour.toString() +
+//               " : " +
+//               DateTime.now().minute.toString() +
+//               " : " +
+//               DateTime.now().second.toString(),
+//           style: TextStyle(
+//               color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+//         ),
+//       ),
+//     );
+//   }
+
+//   bawah() {
+//     return Container(
+//       height: 320,
+//       color: Colors.redAccent,
+//       padding: const EdgeInsets.only(top: 30, left: 8.0, bottom: 8.0, right: 8),
+//       child: ListView(
+//         physics: ScrollPhysics(),
+//         shrinkWrap: true,
+//         scrollDirection: Axis.horizontal,
+//         controller: controller,
+//         children: <Widget>[
+//           Row(children: <Widget>[
+//             SizedBox(
+//               width: 18,
+//             ),
+//             _barkiri(),
+//             SizedBox(
+//               width: 18,
+//             ),
+//             _listproduk(),
+//           ]),
+//         ],
+//       ),
+//     );
+//   }
+
+//   _barkiri() {
+//     return Container(
+//       decoration: BoxDecoration(
+//           color: Colors.brown, borderRadius: BorderRadius.circular(20)),
+//       child: Stack(
+//         children: <Widget>[
+//           Align(
+//             alignment: Alignment.topCenter,
+//             // heightFactor: 10,
+//             child: Padding(
+//               padding: const EdgeInsets.only(top: 20.0),
+//               child: Container(
+//                 height: 65,
+//                 width: 65,
+//                 decoration:
+//                     BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+//                 child: Center(
+//                   child: IconButton(
+//                     onPressed: () {},
+//                     icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           Positioned(
+//             bottom: 40,
+//             left: 10,
+//             child: Container(
+//               child: Text(
+//                 "Nontext",
+//                 style: TextStyle(
+//                     fontSize: 17,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white),
+//               ),
+//             ),
+//           ),
+//           Positioned(
+//             bottom: 20,
+//             left: 10,
+//             child: Container(
+//               child: Text(
+//                 DateTime.now().hour.toString() +
+//                     " : " +
+//                     DateTime.now().minute.toString() +
+//                     " : " +
+//                     DateTime.now().second.toString(),
+//                 style: TextStyle(
+//                     fontSize: 17,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.white),
+//               ),
+//             ),
+//           )
+//         ],
+//       ),
+//       height: 180,
+//       width: 120,
+//     );
+//   }
+
+//   _listproduk() {
+//     return Container(
+//         height: 250,
+//         child: ListView.builder(
+//           shrinkWrap: true,
+//           physics: NeverScrollableScrollPhysics(),
+//           scrollDirection: Axis.horizontal,
+//           itemBuilder: (context, i) {
+//             return Padding(
+//               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+//               child: Container(
+//                 // height: 180,
+//                 width: 150,
+//                 color: Colors.white,
+//                 child: Column(
+//                   children: <Widget>[
+//                     Container(
+//                       height: 110,
+//                       width: 120,
+//                       decoration: BoxDecoration(
+//                           color: _hitemleis[i].color,
+//                           borderRadius: BorderRadius.circular(10.0)),
+//                     ),
+//                     SizedBox(
+//                       height: 3,
+//                     ),
+//                     Container(
+//                       width: 120,
+//                       child: Text(_hitemleis[i].name, style: TextStyle(
+//                         fontSize: 16, fontWeight: FontWeight.w600
+//                       ),),
+//                     ),
+//                     Container(
+//                       width: 120,
+//                       child: Text("Rp "+v.format(_hitemleis[i].price), style: TextStyle(
+//                         fontSize: 16, fontWeight: FontWeight.w600
+//                       ),),
+//                     ),
+
+//                   ],
+//                 ),
+//               ),
+//             );
+//           },
+//           itemCount: _hitemleis.length,
+//         ));
+//   }
+// }
+
 class Nontext extends StatefulWidget {
   final List<Produk> data;
 
-  Nontext({Key key, this.data}) : super(key: key);
-  
+  const Nontext({Key key, this.data}) : super(key: key);
   @override
   _NontextState createState() => _NontextState();
 }
 
 class _NontextState extends State<Nontext> {
-  String output="";
-  Token tokens = null;
-  User users= null;
-  String api;
-String b="";
-   var f = NumberFormat("#,##0", "en_US");
+  List data;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+        //Encode the url
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+        headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},);
+    print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'][1]['produk'];
+    });
 
-  _token(){
-    api="";
-    Token.getTokens("2").then((tokens){
-for(int i = 0; i<tokens.length;i++)
-     api = tokens[i].apitoken;
-
-    //  a=output.toString();
-     setState(() {
-                        
-                         });
-
-                      });
+    return "Success";
   }
-   
-_loop(){
-    User.getUsers().then((users){
-      
-     
-    //  a=output.toString();
-     setState(() {
-    for(int i = 0; i<users.length;i++)
-     output = users[i].produk1;          
-                         });
 
-                      });
-     
-    }
-  _gambar(){
-    
-     User.getUsers().then((users){
-     
-     
-    //  a=output.toString();
-     setState(() {
-               for(int i = 0; i<users.length;i++)
-     b = users[i].user_foto;          
-                         });
-
-                      });
-  }
   @override
-  Widget build(BuildContext context) {  
-    _token();
-_loop();
-_gambar();
-print(output);
-    return Container(
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getJsonData();
+  }  
+  var f = NumberFormat("#,##0", "en_US");
+  List<String> satu = ["Buku Guru Pendidikan Jasmani Olahraga dan Kesehatan Kelas VII","","Third","4"];
+  @override
+  Widget build(BuildContext context) {
+    
+
+   return Container(
       height: 300,
       decoration: BoxDecoration(
         color: Colors.purple[200],
@@ -77,43 +248,21 @@ print(output);
           BoxShadow(
             color: Colors.black26,
             offset: Offset(0, 3),
-            blurRadius: 3,
-            
+            blurRadius: 3
           )
         ]
       ),
-     
       child: ListView(
-         
         physics: ScrollPhysics(),
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        
         children: <Widget>[
-          
           Row(
-            
             children: <Widget>[
               SizedBox(
                 width: 8.0,
-              
               ),
-              
-              _kiri(),
-              SizedBox(
-                width: 8.0,
-              ),
-              _kanan(),
-              
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  _kiri() {
-    return Container(
+              Container(
       child: SizedBox(
         height: 220,
         width: 150,
@@ -132,27 +281,75 @@ print(output);
             ),
             textAlign: TextAlign.center,),
             SizedBox(height: 10,),
-
+//            Row(
+//              mainAxisAlignment: MainAxisAlignment.spaceAround,
+//              children: <Widget>[
+//                Container(
+//                  height: 30,
+//                  width: 30,
+//                  child: Center(
+//                    child: Text("00"),
+//                  ),
+//                  decoration: BoxDecoration(
+//                      color: Colors.orange,
+//                      borderRadius: BorderRadius.circular(8.0)
+//                  ),
+//                ),
+//                Text(" : ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
+//                Container(
+//                  height: 30,
+//                  width: 30,
+//                  child: Center(
+//                    child: Text("00"),
+//                  ),
+//                  decoration: BoxDecoration(
+//                      color: Colors.orange,
+//                      borderRadius: BorderRadius.circular(8.0)
+//                  ),
+//                ),
+//                Text(" : ", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
+//                Container(
+//                  height: 30,
+//                  width: 30,
+//                  child: Center(
+//                    child: Text("00"),
+//                  ),
+//                  decoration: BoxDecoration(
+//                      color: Colors.orange,
+//                      borderRadius: BorderRadius.circular(8.0)
+//                  ),
+//                ),
+//              ],
+//            ),
             SizedBox(height: 20,),
             MaterialButton(onPressed: (){}, child: Text("Lihat Semua"), color: Colors.white,)
           ],
         ),),
       ),
-    );
-  }
-
-  _kanan() {
-   
-    return Container(
+    ),
+              SizedBox(
+                width: 8.0,
+              ),
+              Container(
+      height: 250,
+      decoration: BoxDecoration(
+        color: Colors.purple[200],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 3),
+            blurRadius: 3
+          )
+        ]
+      ),
+      child: Container(
       height: 230,
       child: ListView.builder(
-      itemCount:6,
+        itemCount: data == null ? 0 : data.length,
         scrollDirection: Axis.horizontal,
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemBuilder: (context, i)  {
-        
-     
+        itemBuilder: (context, int index) {
           return Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: GestureDetector(
@@ -161,7 +358,7 @@ print(output);
                   PageRouteBuilder(
                       transitionDuration: Duration(milliseconds: 350),
                       pageBuilder: (context, _, __) =>
-                          DetailProduk2(produk: widget.data[i]))),
+                          DetailProduk2(produk: widget.data[index]))),
               child: Container(
                 width: 130,
                 height: 200,
@@ -175,11 +372,7 @@ print(output);
                       height: 100,
                       width: 100,
                       child: Container(
-     //edit gambar
-
-
-                        child: Image.network(""+b),
-                       // child: Image.network("http://www.bukubali.co.id/wp-content/uploads/cover_dak/ekatalog/spkn/17SPKN-00357.jpg", fit: BoxFit.cover,),
+                        child: Image.network('https://siplah.mascitra.co.id/assets/images/no-image.png', fit: BoxFit.cover,),
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(color: Colors.black26,
@@ -189,15 +382,11 @@ print(output);
                         ),
                       ),
                     ),
-                    
-                     Container(
-                     
+                    Container(
                       height: 50,
                       width: 110,
-  //edit
-
-
-                      child: Text(output,
+                      child: Text(
+                        data[index]['produk'],
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -209,7 +398,7 @@ print(output);
                     Container(
                       width: 110,
                       child: Text(
-                        "Rp " + f.format(6500),
+                        "Rp " + f.format(2000),
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: 16,
@@ -229,7 +418,7 @@ print(output);
                         children: <Widget>[
                           Container(
                             height: 10,
-                            width: i / 2 * 100,
+                            width: index / 2 * 100,
                             decoration: BoxDecoration(
                                 color: Colors.red,
                                 borderRadius: BorderRadius.circular(3)),
@@ -243,8 +432,8 @@ print(output);
                     SizedBox(height: 5.0),
                     Container(
                       width: 100,
-                      child: Text("Tersisa ${(i)}"),
-                    ),
+                      child: Text("Tersisa ${(index)}"),
+                    )
                   ],
                 ),
               ),
@@ -252,7 +441,20 @@ print(output);
           );
         },
       ),
+    ),
+
+    
+      
+      
+       ), 
+            ],
+          )
+        ],
+      ),
     );
+ 
+    
   }
 
 }
+

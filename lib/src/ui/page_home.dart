@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                Nontext(data: _listProduk),
+                Nontext(),
                 SizedBox(
                   height: 10,
                 ),
@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                   height: 10,
                 ),
                 GridKategori(),
-                RekomToko(),
+                // RekomToko(),
                 SizedBox(height: 10.0,),
               
                 // Column(
