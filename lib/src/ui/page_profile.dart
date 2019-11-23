@@ -178,7 +178,7 @@ _loop();
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text(output),
+                      title: Text("10 Kata Bijak"),
                 onTap: ()=> Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -572,7 +572,7 @@ class Pagekedua extends StatefulWidget {
   Widget build(BuildContext context) {
     return WebviewScaffold(
       appBar: AppBar(
-       title: Text("10 kata bijak"),
+       title: Text("Cara Menjadi Web Developer",style: TextStyle(fontSize: 14, color: Colors.white)),
           
         
       ), url: "https://siplah.mascitra.co.id/blog/page/2",
@@ -597,7 +597,7 @@ class _SecondScreen extends State<SecondScreen> {
   Widget build(BuildContext context) {
     return WebviewScaffold(
       appBar: AppBar(
-       title: Text("10 kata bijak"),
+       title: Text("10 Kata Bijak",style:TextStyle(fontSize: 14, color: Colors.white)),
           
         
       ), url: "https://siplah.mascitra.co.id/blog/page/1",
@@ -621,7 +621,7 @@ class Pageketiga extends StatefulWidget {
   Widget build(BuildContext context) {
     return WebviewScaffold(
       appBar: AppBar(
-       title: Text("10 kata bijak"),
+       title: Text("Syarat dan Ketentuan",style: TextStyle(fontSize: 14, color: Colors.white)),
           
         
       ), url: "https://siplah.mascitra.co.id/blog/page/2",

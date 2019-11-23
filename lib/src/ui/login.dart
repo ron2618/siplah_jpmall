@@ -321,12 +321,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
   }
-//  bool _obscureText = true;
-//  void _toggle() {
-//    setState(() {
-//      _obscureText = !_obscureText;
-//    });
-//  }
+ bool _obscureText = true;
+ void _toggle() {
+   setState(() {
+     _obscureText = !_obscureText;
+   });
+ }
   @override
   Widget build(BuildContext context) {
    void savedata() async {
@@ -471,7 +471,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                             const EdgeInsets.all(5.0),
                                         border: InputBorder.none,
                                         hintText: "Password"),
-                                      //obscureText: _obscureText
+                                      obscureText: _obscureText
 
                                   ),
 

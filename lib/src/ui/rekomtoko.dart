@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siplah_jpmall/src/models/model_mitra.dart';
 
 class RekomToko extends StatefulWidget {
   @override
@@ -6,8 +7,43 @@ class RekomToko extends StatefulWidget {
 }
 
 class _RekomTokoState extends State<RekomToko> {
+String a = "no data";
+String b,c,d;
+Mitra mitra;
+  _loop(){
+    a="";
+    Mitra.getMitra().then((mitras){
+      for(int i = 0; i<mitras.length;i++)
+     a = mitras[i].foto;  
+     
+    //  a=output.toString();
+     setState(() {
+            
+                         });
+
+                      });
+     
+    }
+     _loop1(){
+    Mitra.getMitra().then((mitras){
+        for(int i = 1; i<=mitras.length;i++)
+     b = mitras[i].foto; 
+     
+    //  a=output.toString();
+     setState(() {
+           
+                         });
+
+                      });
+     
+    }
   @override
   Widget build(BuildContext context) {
+    _loop();
+    _loop1();
+    print(a);
+    print(b);
+    
     return Column(
       children: <Widget>[
         Container(

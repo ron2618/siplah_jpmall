@@ -44,7 +44,7 @@ _loop(){
     //  a=output.toString();
      setState(() {
     for(int i = 0; i<users.length;i++)
-     output = users[i].produk;          
+     output = users[i].produk1;          
                          });
 
                       });
@@ -68,7 +68,7 @@ _loop(){
     _token();
 _loop();
 _gambar();
-
+print(output);
     return Container(
       height: 300,
       decoration: BoxDecoration(

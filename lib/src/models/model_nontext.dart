@@ -9,16 +9,17 @@ class User {
   Nontext api;
   String id;
   String user_foto;
-  String produk;
+  String produk1;
   
-  User({this.id,this.user_foto,this.produk,this.api});
+  User({this.id,this.user_foto,this.api,this.produk1});
 
   factory User.createUser(Map<String, dynamic> object)
   {
     return User(
       id: object['id'],
       user_foto: object['user_foto'],
-      produk: object['produk']
+      produk1: object['user_nama']
+
     );
   }
 
@@ -33,9 +34,9 @@ class User {
       "API-Key":"4P1_7Pm411_51p114h",
       "API-Token":"$Token({this.apitoken})"
     });
-    var jsonObject = json.decode(apiResult.body);
+    final jsonObject = json.decode(apiResult.body);
     Map<String, dynamic> map = jsonDecode(apiResult.body);
-    var token = map["Data"][0]["produk"][0];
+    var token = map[0];
     List<dynamic> listUser = (jsonObject as Map<String, dynamic>)["Data"];  
     
     List<User> users =[];
