@@ -361,7 +361,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   var body = json.encode(data);
 
   var response = await http.post(url,
-      headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"e6e282930dd7eda4fc32a7a82274351d60ab1874"},
+      headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
       body: body
   );
   print("${response.statusCode}");
@@ -606,10 +606,15 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   var katPel = ['Berbadan Hukum', 'Perseorangan'];
   var codetlp = ['+62', '+81'];
-
+  final nama = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final konfirmasi = TextEditingController();
+  final telp = TextEditingController();
   String slctdKatPel, code;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Color(0xFF6BB8E3),
       body: ListView(
@@ -645,23 +650,26 @@ class _RegisterState extends State<Register> {
                 ),
               
                 CustomTile("Nama", child: TextField(
-                
+                controller: nama,
                   decoration: InputDecoration(
                     border: InputBorder.none
                   ),
                 ),
                 ),
                 CustomTile("Email", child: TextField(
+                  controller: email,
                   decoration: InputDecoration(
                     border: InputBorder.none
                   ),
                 ),),
                 CustomTile("Password", child: TextField(
+                  controller: password,
                   decoration: InputDecoration(
                     border: InputBorder.none
                   ),
                 ),),
                 CustomTile("Konfirmasi Password", child: TextField(
+                  controller: konfirmasi,
                   decoration: InputDecoration(
                     border: InputBorder.none
                   ),
@@ -689,6 +697,7 @@ class _RegisterState extends State<Register> {
                     Container(
                       width: MediaQuery.of(context).size.width-200,
                       child: TextField(
+                        controller: telp,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(5.0),
@@ -745,7 +754,7 @@ class _RegisterState extends State<Register> {
                 ),),
               ),
               MaterialButton(
-                onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register2()), (_) => false),
+                onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register2(nama: nama.text,email: email.text,konfirmasi: konfirmasi.text,password: password.text,telp: telp.text,)), (_) => false),
                 child: Text("Next", style: TextStyle(
                     color: Colors.white
                 ),),
@@ -837,14 +846,23 @@ class CustomTile extends StatelessWidget {
 }
 
 class Register2 extends StatefulWidget {
+ final String nama;
+  final  String email;
+  final  String password;
+  final String konfirmasi;
+  final  String telp;
+
+  const Register2({Key key, this.nama, this.email, this.password, this.konfirmasi, this.telp}) : super(key: key);
   @override
   _Register2State createState() => _Register2State();
 }
 
 class _Register2State extends State<Register2> {
+  
   var placeholder = ['Loading...', 'Loading...', 'Loading...'];
   String prop, kab, kec;
-  
+  final alamat = TextEditingController();
+  final kodepos = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -854,7 +872,42 @@ class _Register2State extends State<Register2> {
   
 
   }
+     Future<http.Response> daftar_api () async {
+  var url ='https://siplah.mascitra.co.id/api/user/daftar';
 
+  Map data = {
+    'nama': widget.nama,
+    'email': widget.email,
+    'password': widget.password,
+    'password_konfirmasi': widget.konfirmasi,
+     'provinsi_id': prop,
+     'kabupaten_id': kab,
+     'kecamatan_id':kec,
+     'alamat':alamat.text,
+     'kode_pos': kodepos.text,
+      'telepon':widget.telp,
+      'kategori_pelanggan':3
+  };
+  //encode Map to JSON
+  var body = json.encode(data);
+
+  var response = await http.post(url,
+      headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
+      body: body
+  );
+  print("${response.statusCode}");
+  
+  print("${response.body}");
+  Map<String, dynamic> map = jsonDecode(response.body);
+  if(map["Error"] == true || map["Error"] == "true"){
+    // _showAlert(context);
+    print('berhasil');
+  }else{
+   // savedata();
+  print('gagal');   
+  }
+  return response;
+}
   @override
   Widget build(BuildContext context) {
     return WillPopScope(child: Scaffold(
@@ -882,11 +935,15 @@ class _Register2State extends State<Register2> {
                         child: DropdownButton(
                         value: prop,
                         isExpanded: true,
-                        items: List.generate(snapshot.hasData ? snapshot.data.results.length : placeholder.length, (i) => DropdownMenuItem(
-                          child: Text(snapshot.hasData ? snapshot.data.results[i].namaProvinsi : placeholder[i]), value: snapshot.hasData ? snapshot.data.results[i].provinsiId : placeholder[i], )),
+                        items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
+                          child: Text(snapshot.hasData ? snapshot.data.data[i].nama : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i], )),
                         onChanged: (item){
                           setState(() {
-                            prop = item;
+                            if(item == null){
+                            
+                            }else{
+                              prop = item;
+                            }
                           });
                           kabupatenBloc.fetchKabupaten(prop);
                         },
@@ -901,11 +958,13 @@ class _Register2State extends State<Register2> {
                         child: DropdownButton(
                           value: kab,
                           isExpanded: true,
-                          items: List.generate(snapshot.hasData ? snapshot.data.results.length : placeholder.length, (i) => DropdownMenuItem(
-                            child: Text(snapshot.hasData ? snapshot.data.results[i].namaKabupaten : placeholder[i]), value: snapshot.hasData ? snapshot.data.results[i].kabupatenId : placeholder[i],)),
+                          items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
+                            child: Text(snapshot.hasData ? snapshot.data.data[i].nama : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i],)),
                           onChanged: (item){
                             setState(() {
+                            
                               kab = item;
+                            
                             });
                             kecamatanBloc.fetchKecamatan(kab);
                           },
@@ -920,8 +979,8 @@ class _Register2State extends State<Register2> {
                         child: DropdownButton(
                           value: kec,
                           isExpanded: true,
-                          items: List.generate(snapshot.hasData ? snapshot.data.results.length : placeholder.length, (i) => DropdownMenuItem(
-                            child: Text(snapshot.hasData ? snapshot.data.results[i].namaKecamatan  : placeholder[i]), value: snapshot.hasData ? snapshot.data.results[i].kecamatanId : placeholder[i],)),
+                          items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
+                            child: Text(snapshot.hasData ? snapshot.data.data[i].nama  : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i],)),
                           onChanged: (item){
                             setState(() {
                               kec = item;
@@ -939,6 +998,7 @@ class _Register2State extends State<Register2> {
                       children: <Widget>[
                         Container(
                           child: Text("Alamat Lengkap", style: TextStyle(
+                            
                               fontSize: 12,
                               color: Colors.white
                           ),),
@@ -955,6 +1015,7 @@ class _Register2State extends State<Register2> {
                               )
                           ),
                           child: TextField(
+                            controller: alamat,
                             maxLines: 5,
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -968,6 +1029,7 @@ class _Register2State extends State<Register2> {
                   CustomTile("Kode Pos", style: 2, child: Container(
                     width: MediaQuery.of(context).size.width - 200,
                     child: TextField(
+                      controller: kodepos,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                       ),
@@ -1021,6 +1083,9 @@ class _Register2State extends State<Register2> {
                     ),),
                   ),
                   MaterialButton(
+                    onPressed: (){
+                      daftar_api();
+                    },
                     child: Text("Selesai", style: TextStyle(
                         color: Colors.white
                     ),),

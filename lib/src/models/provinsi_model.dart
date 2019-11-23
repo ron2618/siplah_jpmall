@@ -5,45 +5,69 @@ Province provinceFromJson(String str) => Province.fromJson(json.decode(str));
 String provinceToJson(Province data) => json.encode(data.toJson());
 
 class Province {
-  bool status;
-  String message;
-  List<Result> results;
+    bool error;
+    dynamic pesanSys;
+    dynamic pesanUsr;
+    List<Data> data;
+    Paging paging;
 
-  Province({
-    this.status,
-    this.message,
-    this.results,
-  });
+    Province({
+        this.error,
+        this.pesanSys,
+        this.pesanUsr,
+        this.data,
+        this.paging,
+    });
 
-  factory Province.fromJson(Map<String, dynamic> json) => new Province(
-    status: json["status"],
-    message: json["message"],
-    results: new List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
-  );
+    factory Province.fromJson(Map<String, dynamic> json) => Province(
+        error: json["Error"],
+        pesanSys: json["Pesan_sys"],
+        pesanUsr: json["Pesan_usr"],
+        data: List<Data>.from(json["Data"].map((x) => Data.fromJson(x))),
+        paging: Paging.fromJson(json["Paging"]),
+    );
 
-  Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "results": new List<dynamic>.from(results.map((x) => x.toJson())),
-  };
+    Map<String, dynamic> toJson() => {
+        "Error": error,
+        "Pesan_sys": pesanSys,
+        "Pesan_usr": pesanUsr,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "Paging": paging.toJson(),
+    };
 }
 
-class Result {
-  String provinsiId;
-  String namaProvinsi;
+class Data {
+    String id;
+    String nama;
 
-  Result({
-    this.provinsiId,
-    this.namaProvinsi,
-  });
+    Data({
+        this.id,
+        this.nama,
+    });
 
-  factory Result.fromJson(Map<String, dynamic> json) => new Result(
-    provinsiId: json["provinsi_id"],
-    namaProvinsi: json["nama_provinsi"],
-  );
+    factory Data.fromJson(Map<String, dynamic> json) => Data(
+        id: json["id"],
+        nama: json["nama"],
+    );
 
-  Map<String, dynamic> toJson() => {
-    "provinsi_id": provinsiId,
-    "nama_provinsi": namaProvinsi,
-  };
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "nama": nama,
+    };
+}
+
+class Paging {
+    bool pagination;
+
+    Paging({
+        this.pagination,
+    });
+
+    factory Paging.fromJson(Map<String, dynamic> json) => Paging(
+        pagination: json["Pagination"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "Pagination": pagination,
+    };
 }
