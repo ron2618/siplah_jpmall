@@ -47,7 +47,7 @@ class _GridProdukState extends State<GridProduk> with TickerProviderStateMixin {
               PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 350),
                   pageBuilder: (context, _, __) =>
-                      DetailProduk(produk: _listProduk[i]))),
+                      DetailProduk())),
           child: Card(
             elevation: 2,
             shape: RoundedRectangleBorder(

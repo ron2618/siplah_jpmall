@@ -1,6 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GridKategori extends StatefulWidget {
+  final List data;
+
+  const GridKategori({Key key, this.data}) : super(key: key);
+
   @override
   _GridKategoriState createState() => _GridKategoriState();
 }
@@ -14,22 +19,22 @@ class _GridKategoriState extends State<GridKategori> {
             scrollDirection: Axis.horizontal,
             // physics: ScrollPhysics(),
             // shrinkWrap: true,
-            itemCount: _listcate.length,
+            itemCount: widget.data.length,
             itemBuilder: (context, i) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-            height: 40,
-            width: 150,
-            child: Container(
-              child: Center(
-                child: Text("  "+_listcate[i].title, style: TextStyle(
-                  fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black
-                ),),
-              ),
-              decoration: BoxDecoration(
-                  color: _listcate[i].color,
-                  borderRadius: BorderRadius.circular(10.0)
+                  child: Container(
+                   
+                     decoration: BoxDecoration(
+                         color: Colors.red[100],
+                       borderRadius: BorderRadius.circular(10),
+                     ),
+            height: 100,
+            width: 110,
+            child: Center(
+              child: Container(
+                height: 120,
+               child: Image.network(widget.data[i]['gambar'],),
               ),
             ),
           ),
@@ -40,18 +45,3 @@ class _GridKategoriState extends State<GridKategori> {
         );  }
 }
 
-class CateList {
-  final String title;
-  final int index;
-  final Color color;
-
-  CateList({this.title, this.index, this.color});
-
-}
-
-List<CateList> _listcate = <CateList>[
-  //CateList(title: "Paket Utama K13", index: 1, color: Colors.blue[100]),
-  CateList(title: "Non Text", index: 1, color: Colors.purple[100]),
-  //CateList(title: "Pendamping K13", index: 1, color: Colors.pink[100]),
-  CateList(title: "Alat Peraga", index: 1, color: Colors.red[100]),
-];

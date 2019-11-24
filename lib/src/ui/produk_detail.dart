@@ -7,9 +7,11 @@ import 'package:siplah_jpmall/src/ui/star.dart';
 // import 'package:siplah_jpmall/src/ui/star.dart';
 
 class DetailProduk extends StatefulWidget {
-  final Produk produk;
+  final String nama;
+  final String harga;
+  final String gambar;
 
-  const DetailProduk({Key key, @required this.produk}) : super(key: key);
+  const DetailProduk({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
   @override
   _DetailProdukState createState() => _DetailProdukState();
 }
@@ -67,9 +69,9 @@ class _DetailProdukState extends State<DetailProduk>
                             });
                           },
                           controller: pageController,
-                          children: List.generate(widget.produk.gambar.length, (f){
+                          children: List.generate(5, (f){
                             return Hero(
-                              tag: 'image-${widget.produk.title}',
+                              tag: widget.gambar,
                               child: Container(
                                 height: 300,
                                 width: double.infinity,
@@ -77,7 +79,7 @@ class _DetailProdukState extends State<DetailProduk>
                                     color: Colors.white,
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            widget.produk.gambar[f].link))),
+                                            widget.gambar))),
                               ),
                             );
                           })
@@ -94,7 +96,7 @@ class _DetailProdukState extends State<DetailProduk>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: List.generate(widget.produk.gambar.length, (i){
+                        children: List.generate(5, (i){
                           return Padding(
                             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                             child: Container(
@@ -113,9 +115,7 @@ class _DetailProdukState extends State<DetailProduk>
               //   backgroundColor: Colors.transparent,
               //   elevation: 0.0,
               // ),
-              CustomBottomSheet(
-                widget.produk,
-              )
+           
             ],
           ),
         ));
@@ -123,9 +123,11 @@ class _DetailProdukState extends State<DetailProduk>
 }
 
 class DetailProduk2 extends StatefulWidget {
-  final Produk produk;
+   final String nama;
+  final String harga;
+  final String gambar;
 
-  const DetailProduk2({Key key, @required this.produk}) : super(key: key);
+  const DetailProduk2({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
   @override
   _DetailProduk2State createState() => _DetailProduk2State();
 }
@@ -183,7 +185,7 @@ class _DetailProduk2State extends State<DetailProduk2>
                                 });
                               },
                               controller: pageController,
-                              children: List.generate(widget.produk.gambar.length, (f){
+                              children: List.generate(5, (f){
                                 return Container(
                                   height: 300,
                                   width: double.infinity,
@@ -191,7 +193,7 @@ class _DetailProduk2State extends State<DetailProduk2>
                                       color: Colors.white,
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                              widget.produk.gambar[f].link))),
+                                              widget.gambar))),
                                 );
                               })
                           ),
@@ -207,7 +209,7 @@ class _DetailProduk2State extends State<DetailProduk2>
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: List.generate(widget.produk.gambar.length, (i){
+                          children: List.generate(5, (i){
                             return Padding(
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: Container(
@@ -226,9 +228,9 @@ class _DetailProduk2State extends State<DetailProduk2>
               //   backgroundColor: Colors.transparent,
               //   elevation: 0.0,
               // ),
-              CustomBottomSheet(
-                widget.produk,
-              )
+             CustomBottomSheet(
+               nama: widget.nama,gambar: widget.gambar,harga: widget.harga,
+             ),
             ],
           ),
         ));
@@ -236,11 +238,16 @@ class _DetailProduk2State extends State<DetailProduk2>
 }
 
 class SheetContainer extends StatelessWidget {
-  final Produk produk;
-  SheetContainer(this.produk);
+  final String nama;
+  final String harga;
+  final String gambar;
+
+  const SheetContainer({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
+ 
   @override
   Widget build(BuildContext context) {
     // double sheetItemHeight = 110;
+    print(nama);
     return Container(
       padding: EdgeInsets.only(top: 25),
       height: MediaQuery.of(context).size.height,
@@ -254,7 +261,7 @@ class SheetContainer extends StatelessWidget {
           Expanded(
               flex: 1,
               child: SheetItems(
-                produk: produk,
+                nama: nama,gambar: gambar,harga: harga,
               ))
         ],
       ),
@@ -282,8 +289,12 @@ class SheetContainer extends StatelessWidget {
 //           ),
 //         )
 class CustomBottomSheet extends StatefulWidget {
-  final Produk produk;
-  CustomBottomSheet(this.produk);
+   final String nama;
+  final String harga;
+  final String gambar;
+
+  const CustomBottomSheet({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
+
   @override
   _CustomBottomSheetState createState() => _CustomBottomSheetState();
 }
@@ -356,15 +367,19 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
             return;
           }
         },
-        child: SheetContainer(widget.produk),
+        child: SheetContainer(nama: widget.nama,gambar: widget.gambar,harga: widget.harga,),
       ),
     );
   }
 }
 
 class SheetItems extends StatefulWidget {
-  final Produk produk;
-  SheetItems({this.produk});
+   final String nama;
+  final String harga;
+  final String gambar;
+
+  const SheetItems({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
+
   @override
   _SheetItemsState createState() => _SheetItemsState();
 }
@@ -397,6 +412,8 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var price  = widget.harga;
+
     return ListView(
       children: <Widget>[
         Container(
@@ -418,7 +435,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
                     width: 250,
                     height: 80,
                     child: Text(
-                      widget.produk.title,
+                      widget.nama,
                       textAlign: TextAlign.left,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
@@ -443,7 +460,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
               ),
               Container(
                 width: double.infinity,
-                child: Text("Rp " + f.format(widget.produk.price.toInt()),
+                child: Text("Rp "+ price,
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.red,
@@ -465,7 +482,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w500),
                       ),
-                      widget.produk.stok > 50
+                      20 > 50
                           ? Text(
                               "Tersedia > 50",
                               style: TextStyle(
@@ -487,7 +504,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    _ulasan(widget.produk.star),
+                    
                     _diskusi(12),
                     _pengiriman()
                   ],
@@ -520,8 +537,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
             color: Colors.white,
             child: _informasiProduk()),
         _customDivider(),
-        Container(
-            width: double.infinity, color: Colors.white, child: _hubPenjual()),
+     
         _customDivider(),
         Container(
           padding: EdgeInsets.only(left: 20, right: 20, top: 8.0, bottom: 8.0),
@@ -733,144 +749,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
     );
   }
 
-  _hubPenjual() {
-    var startoko = widget.produk.toko.starToko.jumlahStar /
-        widget.produk.toko.starToko.jumlahStar;
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Text(
-              "Penjual",
-              textAlign: TextAlign.left,
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: <Widget>[
-              Container(
-                height: 60,
-                width: 60,
-                child: Image.network(
-                    "http://s1.bukalapak.com/uploads/logos/6813/w-160/bukamall-logo-new.jpg.webp"),
-              ),
-              SizedBox(
-                width: 8.0,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    width: 200,
-                    child: Text(
-                      widget.produk.toko.namaToko,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                      maxLines: 1,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 3.0,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.location_on,
-                        size: 18,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 200,
-                        child: Text(
-                          widget.produk.toko.lokasi,
-                          maxLines: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    height: 30,
-                    width: 100,
-                    child: StarDisplay(
-                      size: 15,
-                      value: startoko.toInt(),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                  height: 40,
-                  width: 180,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black26),
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(Icons.chat_bubble_outline),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        "Chat Penjual",
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  )),
-              Container(
-                  height: 40,
-                  width: 180,
-                  decoration: BoxDecoration(
-                      color: Colors.cyan,
-                      // border: Border.all(color: Colors.black26),
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(Icons.add, color: Colors.white),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        "Favoritkan",
-                        style: TextStyle(fontSize: 12, color: Colors.white),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  )),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
+ 
   _informasiProduk() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -888,21 +767,21 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
             height: 10,
           ),
           _rowku(
-              "Berat", widget.produk.spek.berat.toInt().toString() + " gram"),
+              "Berat",  "3 gram"),
           SizedBox(
             height: 5,
           ),
-          _rowku("Panjang", widget.produk.spek.dimen.p.toString() + " cm"),
-          SizedBox(
-            height: 5,
-          ),
-          _rowku(
-              "Lebar", widget.produk.spek.dimen.l.toInt().toString() + " cm"),
+          _rowku("Panjang",  "4 cm"),
           SizedBox(
             height: 5,
           ),
           _rowku(
-              "Tebal", widget.produk.spek.dimen.t.toInt().toString() + " cm"),
+              "Lebar",  "9 cm"),
+          SizedBox(
+            height: 5,
+          ),
+          _rowku(
+              "Tebal","10 cm"),
           SizedBox(
             height: 10,
           ),
@@ -921,7 +800,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
             height: 100,
             width: double.infinity,
             child: Text(
-              widget.produk.spek.deskripsi,
+          '',
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
               textAlign: TextAlign.left,

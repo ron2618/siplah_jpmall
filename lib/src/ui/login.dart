@@ -872,6 +872,22 @@ class _Register2State extends State<Register2> {
   
 
   }
+  void _showAlert(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Peringatan"),
+            content: Text("maaf gagal mendaftar"),
+          )
+      );}
+      void _berhasil(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Peringatan"),
+            content: Text("Password atau Email Kamu Salah"),
+          )
+      );}
      Future<http.Response> daftar_api () async {
   var url ='https://siplah.mascitra.co.id/api/user/daftar';
 
@@ -900,11 +916,10 @@ class _Register2State extends State<Register2> {
   print("${response.body}");
   Map<String, dynamic> map = jsonDecode(response.body);
   if(map["Error"] == true || map["Error"] == "true"){
-    // _showAlert(context);
-    print('berhasil');
+     _showAlert(context);
   }else{
    // savedata();
-  print('gagal');   
+  _berhasil(context);  
   }
   return response;
 }

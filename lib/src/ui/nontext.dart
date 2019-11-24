@@ -204,35 +204,24 @@ import 'package:http/http.dart' as http;
 // }
 
 class Nontext extends StatefulWidget {
-  final List<Produk> data;
+  final List data;
+  final List kategori;
 
-  const Nontext({Key key, this.data}) : super(key: key);
+  const Nontext({Key key, this.data, this.kategori}) : super(key: key);
+
+ 
   @override
   _NontextState createState() => _NontextState();
 }
 
 class _NontextState extends State<Nontext> {
-  List data;
-  Future<String> getJsonData() async {
-    var response = await http.post(
-        //Encode the url
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
-        headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},);
-    print(response.body);
-    setState(() {
-      // ignore: deprecated_member_use
-      var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'][1]['produk'];
-    });
 
-    return "Success";
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getJsonData();
+
   }  
   var f = NumberFormat("#,##0", "en_US");
   List<String> satu = ["Buku Guru Pendidikan Jasmani Olahraga dan Kesehatan Kelas VII","","Third","4"];
@@ -242,6 +231,7 @@ class _NontextState extends State<Nontext> {
 
    return Container(
       height: 300,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Colors.purple[200],
         boxShadow: [
@@ -262,7 +252,13 @@ class _NontextState extends State<Nontext> {
               SizedBox(
                 width: 8.0,
               ),
-              Container(
+              widget.kategori != null ?   Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),topLeft: Radius.circular(20)),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.kategori[0]['gambar'])
+                  )
+                ),
       child: SizedBox(
         height: 220,
         width: 150,
@@ -272,15 +268,15 @@ class _NontextState extends State<Nontext> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             SizedBox(height: 15,),
-            Text("NON TEXT \n", style: TextStyle(
-              color: Colors.white,
-              fontSize: 20
+            // Text(widget.kategori != null ?widget.kategori[0]['nama'] : 'loading....', style: TextStyle(
+            //   color: Colors.white,
+            //   fontSize: 20
               
-              ,
-              fontWeight: FontWeight.w500
-            ),
-            textAlign: TextAlign.center,),
-            SizedBox(height: 10,),
+            //   ,
+            //   fontWeight: FontWeight.w500
+            // ),
+            // textAlign: TextAlign.center,),
+            SizedBox(height: 120,),
 //            Row(
 //              mainAxisAlignment: MainAxisAlignment.spaceAround,
 //              children: <Widget>[
@@ -322,16 +318,16 @@ class _NontextState extends State<Nontext> {
 //              ],
 //            ),
             SizedBox(height: 20,),
-            MaterialButton(onPressed: (){}, child: Text("Lihat Semua"), color: Colors.white,)
+            
           ],
         ),),
       ),
-    ),
+    ):Container(),
               SizedBox(
                 width: 8.0,
               ),
               Container(
-      height: 250,
+      height: 220,
       decoration: BoxDecoration(
         color: Colors.purple[200],
         boxShadow: [
@@ -343,9 +339,9 @@ class _NontextState extends State<Nontext> {
         ]
       ),
       child: Container(
-      height: 230,
+      height: 100,
       child: ListView.builder(
-        itemCount: data == null ? 0 : data.length,
+        itemCount: widget.data == null ? 0 : widget.data.length,
         scrollDirection: Axis.horizontal,
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -358,10 +354,10 @@ class _NontextState extends State<Nontext> {
                   PageRouteBuilder(
                       transitionDuration: Duration(milliseconds: 350),
                       pageBuilder: (context, _, __) =>
-                          DetailProduk2(produk: widget.data[index]))),
+                          DetailProduk2(nama: widget.data[index]['produk'], gambar: widget.data[index]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'https://siplah.mascitra.co.id/assets/images/no-image.png',harga: widget.data[index]['harga'],))),
               child: Container(
                 width: 130,
-                height: 200,
+                height: 100,
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
@@ -372,7 +368,7 @@ class _NontextState extends State<Nontext> {
                       height: 100,
                       width: 100,
                       child: Container(
-                        child: Image.network('https://siplah.mascitra.co.id/assets/images/no-image.png', fit: BoxFit.cover,),
+                        child: Image.network(widget.data[index]['foto'][0]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'https://siplah.mascitra.co.id/assets/images/no-image.png', fit: BoxFit.cover,),
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(color: Colors.black26,
@@ -386,7 +382,7 @@ class _NontextState extends State<Nontext> {
                       height: 50,
                       width: 110,
                       child: Text(
-                        data[index]['produk'],
+                        widget.data[index]['produk'],
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -398,7 +394,7 @@ class _NontextState extends State<Nontext> {
                     Container(
                       width: 110,
                       child: Text(
-                        "Rp " + f.format(2000),
+                        "Rp " + widget.data[index]['harga'],
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: 16,

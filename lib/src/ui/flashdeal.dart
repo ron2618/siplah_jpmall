@@ -328,7 +328,7 @@ class _FlashDealState extends State<FlashDeal> {
                   PageRouteBuilder(
                       transitionDuration: Duration(milliseconds: 350),
                       pageBuilder: (context, _, __) =>
-                          DetailProduk2(produk: widget.data[i]))),
+                          DetailProduk2())),
               child: Container(
                 width: 130,
                 height: 200,

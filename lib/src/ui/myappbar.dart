@@ -32,7 +32,7 @@ class _MyAppBarNormalState extends State<MyAppBarNormal> {
             width: 140,
             decoration: new BoxDecoration(
           image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"),
-          fit: BoxFit.cover),
+          fit: BoxFit.scaleDown),
             ),
          ),
               ],
@@ -64,7 +64,7 @@ class _MyAppBarAbNormalState extends State<MyAppBarAbNormal> {
             width: 100,
             decoration: new BoxDecoration(
           image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"),
-          fit: BoxFit.cover)
+          fit: BoxFit.fill)
         ),
           ),
           SizedBox(

@@ -12,13 +12,36 @@ import 'package:siplah_jpmall/src/ui/myflexspace.dart';
 import 'package:siplah_jpmall/src/ui/pendamping.dart' as prefix0;
 import 'package:siplah_jpmall/src/ui/produk_detail.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
+import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+   List data;
+  List data2;
+  List kategorilist;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+        //Encode the url
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+        headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},);
+    print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'][0]['produk'];
+      data2 = convertDataToJson['Data'][1]['produk'];
+      kategorilist = convertDataToJson['Data'];
+    });
+
+    return "Success";
+  }
   double posisi = 0.0;
   int currentPage = 0;
   ScrollController _controller;
@@ -48,6 +71,7 @@ class _HomePageState extends State<HomePage> {
 //    print("Aspect Ratio : "+MediaQuery.of(context).size.aspectRatio.toString());
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    getJsonData();
   }
   @override
   Widget build(BuildContext context) {
@@ -57,8 +81,10 @@ class _HomePageState extends State<HomePage> {
           headerSliverBuilder: (context, inner) {
             return [
               SliverAppBar(
+
                 automaticallyImplyLeading: false,
                 title: AnimatedCrossFade(
+                  
                     duration: const Duration(milliseconds: 200),
                     firstChild: MyAppBarNormal(),
                     secondChild: MyAppBarAbNormal(),
@@ -77,8 +103,12 @@ class _HomePageState extends State<HomePage> {
                 //   child: posisi >= 27 ? MyAppBarNormal() : MyAppBarAbNormal()),
                 pinned: true,
                 expandedHeight: 120,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: MyFlexSpace(),
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [Colors.purple,Colors.yellow])),
+                  child: FlexibleSpaceBar(
+                    background: MyFlexSpace(),
+                  ),
                 ),
               ),
             ];
@@ -98,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                Nontext(),
+                Nontext(data: data,kategori: kategorilist,),
                 SizedBox(
                   height: 10,
                 ),
@@ -106,11 +136,11 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                Alatperaga(data: _listProduk),
+                Alatperaga(data: data2,kategori: kategorilist,),
                 SizedBox(
                   height: 10,
                 ),
-                GridKategori(),
+                GridKategori(data: kategorilist,),
                 // RekomToko(),
                 SizedBox(height: 10.0,),
               
@@ -149,7 +179,7 @@ class Cat1 extends StatelessWidget {
             PageRouteBuilder(
                 transitionDuration: Duration(milliseconds: 350),
                 pageBuilder: (context, _, __) =>
-                    DetailProduk2(produk: _listProduk[i]))),
+                    DetailProduk2())),
             child: Column(
               children: <Widget>[
                 Container(
