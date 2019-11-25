@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:siplah_jpmall/src/models/profile1.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -42,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -76,57 +76,33 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       
       ),
-        body: TabBarView(
+      
+       body: TabBarView(
             controller: controller,
             children: [
               PageBeli(),
             
             ])
-
-        );
+    
+            );
+       
+        
+        
   }
 
     }
 
   
 class PageBeli extends StatelessWidget {
+final List data;
+final List kategori;
 
+const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
   
   
-
-  Profile1 profiles = null;
-  String output;
-  String api;
-  _token() {
-    api = "";
-    Token.getTokens("2").then((tokens) {
-      for (int i = 0; i < tokens.length; i++)
-        api = tokens[i].apitoken;
-
-      //  a=output.toString();
-
-    });
-  }
-  _loop(){
-    output="";
-    Profile1.getProfile1().then((profiles){
-      
-      for(int i = 0; i<profiles.length;i++)
-        output = profiles[i].judul;
-      
-      //  a=output.toString();
-
-
-    });
-
-  }
     @override
   Widget build(BuildContext context) {
 
-
-_token();
-_loop();
-//print(output);
    void _showAlert(BuildContext context) {
       showDialog(
           context: context,
@@ -214,6 +190,9 @@ _loop();
                 leading: Icon(Icons.signal_cellular_connected_no_internet_4_bar),
                     ),
                   ),
+
+                  //batas bawah
+
                     Container(
                     color: Colors.grey[200],
                     height: 50,

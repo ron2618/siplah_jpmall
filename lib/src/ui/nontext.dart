@@ -354,7 +354,7 @@ class _NontextState extends State<Nontext> {
                   PageRouteBuilder(
                       transitionDuration: Duration(milliseconds: 350),
                       pageBuilder: (context, _, __) =>
-                          DetailProduk2(nama: widget.data[index]['produk'], gambar: widget.data[index]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'https://siplah.mascitra.co.id/assets/images/no-image.png',harga: widget.data[index]['harga'],))),
+                          DetailProduk2(nama: widget.data[index]['produk'], gambar: widget.data[index]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'https://siplah.mascitra.co.id/assets/images/no-image.png',harga:widget.data[index]['harga']))),
               child: Container(
                 width: 130,
                 height: 100,
@@ -394,7 +394,7 @@ class _NontextState extends State<Nontext> {
                     Container(
                       width: 110,
                       child: Text(
-                        "Rp " + widget.data[index]['harga'],
+                        "Rp " + widget.data[index]['harga']== '0'? widget.data[index]['harga']:"Harga Zona",
                         style: TextStyle(
                           color: Colors.red,
                           fontSize: 16,

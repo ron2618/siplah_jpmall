@@ -9,7 +9,7 @@ import 'package:siplah_jpmall/src/ui/gridproduk.dart';
 import 'package:siplah_jpmall/src/ui/imageslider.dart';
 import 'package:siplah_jpmall/src/ui/myappbar.dart';
 import 'package:siplah_jpmall/src/ui/myflexspace.dart';
-import 'package:siplah_jpmall/src/ui/pendamping.dart' as prefix0;
+import 'package:siplah_jpmall/src/ui/pendamping.dart';
 import 'package:siplah_jpmall/src/ui/produk_detail.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'dart:async';
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-               // Pendamping(data: _listProduk),
+                //Pendamping(data: data2,kategori: kategorilist,),
                 SizedBox(
                   height: 10,
                 ),
