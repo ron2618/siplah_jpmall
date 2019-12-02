@@ -1,4 +1,6 @@
+ 
 import 'package:flutter/material.dart';
+import 'package:siplah_jpmall/src/ui/edit_profile.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage>
   ScrollController _controller;
   double position = 0;
   String namauser = null;
+  String nama=null;
   @override
   void initState() {
     _controller = ScrollController();
@@ -36,16 +39,22 @@ class _ProfilePageState extends State<ProfilePage>
      final pref = await SharedPreferences.getInstance();
     setState(() {
           namauser = pref.getString("username");
+          nama = pref.getString("nama");
     });
   }
-
   @override
   Widget build(BuildContext context) {
    
+  //print(nama);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.settings, color: Colors.white,), onPressed: null),
+          IconButton(icon: Icon(Icons.settings, color: Colors.white,), onPressed: ()=> Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Editprofile(),
+                  )
+                  ), ),
           Container(
             padding: const EdgeInsets.all(5),
             child: Stack(
@@ -227,7 +236,8 @@ const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) => Pageketiga(),
-                  )),               
+                  )
+                  ),               
                 leading: Icon(Icons.book),
                     ),
                   ),

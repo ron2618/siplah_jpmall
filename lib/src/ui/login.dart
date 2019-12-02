@@ -5,6 +5,7 @@ import 'package:siplah_jpmall/src/bloc/kecamatan_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/provinsi_bloc.dart';
 import 'package:siplah_jpmall/src/models/kabupaten_model.dart';
 import 'package:siplah_jpmall/src/models/kecamatan_model.dart';
+import 'package:siplah_jpmall/src/models/product_model.dart';
 import 'package:siplah_jpmall/src/models/provinsi_model.dart';
 import 'dart:async';
 import 'package:siplah_jpmall/src/ui/mainpage.dart';
@@ -14,6 +15,7 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/ui/page_home.dart';
 class WelcomePage extends StatefulWidget {
+   
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
@@ -22,11 +24,14 @@ class WelcomePage extends StatefulWidget {
     SharedPreferences sharedPreferences;
 
 class _WelcomePageState extends State<WelcomePage> {
+ 
   var token ;
   PageController _pageController;
   bool lastPage = false;
   int initialPage = 0;
   String usernama = null;
+  
+  String foto,npsn,nama,email,alamat,kodepos,telepon;
 
   final page = <ListPage>[
     ListPage(0, PagePertama()),
@@ -48,9 +53,9 @@ class _WelcomePageState extends State<WelcomePage> {
       headers: {"Content-Type": "application/json"},
       body: body
   );
-  print("${response.statusCode}");
+  // print("${response.statusCode}");
   
-  print("${response.body}");
+  // print("${response.body}");
   Map<String, dynamic> map = jsonDecode(response.body);
   token  = map["Data"][0]["api_token"];
   
@@ -65,8 +70,12 @@ class _WelcomePageState extends State<WelcomePage> {
     getCredential();
   }
   getCredential() async {
+    
+    //print(username.text);
      final pref = await SharedPreferences.getInstance();
     setState(() {
+
+         
           usernama = pref.getString("username");
           if(usernama != null){
             Navigator.of(context).pushAndRemoveUntil(
@@ -312,11 +321,19 @@ class PageKetiga extends StatelessWidget {
 }
 
 class LoginPage extends StatefulWidget {
+  final List npsn;
+
+  const LoginPage({Key key, this.npsn}) : super(key: key);
+
+
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+  String foto,npsn,nama,email,alamat,kodepos,telepon;
+
   @override
   void initState() {
     super.initState();
@@ -331,11 +348,20 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
    void savedata() async {
    sharedPreferences = await SharedPreferences.getInstance();
+   
     setState(() {
-      
+      //  sharedPreferences.setString("foto",widget.data1[0]["foto"]);
+      //  sharedPreferences.setString("npsn",widget.data1[0]["npsn"]);
+      //  sharedPreferences.setString("nama",widget.data1[0]["nama"]);
+      //  sharedPreferences.setString("email",widget.data1[0]["email"]);
+      //  sharedPreferences.setString("alamat",widget.data1[0]["alamat"]);
+      //  sharedPreferences.setString("kodepos",widget.data1[0]["kodepos"]);
+        sharedPreferences.setString("id",npsn);
       sharedPreferences.setString("username", username.text);
    
       sharedPreferences.commit();
+
+      //print("npsn berhasil = "+npsn);
     });
  Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
@@ -364,10 +390,34 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
       body: body
   );
-  print("${response.statusCode}");
+
+  // var response1 = await http.post(
+  //       //Encode the url
+  //       Uri.encodeFull('https://siplah.mascitra.co.id/api/user/login'),
+  //       headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
+  //       body:{
+  //         "email":username.text,
+  //         "password":password.text,
+  //       }
+  //       );
+ 
+       
+
   
-  print("${response.body}");
+  //print("${response.statusCode}");
+  
+  
   Map<String, dynamic> map = jsonDecode(response.body);
+  
+   //var convertDataToJson = json.decode(response.body);
+    npsn = map['Data'][0]['id'];
+  //  nama = convertDataToJson["nama"];
+  //  email = convertDataToJson["email"];
+  //  alamat = convertDataToJson["alamat"];
+  //  kodepos = convertDataToJson["kodepos"];
+  //  telepon = convertDataToJson["telepon"];
+//print("npsn = "+npsn);
+
   if(map["Error"] == true || map["Error"] == "true"){
     _showAlert(context);
   }else{
@@ -911,9 +961,9 @@ class _Register2State extends State<Register2> {
       headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
       body: body
   );
-  print("${response.statusCode}");
+  // print("${response.statusCode}");
   
-  print("${response.body}");
+  // print("${response.body}");
   Map<String, dynamic> map = jsonDecode(response.body);
   if(map["Error"] == true || map["Error"] == "true"){
      _showAlert(context);

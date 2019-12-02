@@ -5,93 +5,89 @@ import 'dart:convert';
 List<Blog> blogsFromJson(String str) => new List<Blog>.from(json.decode(str).map((x) => Blog.fromJson(x)));
 String blogsToJson(Blog data) => json.encode(data.toJson());
 class Blog {
-  bool error;
-  Null pesanSys;
-  Null pesanUsr;
-  List<Data> data;
+    bool error;
+    dynamic pesanSys;
+    dynamic pesanUsr;
+    List<Datum> data;
 
-  Blog({this.error, this.pesanSys, this.pesanUsr, this.data});
+    Blog({
+        this.error,
+        this.pesanSys,
+        this.pesanUsr,
+        this.data,
+    });
 
-  Blog.fromJson(Map<String, dynamic> json) {
-    error = json['Error'];
-    pesanSys = json['Pesan_sys'];
-    pesanUsr = json['Pesan_usr'];
-    if (json['Data'] != null) {
-      data = new List<Data>();
-      json['Data'].forEach((v) {
-        data.add(new Data.fromJson(v));
-      });
-    }
-  }
+    factory Blog.fromJson(Map<String, dynamic> json) => Blog(
+        error: json["Error"],
+        pesanSys: json["Pesan_sys"],
+        pesanUsr: json["Pesan_usr"],
+        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Error'] = this.error;
-    data['Pesan_sys'] = this.pesanSys;
-    data['Pesan_usr'] = this.pesanUsr;
-    if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+    Map<String, dynamic> toJson() => {
+        "Error": error,
+        "Pesan_sys": pesanSys,
+        "Pesan_usr": pesanUsr,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+    };
 }
 
-class Data {
-  String id;
-  String nama;
-  List<Page> page;
-  String createdAt;
-  String updatedAt;
+class Datum {
+    String id;
+    String nama;
+    List<Page> page;
+    DateTime createdAt;
+    DateTime updatedAt;
 
-  Data({this.id, this.nama, this.page, this.createdAt, this.updatedAt});
+    Datum({
+        this.id,
+        this.nama,
+        this.page,
+        this.createdAt,
+        this.updatedAt,
+    });
 
-  Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    nama = json['nama'];
-    if (json['page'] != null) {
-      page = new List<Page>();
-      json['page'].forEach((v) {
-        page.add(new Page.fromJson(v));
-      });
-    }
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
+    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        id: json["id"],
+        nama: json["nama"],
+        page: List<Page>.from(json["page"].map((x) => Page.fromJson(x))),
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+    );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['nama'] = this.nama;
-    if (this.page != null) {
-      data['page'] = this.page.map((v) => v.toJson()).toList();
-    }
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    return data;
-  }
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "nama": nama,
+        "page": List<dynamic>.from(page.map((x) => x.toJson())),
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+    };
 }
 
 class Page {
-  String id;
-  String judul;
-  String createdAt;
-  String updatedAt;
+    String id;
+    String judul;
+    DateTime createdAt;
+    DateTime updatedAt;
 
-  Page({this.id, this.judul, this.createdAt, this.updatedAt});
+    Page({
+        this.id,
+        this.judul,
+        this.createdAt,
+        this.updatedAt,
+    });
 
-  Page.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    judul = json['judul'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
+    factory Page.fromJson(Map<String, dynamic> json) => Page(
+        id: json["id"],
+        judul: json["judul"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+    );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['judul'] = this.judul;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    return data;
-  }
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "judul": judul,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+    };
 }
