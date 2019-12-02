@@ -3,6 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siplah_jpmall/src/bloc/kabupaten_bloc.dart';
+import 'package:siplah_jpmall/src/bloc/kecamatan_bloc.dart';
+import 'package:siplah_jpmall/src/bloc/provinsi_bloc.dart';
+import 'package:siplah_jpmall/src/models/kabupaten_model.dart';
+import 'package:siplah_jpmall/src/models/kecamatan_model.dart';
+import 'package:siplah_jpmall/src/models/provinsi_model.dart';
+import 'package:siplah_jpmall/src/ui/login.dart';
 import 'package:siplah_jpmall/src/ui/page_profile.dart';
 import 'package:http/http.dart' as http;
 class Editprofile extends StatefulWidget {
@@ -183,16 +190,140 @@ class FormEdit extends StatefulWidget{
   _FormEdit createState() => _FormEdit();
 }
 class _FormEdit extends State<FormEdit>{
+  List data;
+  String id;
+Future<String> getJsonData() async {
+    var response = await http.post(
+        //Encode the url
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
+        headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
+        body: {"id":""+id});
+   // print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'];
+    
+     
+    });
+    }
+
     bool _isLoading = false;
  
   bool _isFieldNameValid;
   bool _isFieldEmailValid;
   bool _isFieldAgeValid;
-  TextEditingController _controllerName = TextEditingController();
-  TextEditingController _controllerEmail = TextEditingController();
-  TextEditingController _controllerAge = TextEditingController();
+  
+  final nama = TextEditingController();
+  final email = TextEditingController();
+  final namapemilik = TextEditingController();
+  final norekening = TextEditingController();
+  final namabank = TextEditingController();
+  final namaperusahaan = TextEditingController();
+  final npwp = TextEditingController();
+  final telepon = TextEditingController();
+  final alamat = TextEditingController();
+  final provinsi = TextEditingController();
+  final kabupaten = TextEditingController();
+  final kodepos = TextEditingController();
+  final penandatangan = TextEditingController();
+  final pospenanda = TextEditingController();
+  final password = TextEditingController();
+  final konfirmasi = TextEditingController();
+  final limitasi = TextEditingController();
+  final deskripsi = TextEditingController();
+
+ var placeholder = ['Loading...', 'Loading...', 'Loading...'];
+  String prop, kab, kec;
+getCredential() async {
+     final pref = await SharedPreferences.getInstance();
+     setState(() {
+          id = pref.getString("id");
+          // foto = pref.getString("foto");
+          // email = pref.getString("alamat");
+          // alamat = pref.getString("telepon");
+          // kodepos = pref.getString("kodepos");
+          // telepon = pref.getString("telepon");
+          });
+   //print("id profile = "+id);
+  }
+@override
+  void initState() {
+    super.initState();
+    provinceBloc.provinceFetchAll();
+     getCredential();
+
+  
+
+  }
+  void _showAlert(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Peringatan"),
+            content: Text("maaf gagal mendaftar"),
+          )
+      );}
+      void _berhasil(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Peringatan"),
+            content: Text("Password atau Email Kamu Salah"),
+          )
+      );}
+     Future<http.Response> daftar_api () async {
+  var url ='https://siplah.mascitra.co.id/api/mitra/user/profil_update';
+
+  Map data = {
+    'user_id':id,
+    'nama_pemeilik_rekening': namapemilik.text,
+    'no_rekening':norekening.text,
+    'limitasi_minimum':limitasi.text,
+    'deskripsi':deskripsi.text,
+    'npwp':npwp.text,
+    'bank':namabank.text,
+    'nama':namaperusahaan.text,
+    'penanda_tangan':penandatangan.text,
+    'posisi_penanda_tangan':pospenanda.text,
+    'email': email.text,
+    'password_baru': password.text,
+    'password_baru_konfirmasi': konfirmasi.text,
+     'provinsi_id': prop,
+     'kabupaten_id': kab,
+     'kecamatan_id':kec,
+     'alamat':alamat.text,
+     'kode_pos': kodepos.text,
+      'telepon':telepon.text,
+      'latitude':"",
+      'longitude':"",
+     
+  };
+  //encode Map to JSON
+  var body = json.encode(data);
+
+  var response = await http.post(url,
+      headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
+      body: body
+  );
+  // print("${response.statusCode}");
+  
+  // print("${response.body}");
+  Map<String, dynamic> map = jsonDecode(response.body);
+  print(map);
+  if(map["Error"] == true || map["Error"] == "true"){
+     _showAlert(context);
+  }else{
+   // savedata();
+  _berhasil(context);  
+  }
+  return response;
+}
+
   @override
   Widget build(BuildContext context) {
+    getJsonData();
+   // print("id profil edit ="+id);
   return Scaffold(
      
       appBar: AppBar(
@@ -213,18 +344,24 @@ class _FormEdit extends State<FormEdit>{
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 _buildTextFieldNamaPemilik(),
+                _buildTextFieldPassword(),
+                _buildTextFieldKonfirmasi(),
                 _buildTextFieldEmail(),
                 _buildTextFieldNoRekening(),
                 _buildTextFieldNamaBank(),
+                _buildTextFieldlimitasi(),
+                _buildTextFielddeskripsi(),
                 _buildTextFieldNama(),
                 _buildTextFieldNPWP(),
                 _buildTextFieldTelepon(),
                 _buildTextFieldAlamat(),
                 _buildTextFieldProvinsi(),
                 _buildTextFieldKabupaten(),
+                _buildTextFieldKecamatan(),
                 _buildTextFieldKodepos(),
                 _buildTextFieldPenandaTangan(),
                 _buildTextFieldPosPenandaTangan(),
+               
                 
                 
 
@@ -232,6 +369,7 @@ class _FormEdit extends State<FormEdit>{
                   padding: const EdgeInsets.only(top: 8.0),
                   child: RaisedButton(
                     onPressed: () {
+                      daftar_api();
                     },
                     child: Text(
                       "Submit".toUpperCase(),
@@ -239,6 +377,7 @@ class _FormEdit extends State<FormEdit>{
                         color: Colors.white,
                       ),
                     ),
+                    
                     color: Colors.orange[600],
                   ),
                 )
@@ -268,7 +407,7 @@ class _FormEdit extends State<FormEdit>{
 
   Widget _buildTextFieldNamaPemilik() {
     return TextField(
-      controller: _controllerName,
+      controller: namapemilik,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Nama Pemilik Rekening",
@@ -276,37 +415,73 @@ class _FormEdit extends State<FormEdit>{
             ? null
             : "Nama Pemilik Rekening harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldNameValid) {
-          setState(() => _isFieldNameValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
+Widget _buildTextFieldPassword() {
+    return TextField(
+      controller: password,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Password",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Password harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+  Widget _buildTextFieldKonfirmasi() {
+    return TextField(
+      controller: konfirmasi,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Konfirmasi Password",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Konfirmasi Password harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
   Widget _buildTextFieldNoRekening() {
     return TextField(
-      controller: _controllerName,
-      keyboardType: TextInputType.text,
+      controller: norekening,
+      keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: "No. Rekening",
         errorText: _isFieldNameValid == null || _isFieldNameValid
             ? null
             : "No. Rekening harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldNameValid) {
-          setState(() => _isFieldNameValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
   Widget _buildTextFieldNamaBank() {
     return TextField(
-      controller: _controllerName,
+      controller: namabank,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Bank ",
@@ -314,18 +489,53 @@ class _FormEdit extends State<FormEdit>{
             ? null
             : "Nama Bank harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldNameValid) {
-          setState(() => _isFieldNameValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
     );
   }
-
+Widget _buildTextFieldlimitasi() {
+    return TextField(
+      controller: limitasi,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        labelText: "Limitasi",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Limitasi harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+  Widget _buildTextFielddeskripsi() {
+    return TextField(
+      controller: deskripsi,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Deskripsi",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Deskripsi harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
   Widget _buildTextFieldNama() {
     return TextField(
-      controller: _controllerName,
+      controller: namaperusahaan,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Nama Perusahaan",
@@ -333,133 +543,169 @@ class _FormEdit extends State<FormEdit>{
             ? null
             : "Nama Perusahaan harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldNameValid) {
-          setState(() => _isFieldNameValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
   Widget _buildTextFieldNPWP() {
     return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
+      controller: npwp,
+      keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: "NPWP",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "NPWP harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
   Widget _buildTextFieldTelepon() {
     return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
+      controller: telepon,
+      keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: "Telepon",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "Nomor Telepon harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
   Widget _buildTextFieldAlamat() {
     return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
+      controller: alamat,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Alamat",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "Alamat harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
     );
   }
+  
 
   Widget _buildTextFieldProvinsi() {
-    return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        labelText: "Provinsi",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
-            ? null
-            : "Provinsi harus diisi",
-      ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
-    );
+    SizedBox(
+                  height: 10,
+                );
+  return CustomTile("Provinsi", child: StreamBuilder<Province>(
+                    stream: provinceBloc.allProvince,
+                    builder: (context, snapshot) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                        value: prop,
+                        isExpanded: true,
+                        items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
+                          child: Text(snapshot.hasData ? snapshot.data.data[i].nama : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i], )),
+                        onChanged: (item){
+                          setState(() {
+                            if(item == null){
+                            
+                            }else{
+                              prop = item;
+                            }
+                          });
+                          kabupatenBloc.fetchKabupaten(prop);
+                        },
+                      )
+                      );
+                    }
+                  ),);
   }
 
   Widget _buildTextFieldKabupaten() {
-    return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        labelText: "Kabupaten",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
-            ? null
-            : "Kabupaten harus diisi",
-      ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
-    );
+   return CustomTile("Kabupaten/Kota", child: StreamBuilder<Kabupaten>(
+                    stream: kabupatenBloc.allKabupaten,
+                    builder: (context, snapshot) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: kab,
+                          isExpanded: true,
+                          items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
+                            child: Text(snapshot.hasData ? snapshot.data.data[i].nama : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i],)),
+                          onChanged: (item){
+                            setState(() {
+                            
+                              kab = item;
+                            
+                            });
+                            kecamatanBloc.fetchKecamatan(kab);
+                          },
+                        ),
+                      );
+                    }
+                  ),);
   }
 
+Widget _buildTextFieldKecamatan() {
+   return CustomTile("Kecamatan", child: StreamBuilder<Kecamatan>(
+                    stream: kecamatanBloc.allKecamatan,
+                    builder: (context, snapshot) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: kec,
+                          isExpanded: true,
+                          items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
+                            child: Text(snapshot.hasData ? snapshot.data.data[i].nama  : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i],)),
+                          onChanged: (item){
+                            setState(() {
+                              kec = item;
+                            });
+                          },
+                        ),
+                      );
+                    }
+                  ),);
+}
   Widget _buildTextFieldKodepos() {
     return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
+      controller: kodepos,
+      keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: "Kode Pos",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "Kode Pos harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
 
   Widget _buildTextFieldEmail() {
     return TextField(
-      controller: _controllerEmail,
+      controller: email,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: "Email",
@@ -467,50 +713,50 @@ class _FormEdit extends State<FormEdit>{
             ? null
             : "Email harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
   Widget _buildTextFieldPenandaTangan() {
     return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
+      controller: penandatangan,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Penanda Tangan",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "Form Penanda Tangan harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
     );
   }
 
   Widget _buildTextFieldPosPenandaTangan() {
     return TextField(
-      controller: _controllerEmail,
-      keyboardType: TextInputType.emailAddress,
+      controller: pospenanda,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Posisi Penanda Tangan",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "Form Posisi Penanda Tangan harus diisi",
       ),
-      onChanged: (value) {
-        bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldEmailValid) {
-          setState(() => _isFieldEmailValid = isFieldValid);
-        }
-      },
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
     );
   }
   
