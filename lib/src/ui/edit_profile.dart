@@ -10,6 +10,8 @@ import 'package:siplah_jpmall/src/models/kabupaten_model.dart';
 import 'package:siplah_jpmall/src/models/kecamatan_model.dart';
 import 'package:siplah_jpmall/src/models/provinsi_model.dart';
 import 'package:siplah_jpmall/src/ui/login.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:siplah_jpmall/src/ui/page_profile.dart';
 import 'package:http/http.dart' as http;
 class Editprofile extends StatefulWidget {
@@ -21,7 +23,7 @@ class _Editprofile extends State<Editprofile>{
 List data;
    @override
   void initState() {
-    getCredential();
+   
    
   }
   
@@ -54,6 +56,7 @@ getCredential() async {
   }
   @override
   Widget build(BuildContext context) {
+     getCredential();
      getJsonData();
      
       //print(data);
@@ -192,6 +195,22 @@ class FormEdit extends StatefulWidget{
 class _FormEdit extends State<FormEdit>{
   List data;
   String id;
+  Position _currentPosition;
+
+_getCurrentLocation() {
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
 Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
@@ -232,6 +251,7 @@ Future<String> getJsonData() async {
   final konfirmasi = TextEditingController();
   final limitasi = TextEditingController();
   final deskripsi = TextEditingController();
+  final fotopemilik = TextEditingController();
 
  var placeholder = ['Loading...', 'Loading...', 'Loading...'];
   String prop, kab, kec;
@@ -252,6 +272,7 @@ getCredential() async {
     super.initState();
     provinceBloc.provinceFetchAll();
      getCredential();
+   
 
   
 
@@ -261,7 +282,7 @@ getCredential() async {
           context: context,
           builder: (context) => AlertDialog(
             title: Text("Peringatan"),
-            content: Text("maaf gagal mendaftar"),
+            content: Text("maaf gagal edit"),
           )
       );}
       void _berhasil(BuildContext context) {
@@ -269,7 +290,7 @@ getCredential() async {
           context: context,
           builder: (context) => AlertDialog(
             title: Text("Peringatan"),
-            content: Text("Password atau Email Kamu Salah"),
+            content: Text("Data berhasil diubah"),
           )
       );}
      Future<http.Response> daftar_api () async {
@@ -295,8 +316,8 @@ getCredential() async {
      'alamat':alamat.text,
      'kode_pos': kodepos.text,
       'telepon':telepon.text,
-      'latitude':"",
-      'longitude':"",
+      'latitude':"${_currentPosition.latitude}",
+      'longitude':"${_currentPosition.longitude}",
      
   };
   //encode Map to JSON
@@ -323,6 +344,8 @@ getCredential() async {
   @override
   Widget build(BuildContext context) {
     getJsonData();
+      _getCurrentLocation();
+    //print(_currentPosition.latitude);
    // print("id profil edit ="+id);
   return Scaffold(
      
@@ -404,6 +427,21 @@ getCredential() async {
       ),
     );
   }
+
+  Widget _buildTextFieldFotoUpload() {
+    return TextField(
+      controller: fotopemilik,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Nama Pemilik Rekening",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Nama Pemilik Rekening harus diisi",
+      ),
+
+    );
+  }
+
 
   Widget _buildTextFieldNamaPemilik() {
     return TextField(
