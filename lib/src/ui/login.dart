@@ -14,24 +14,24 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/ui/page_home.dart';
+
 class WelcomePage extends StatefulWidget {
-   
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
- final username = TextEditingController();
-    final password = TextEditingController();
-    SharedPreferences sharedPreferences;
+
+final username = TextEditingController();
+final password = TextEditingController();
+SharedPreferences sharedPreferences;
 
 class _WelcomePageState extends State<WelcomePage> {
- 
-  var token ;
+  var token;
   PageController _pageController;
   bool lastPage = false;
   int initialPage = 0;
   String usernama = null;
-  
-  String foto,npsn,nama,email,alamat,kodepos,telepon;
+
+  String foto, npsn, nama, email, alamat, kodepos, telepon;
 
   final page = <ListPage>[
     ListPage(0, PagePertama()),
@@ -39,28 +39,23 @@ class _WelcomePageState extends State<WelcomePage> {
     ListPage(2, PageKetiga()),
   ];
 
+  Future<http.Response> postRequest() async {
+    var url = 'https://siplah.mascitra.co.id/api/api/get_token';
 
-  Future<http.Response> postRequest () async {
-  var url ='https://siplah.mascitra.co.id/api/api/get_token';
+    Map data = {'app': 'siplah_jpmall.id'};
+    //encode Map to JSON
+    var body = json.encode(data);
 
-  Map data = {
-    'app': 'siplah_jpmall.id'
-  };
-  //encode Map to JSON
-  var body = json.encode(data);
+    var response = await http.post(url,
+        headers: {"Content-Type": "application/json"}, body: body);
+    // print("${response.statusCode}");
 
-  var response = await http.post(url,
-      headers: {"Content-Type": "application/json"},
-      body: body
-  );
-  // print("${response.statusCode}");
-  
-  // print("${response.body}");
-  Map<String, dynamic> map = jsonDecode(response.body);
-  token  = map["Data"][0]["api_token"];
-  
-  return response;
-}
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    token = map["Data"][0]["api_token"];
+
+    return response;
+  }
 
   @override
   void initState() {
@@ -69,28 +64,23 @@ class _WelcomePageState extends State<WelcomePage> {
     postRequest();
     getCredential();
   }
+
   getCredential() async {
-    
     //print(username.text);
-     final pref = await SharedPreferences.getInstance();
+    final pref = await SharedPreferences.getInstance();
     setState(() {
-
-         
-          usernama = pref.getString("username");
-          if(usernama != null){
-            Navigator.of(context).pushAndRemoveUntil(
-          new MaterialPageRoute(
-              builder: (BuildContext context) => new MainPage()),
-          (Route<dynamic> route) => false);
-
-          }          
+      usernama = pref.getString("username");
+      if (usernama != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            new MaterialPageRoute(
+                builder: (BuildContext context) => new MainPage()),
+            (Route<dynamic> route) => false);
+      }
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       bottomNavigationBar: initialPage == page.length - 1
           ? Container(
@@ -322,110 +312,112 @@ class PageKetiga extends StatelessWidget {
 
 class LoginPage extends StatefulWidget {
   final List npsn;
+  final List levelid;
 
-  const LoginPage({Key key, this.npsn}) : super(key: key);
-
-
+  const LoginPage({Key key, this.npsn, this.levelid}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-  String foto,npsn,nama,email,alamat,kodepos,telepon;
+  String levelid, npsn;
 
   @override
   void initState() {
     super.initState();
   }
- bool _obscureText = true;
- void _toggle() {
-   setState(() {
-     _obscureText = !_obscureText;
-   });
- }
+
+  bool _obscureText = true;
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-   void savedata() async {
-   sharedPreferences = await SharedPreferences.getInstance();
-   
-    setState(() {
-      //  sharedPreferences.setString("foto",widget.data1[0]["foto"]);
-      //  sharedPreferences.setString("npsn",widget.data1[0]["npsn"]);
-      //  sharedPreferences.setString("nama",widget.data1[0]["nama"]);
-      //  sharedPreferences.setString("email",widget.data1[0]["email"]);
-      //  sharedPreferences.setString("alamat",widget.data1[0]["alamat"]);
-      //  sharedPreferences.setString("kodepos",widget.data1[0]["kodepos"]);
-        sharedPreferences.setString("id",npsn);
-      sharedPreferences.setString("username", username.text);
-   
-      sharedPreferences.commit();
+    void savedata() async {
+      sharedPreferences = await SharedPreferences.getInstance();
 
-      //print("npsn berhasil = "+npsn);
-    });
- Navigator.of(context).pushAndRemoveUntil(
+      setState(() {
+        //  sharedPreferences.setString("foto",widget.data1[0]["foto"]);
+        //  sharedPreferences.setString("npsn",widget.data1[0]["npsn"]);
+        //  sharedPreferences.setString("nama",widget.data1[0]["nama"]);
+        //  sharedPreferences.setString("email",widget.data1[0]["email"]);
+        //  sharedPreferences.setString("alamat",widget.data1[0]["alamat"]);
+        //  sharedPreferences.setString("kodepos",widget.data1[0]["kodepos"]);
+        sharedPreferences.setString("id", npsn);
+        sharedPreferences.setString("level_id", levelid);
+        sharedPreferences.setString("username", username.text);
+
+        sharedPreferences.commit();
+
+        //print("npsn berhasil = "+npsn);
+        //print("level_id= "+levelid);
+      });
+      Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
               builder: (BuildContext context) => new MainPage()),
           (Route<dynamic> route) => false);
-}
+    }
+
     void _showAlert(BuildContext context) {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Peringatan"),
-            content: Text("Password atau Email Kamu Salah"),
-          )
-      );}
-      Future<http.Response> login_api () async {
-  var url ='https://siplah.mascitra.co.id/api/user/login';
+                title: Text("Peringatan"),
+                content: Text("Password atau Email Kamu Salah"),
+              ));
+    }
 
-  Map data = {
-    'email': username.text,
-    'password': password.text
-  };
-  //encode Map to JSON
-  var body = json.encode(data);
+    Future<http.Response> login_api() async {
+      var url = 'https://siplah.mascitra.co.id/api/user/login';
 
-  var response = await http.post(url,
-      headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
-      body: body
-  );
+      Map data = {'email': username.text, 'password': password.text};
+      //encode Map to JSON
+      var body = json.encode(data);
 
-  // var response1 = await http.post(
-  //       //Encode the url
-  //       Uri.encodeFull('https://siplah.mascitra.co.id/api/user/login'),
-  //       headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
-  //       body:{
-  //         "email":username.text,
-  //         "password":password.text,
-  //       }
-  //       );
- 
-       
+      var response = await http.post(url,
+          headers: {
+            "Content-Type": "application/json",
+            "API-App": "siplah_jpmall.id",
+            "Api-Key": "4P1_7Pm411_51p114h",
+            "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          },
+          body: body);
 
-  
-  //print("${response.statusCode}");
-  
-  
-  Map<String, dynamic> map = jsonDecode(response.body);
-  
-   //var convertDataToJson = json.decode(response.body);
-    npsn = map['Data'][0]['id'];
-  //  nama = convertDataToJson["nama"];
-  //  email = convertDataToJson["email"];
-  //  alamat = convertDataToJson["alamat"];
-  //  kodepos = convertDataToJson["kodepos"];
-  //  telepon = convertDataToJson["telepon"];
+      // var response1 = await http.post(
+      //       //Encode the url
+      //       Uri.encodeFull('https://siplah.mascitra.co.id/api/user/login'),
+      //       headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
+      //       body:{
+      //         "email":username.text,
+      //         "password":password.text,
+      //       }
+      //       );
+
+      //print("${response.statusCode}");
+
+      Map<String, dynamic> map = jsonDecode(response.body);
+
+      //var convertDataToJson = json.decode(response.body);
+      npsn = map['Data'][0]['id'];
+      levelid = map['Data'][0]['level_id'];
+      //  nama = convertDataToJson["nama"];
+      //  email = convertDataToJson["email"];
+      //  alamat = convertDataToJson["alamat"];
+      //  kodepos = convertDataToJson["kodepos"];
+      //  telepon = convertDataToJson["telepon"];
 //print("npsn = "+npsn);
 
-  if(map["Error"] == true || map["Error"] == "true"){
-    _showAlert(context);
-  }else{
-    savedata();
-   
-  }
-  return response;
-}
+      if (map["Error"] == true || map["Error"] == "true") {
+        _showAlert(context);
+      } else {
+        savedata();
+      }
+      return response;
+    }
 
     return Scaffold(
       body: ListView(
@@ -439,7 +431,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   color: Color(0xFF6BB8E3),
                   child: Stack(
                     children: <Widget>[
-
                       Positioned(
                         bottom: MediaQuery.of(context).size.width / 5,
                         right: 10,
@@ -502,7 +493,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                         contentPadding:
                                             const EdgeInsets.all(5.0),
                                         border: InputBorder.none,
-                                        
                                         hintText: "Username"),
                                   ),
                                 ),
@@ -515,25 +505,21 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                     border: Border.all(color: Colors.black54)),
                                 child: Center(
                                   child: TextField(
-                                    controller: password,
-                                    decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.all(5.0),
-                                        border: InputBorder.none,
-                                        hintText: "Password"),
-                                      obscureText: _obscureText
-
-                                  ),
-
+                                      controller: password,
+                                      decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.all(5.0),
+                                          border: InputBorder.none,
+                                          hintText: "Password"),
+                                      obscureText: _obscureText),
                                 ),
-
                               ),
 //                              new FlatButton(
 //                                  onPressed: _toggle,
 //                                  child: new Text(_obscureText ? "Show" : "Hide")),
                               SizedBox(height: 10),
                               MaterialButton(
-                                onPressed: (){
+                                onPressed: () {
                                   login_api();
                                 },
                                 color: Color(0xFF3FCB9B),
@@ -596,7 +582,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                               fontWeight: FontWeight.w500),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () => Navigator.push(
-
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
@@ -664,318 +649,7 @@ class _RegisterState extends State<Register> {
   String slctdKatPel, code;
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Color(0xFF6BB8E3),
-      body: ListView(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text("Register JPMALL", style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w600
-                  ),),
-                ),
-                SizedBox(height: 10,),
-                CustomTile(
-                  "Kategori Pelanggan",
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      isExpanded: true,
-                      value: slctdKatPel,
-                        items: List.generate(katPel.length,
-                                (i) => DropdownMenuItem<String>(child: Text(katPel[i]), value: katPel[i],)),
-                        onChanged: (item){
-                          setState((){
-                            slctdKatPel = item;
-                          });
-                        }),
-                  ),
-                ),
-              
-                CustomTile("Nama", child: TextField(
-                controller: nama,
-                  decoration: InputDecoration(
-                    border: InputBorder.none
-                  ),
-                ),
-                ),
-                CustomTile("Email", child: TextField(
-                  controller: email,
-                  decoration: InputDecoration(
-                    border: InputBorder.none
-                  ),
-                ),),
-                CustomTile("Password", child: TextField(
-                  controller: password,
-                  decoration: InputDecoration(
-                    border: InputBorder.none
-                  ),
-                ),),
-                CustomTile("Konfirmasi Password", child: TextField(
-                  controller: konfirmasi,
-                  decoration: InputDecoration(
-                    border: InputBorder.none
-                  ),
-                ),),
-                SizedBox(height: 15),
-                CustomTile("Telp", style: 2, child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(width: 70,
-                    decoration: BoxDecoration(
-                      border: Border(right: BorderSide(
-                        color: Colors.black54
-                      ))
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        isExpanded: true,
-                        value: code,
-                          items: List.generate(codetlp.length, (f) => DropdownMenuItem(child: Text(codetlp[f]))), onChanged: (item){
-                          setState((){
-                            code = item;
-                          });
-                      }),
-                    ),),
-                    Container(
-                      width: MediaQuery.of(context).size.width-200,
-                      child: TextField(
-                        controller: telp,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(5.0),
-                            border: InputBorder.none
-                        ),
-                      ),
-                    )
-                  ],
-                ),)
-              ],
-            ),
-          )
-        ],
-      ),
-    bottomNavigationBar: Container(
-      height: 50,
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                  backgroundColor: Colors.black12,
-                  child: Text("1", style: TextStyle(
-                      color: Colors.white
-                  ),),
-                ),
-              ),
-              Container(
-                height: 30,
-                width: 1,
-                color: Colors.white,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: Text("2", style: TextStyle(
-                      color: Colors.white
-                  ),),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              MaterialButton(
-                child: Text("Cancel", style: TextStyle(
-                  color: Colors.white
-                ),),
-              ),
-              MaterialButton(
-                onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register2(nama: nama.text,email: email.text,konfirmasi: konfirmasi.text,password: password.text,telp: telp.text,)), (_) => false),
-                child: Text("Next", style: TextStyle(
-                    color: Colors.white
-                ),),
-              ),
-            ],
-          ),
-        ],
-      ),
-    )
-    );
-  }
-}
-
-class CustomTile extends StatelessWidget {
-  final String title;
-  final Widget child;
-  final int style; // 1 normal, 2 telp
-  final bool enable;
-
-  const CustomTile(this.title, {Key key, this.child, this.style = 1, this.enable = true})
-      : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    switch (style) {
-      case 1:
-        return Container(
-          padding: const EdgeInsets.all(3.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                child: Text(title, style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white
-                ),),
-              ),
-              SizedBox(height: 5.0),
-              Container(
-                height: 50,
-                padding: const EdgeInsets.all(5.0),
-                decoration: BoxDecoration(
-                  color: enable == true ? Colors.white : Colors.grey,
-                  border: Border.all(
-                    color: Colors.black54,
-                    width: 2.0
-                  )
-                ),
-                child: child,
-              )
-            ],
-          ),
-        );
-        break;
-      case 2:
-        return Container(
-          padding: const EdgeInsets.all(3.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(width: 3.0,),
-              Container(
-                child:  Text(title, style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white
-                ),),
-              ),
-              SizedBox(width: 5.0),
-              Container(
-                height: 50,
-                padding: const EdgeInsets.all(5.0),
-                decoration: BoxDecoration(
-                    color: enable == true ? Colors.white : Colors.grey,
-                    border: Border.all(
-                        color: Colors.black54,
-                        width: 2.0
-                    )
-                ),
-                child: child,
-              ),
-            ],
-          ),
-        );
-        break;
-      default:
-    }
-  }
-}
-
-class Register2 extends StatefulWidget {
- final String nama;
-  final  String email;
-  final  String password;
-  final String konfirmasi;
-  final  String telp;
-
-  const Register2({Key key, this.nama, this.email, this.password, this.konfirmasi, this.telp}) : super(key: key);
-  @override
-  _Register2State createState() => _Register2State();
-}
-
-class _Register2State extends State<Register2> {
-  
-  var placeholder = ['Loading...', 'Loading...', 'Loading...'];
-  String prop, kab, kec;
-  final alamat = TextEditingController();
-  final kodepos = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    provinceBloc.provinceFetchAll();
-   
-
-  
-
-  }
-  void _showAlert(BuildContext context) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Peringatan"),
-            content: Text("maaf gagal mendaftar"),
-          )
-      );}
-      void _berhasil(BuildContext context) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Peringatan"),
-            content: Text("Password atau Email Kamu Salah"),
-          )
-      );}
-     Future<http.Response> daftar_api () async {
-  var url ='https://siplah.mascitra.co.id/api/user/daftar';
-
-  Map data = {
-    'nama': widget.nama,
-    'email': widget.email,
-    'password': widget.password,
-    'password_konfirmasi': widget.konfirmasi,
-     'provinsi_id': prop,
-     'kabupaten_id': kab,
-     'kecamatan_id':kec,
-     'alamat':alamat.text,
-     'kode_pos': kodepos.text,
-      'telepon':widget.telp,
-      'kategori_pelanggan':3
-  };
-  //encode Map to JSON
-  var body = json.encode(data);
-
-  var response = await http.post(url,
-      headers: {"Content-Type": "application/json","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},
-      body: body
-  );
-  // print("${response.statusCode}");
-  
-  // print("${response.body}");
-  Map<String, dynamic> map = jsonDecode(response.body);
-  if(map["Error"] == true || map["Error"] == "true"){
-     _showAlert(context);
-  }else{
-   // savedata();
-  _berhasil(context);  
-  }
-  return response;
-}
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(child: Scaffold(
         backgroundColor: Color(0xFF6BB8E3),
         body: ListView(
           children: <Widget>[
@@ -986,120 +660,104 @@ class _Register2State extends State<Register2> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Text("Register JPMALL", style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600
-                    ),),
+                    child: Text(
+                      "Register JPMALL",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
-                  SizedBox(height: 10,),
-                  CustomTile("Provinsi", child: StreamBuilder<Province>(
-                    stream: provinceBloc.allProvince,
-                    builder: (context, snapshot) {
-                      return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                        value: prop,
-                        isExpanded: true,
-                        items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
-                          child: Text(snapshot.hasData ? snapshot.data.data[i].nama : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i], )),
-                        onChanged: (item){
-                          setState(() {
-                            if(item == null){
-                            
-                            }else{
-                              prop = item;
-                            }
-                          });
-                          kabupatenBloc.fetchKabupaten(prop);
-                        },
-                      )
-                      );
-                    }
-                  ),),
-                  CustomTile("Kabupaten/Kota", child: StreamBuilder<Kabupaten>(
-                    stream: kabupatenBloc.allKabupaten,
-                    builder: (context, snapshot) {
-                      return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: kab,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomTile(
+                    "Kategori Pelanggan",
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
                           isExpanded: true,
-                          items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
-                            child: Text(snapshot.hasData ? snapshot.data.data[i].nama : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i],)),
-                          onChanged: (item){
+                          value: slctdKatPel,
+                          items: List.generate(
+                              katPel.length,
+                              (i) => DropdownMenuItem<String>(
+                                    child: Text(katPel[i]),
+                                    value: katPel[i],
+                                  )),
+                          onChanged: (item) {
                             setState(() {
-                            
-                              kab = item;
-                            
+                              slctdKatPel = item;
                             });
-                            kecamatanBloc.fetchKecamatan(kab);
-                          },
-                        ),
-                      );
-                    }
-                  ),),
-                  CustomTile("Kecamatan", child: StreamBuilder<Kecamatan>(
-                    stream: kecamatanBloc.allKecamatan,
-                    builder: (context, snapshot) {
-                      return DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: kec,
-                          isExpanded: true,
-                          items: List.generate(snapshot.hasData ? snapshot.data.data.length : placeholder.length, (i) => DropdownMenuItem(
-                            child: Text(snapshot.hasData ? snapshot.data.data[i].nama  : placeholder[i]), value: snapshot.hasData ? snapshot.data.data[i].id : placeholder[i],)),
-                          onChanged: (item){
-                            setState(() {
-                              kec = item;
-                            });
-                          },
-                        ),
-                      );
-                    }
-                  ),),
-                  Container(
-                    padding: const EdgeInsets.all(3.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                          }),
+                    ),
+                  ),
+                  CustomTile(
+                    "Nama",
+                    child: TextField(
+                      controller: nama,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    ),
+                  ),
+                  CustomTile(
+                    "Email",
+                    child: TextField(
+                      controller: email,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    ),
+                  ),
+                  CustomTile(
+                    "Password",
+                    child: TextField(
+                      controller: password,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    ),
+                  ),
+                  CustomTile(
+                    "Konfirmasi Password",
+                    child: TextField(
+                      controller: konfirmasi,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  CustomTile(
+                    "Telp",
+                    style: 2,
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
-                          child: Text("Alamat Lengkap", style: TextStyle(
-                            
-                              fontSize: 12,
-                              color: Colors.white
-                          ),),
-                        ),
-                        SizedBox(height: 5.0),
-                        Container(
-//                          height: 50,
-                          padding: const EdgeInsets.all(5.0),
+                          width: 70,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: Colors.black54,
-                                  width: 2.0
-                              )
+                              border: Border(
+                                  right: BorderSide(color: Colors.black54))),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                                isExpanded: true,
+                                value: code,
+                                items: List.generate(
+                                    codetlp.length,
+                                    (f) => DropdownMenuItem(
+                                        child: Text(codetlp[f]))),
+                                onChanged: (item) {
+                                  setState(() {
+                                    code = item;
+                                  });
+                                }),
                           ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width - 200,
                           child: TextField(
-                            controller: alamat,
-                            maxLines: 5,
+                            controller: telp,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              border: InputBorder.none,
-                            ),
+                                contentPadding: const EdgeInsets.all(5.0),
+                                border: InputBorder.none),
                           ),
                         )
                       ],
                     ),
-                  ),
-                  SizedBox(height:15),
-                  CustomTile("Kode Pos", style: 2, child: Container(
-                    width: MediaQuery.of(context).size.width - 200,
-                    child: TextField(
-                      controller: kodepos,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),)
+                  )
                 ],
               ),
             )
@@ -1116,10 +774,11 @@ class _Register2State extends State<Register2> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      child: Text("1", style: TextStyle(
-                          color: Colors.white
-                      ),),
+                      backgroundColor: Colors.black12,
+                      child: Text(
+                        "1",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                   Container(
@@ -1130,10 +789,11 @@ class _Register2State extends State<Register2> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: CircleAvatar(
-                      backgroundColor: Colors.black12,
-                      child: Text("2", style: TextStyle(
-                          color: Colors.white
-                      ),),
+                      backgroundColor: Colors.transparent,
+                      child: Text(
+                        "2",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
@@ -1142,57 +802,473 @@ class _Register2State extends State<Register2> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   MaterialButton(
-                  onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Register()), (_) => false),
-                    child: Text("Cancel", style: TextStyle(
-                        color: Colors.white
-                    ),),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   MaterialButton(
-                    onPressed: (){
-                      daftar_api();
-                    },
-                    child: Text("Selesai", style: TextStyle(
-                        color: Colors.white
-                    ),),
+                    onPressed: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Register2(
+                                  nama: nama.text,
+                                  email: email.text,
+                                  konfirmasi: konfirmasi.text,
+                                  password: password.text,
+                                  telp: telp.text,
+                                )),
+                        (_) => false),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
             ],
           ),
-        )
-    ), onWillPop: _onBackPressed);
-  }
-  Future<bool> _onBackPressed() {
-    return showDialog(context: context, builder: (BuildContext context) => AlertDialog(
-      content: Text("Apakah Anda ingin membatalkan Registrasi ?"),
-      actions: <Widget>[
-        MaterialButton(onPressed: () => Navigator.pop(context, false), child: Text("No"),),
-        MaterialButton(onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()), (_) => false), child: Text("Yes"),)
-      ],
-    ));
+        ));
   }
 }
+
+class CustomTile extends StatelessWidget {
+  final String title;
+  final Widget child;
+  final int style; // 1 normal, 2 telp
+  final bool enable;
+
+  const CustomTile(this.title,
+      {Key key, this.child, this.style = 1, this.enable = true})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    switch (style) {
+      case 1:
+        return Container(
+          padding: const EdgeInsets.all(3.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 12, color: Colors.white),
+                ),
+              ),
+              SizedBox(height: 5.0),
+              Container(
+                height: 50,
+                padding: const EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                    color: enable == true ? Colors.white : Colors.grey,
+                    border: Border.all(color: Colors.black54, width: 2.0)),
+                child: child,
+              )
+            ],
+          ),
+        );
+        break;
+      case 2:
+        return Container(
+          padding: const EdgeInsets.all(3.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                width: 3.0,
+              ),
+              Container(
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+              SizedBox(width: 5.0),
+              Container(
+                height: 50,
+                padding: const EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                    color: enable == true ? Colors.white : Colors.grey,
+                    border: Border.all(color: Colors.black54, width: 2.0)),
+                child: child,
+              ),
+            ],
+          ),
+        );
+        break;
+      default:
+    }
+  }
+}
+
+class Register2 extends StatefulWidget {
+  final String nama;
+  final String email;
+  final String password;
+  final String konfirmasi;
+  final String telp;
+
+  const Register2(
+      {Key key,
+      this.nama,
+      this.email,
+      this.password,
+      this.konfirmasi,
+      this.telp})
+      : super(key: key);
+  @override
+  _Register2State createState() => _Register2State();
+}
+
+class _Register2State extends State<Register2> {
+  var placeholder = ['Loading...', 'Loading...', 'Loading...'];
+  String prop, kab, kec;
+  final alamat = TextEditingController();
+  final kodepos = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    provinceBloc.provinceFetchAll();
+  }
+
+  void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("maaf gagal mendaftar"),
+            ));
+  }
+
+  void _berhasil(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Password atau Email Kamu Salah"),
+            ));
+  }
+
+  Future<http.Response> daftar_api() async {
+    var url = 'https://siplah.mascitra.co.id/api/user/daftar';
+
+    Map data = {
+      'nama': widget.nama,
+      'email': widget.email,
+      'password': widget.password,
+      'password_konfirmasi': widget.konfirmasi,
+      'provinsi_id': prop,
+      'kabupaten_id': kab,
+      'kecamatan_id': kec,
+      'alamat': alamat.text,
+      'kode_pos': kodepos.text,
+      'telepon': widget.telp,
+      'kategori_pelanggan': 3
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+      // savedata();
+      _berhasil(context);
+    }
+    return response;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+        child: Scaffold(
+            backgroundColor: Color(0xFF6BB8E3),
+            body: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          "Register JPMALL",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CustomTile(
+                        "Provinsi",
+                        child: StreamBuilder<Province>(
+                            stream: provinceBloc.allProvince,
+                            builder: (context, snapshot) {
+                              return DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                value: prop,
+                                isExpanded: true,
+                                items: List.generate(
+                                    snapshot.hasData
+                                        ? snapshot.data.data.length
+                                        : placeholder.length,
+                                    (i) => DropdownMenuItem(
+                                          child: Text(snapshot.hasData
+                                              ? snapshot.data.data[i].nama
+                                              : placeholder[i]),
+                                          value: snapshot.hasData
+                                              ? snapshot.data.data[i].id
+                                              : placeholder[i],
+                                        )),
+                                onChanged: (item) {
+                                  setState(() {
+                                    if (item == null) {
+                                    } else {
+                                      prop = item;
+                                    }
+                                  });
+                                  kabupatenBloc.fetchKabupaten(prop);
+                                },
+                              ));
+                            }),
+                      ),
+                      CustomTile(
+                        "Kabupaten/Kota",
+                        child: StreamBuilder<Kabupaten>(
+                            stream: kabupatenBloc.allKabupaten,
+                            builder: (context, snapshot) {
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  value: kab,
+                                  isExpanded: true,
+                                  items: List.generate(
+                                      snapshot.hasData
+                                          ? snapshot.data.data.length
+                                          : placeholder.length,
+                                      (i) => DropdownMenuItem(
+                                            child: Text(snapshot.hasData
+                                                ? snapshot.data.data[i].nama
+                                                : placeholder[i]),
+                                            value: snapshot.hasData
+                                                ? snapshot.data.data[i].id
+                                                : placeholder[i],
+                                          )),
+                                  onChanged: (item) {
+                                    setState(() {
+                                      kab = item;
+                                    });
+                                    kecamatanBloc.fetchKecamatan(kab);
+                                  },
+                                ),
+                              );
+                            }),
+                      ),
+                      CustomTile(
+                        "Kecamatan",
+                        child: StreamBuilder<Kecamatan>(
+                            stream: kecamatanBloc.allKecamatan,
+                            builder: (context, snapshot) {
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  value: kec,
+                                  isExpanded: true,
+                                  items: List.generate(
+                                      snapshot.hasData
+                                          ? snapshot.data.data.length
+                                          : placeholder.length,
+                                      (i) => DropdownMenuItem(
+                                            child: Text(snapshot.hasData
+                                                ? snapshot.data.data[i].nama
+                                                : placeholder[i]),
+                                            value: snapshot.hasData
+                                                ? snapshot.data.data[i].id
+                                                : placeholder[i],
+                                          )),
+                                  onChanged: (item) {
+                                    setState(() {
+                                      kec = item;
+                                    });
+                                  },
+                                ),
+                              );
+                            }),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                "Alamat Lengkap",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            Container(
+//                          height: 50,
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.black54, width: 2.0)),
+                              child: TextField(
+                                controller: alamat,
+                                maxLines: 5,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      CustomTile(
+                        "Kode Pos",
+                        style: 2,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 200,
+                          child: TextField(
+                            controller: kodepos,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+            bottomNavigationBar: Container(
+              height: 50,
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          child: Text(
+                            "1",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        width: 1,
+                        color: Colors.white,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black12,
+                          child: Text(
+                            "2",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      MaterialButton(
+                        onPressed: () => Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Register()),
+                            (_) => false),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          daftar_api();
+                        },
+                        child: Text(
+                          "Selesai",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )),
+        onWillPop: _onBackPressed);
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              content: Text("Apakah Anda ingin membatalkan Registrasi ?"),
+              actions: <Widget>[
+                MaterialButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text("No"),
+                ),
+                MaterialButton(
+                  onPressed: () => Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      (_) => false),
+                  child: Text("Yes"),
+                )
+              ],
+            ));
+  }
+}
+
 class Data {
   final String api_token;
-  
+
   Data({this.api_token});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return new Data(
       api_token: json['api_token'],
-     
     );
   }
 }
+
 class Par {
   final String api_token;
-  
+
   Par({this.api_token});
 
   factory Par.fromJson(Map<String, dynamic> json) {
     return new Par(
       api_token: json['api_token'],
-     
     );
   }
 }

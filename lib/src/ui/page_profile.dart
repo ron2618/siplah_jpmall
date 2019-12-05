@@ -1,5 +1,5 @@
- 
 import 'package:flutter/material.dart';
+import 'package:siplah_jpmall/src/ui/edit_profilSKLH.dart';
 import 'package:siplah_jpmall/src/ui/edit_profile.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +8,7 @@ import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 import 'login.dart';
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -19,7 +20,8 @@ class _ProfilePageState extends State<ProfilePage>
   ScrollController _controller;
   double position = 0;
   String namauser = null;
-  String nama=null;
+  String nama = null;
+  String level_id = null;
   @override
   void initState() {
     _controller = ScrollController();
@@ -35,123 +37,136 @@ class _ProfilePageState extends State<ProfilePage>
     });
 //    print(position);
   }
+
   getCredential() async {
-     final pref = await SharedPreferences.getInstance();
+    final pref = await SharedPreferences.getInstance();
     setState(() {
-          namauser = pref.getString("username");
-          nama = pref.getString("nama");
+      namauser = pref.getString("username");
+      nama = pref.getString("nama");
+      level_id = pref.getString("level_id");
     });
   }
+
   @override
   Widget build(BuildContext context) {
-   
-  //print(nama);
+    //print("level id = "+level_id);
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.settings, color: Colors.white,), onPressed: ()=> Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Editprofile(),
-                  )
-                  ), ),
-          Container(
-            padding: const EdgeInsets.all(5),
-            child: Stack(
-                children: <Widget>[IconButton(icon: Icon(Icons.notifications, color: Colors.white,), onPressed: null),
-                  Positioned(
-                    left: 23,
-                    top: 5,
-                    child: CircleAvatar(
-                      child: Center(child: Text("3", style: TextStyle(fontSize: 14, color: Colors.white),)),
+        appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+                onPressed: () => level_id == '3'
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => Editprofile(),
+                        ))
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => EditprofileSKL(),
+                        ))),
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Stack(children: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.notifications,
+                      color: Colors.white,
+                    ),
+                    onPressed: null),
+                Positioned(
+                  left: 23,
+                  top: 5,
+                  child: CircleAvatar(
+                    child: Center(
+                        child: Text(
+                      "3",
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    )),
                     backgroundColor: Colors.deepOrange,
                     radius: 8,
+                  ),
+                )
+              ]),
+            ),
+          ],
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage(
+                      "https://static-2.gumroad.com/res/gumroad/1654647495106/asset_previews/df232360d4f186e2672d177431a77a68/retina/Animation_207.png"),
                 ),
-                  )]),
-          ),
-        ],
-        title: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Row(
-            children: <Widget>[
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage("https://static-2.gumroad.com/res/gumroad/1654647495106/asset_previews/df232360d4f186e2672d177431a77a68/retina/Animation_207.png"),
-              ),
-              SizedBox(width: 10,),
-              Text(namauser != null ? namauser : "waiting...", style: TextStyle(color: Colors.white),)
-            ],
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  namauser != null ? namauser : "waiting...",
+                  style: TextStyle(color: Colors.white),
+                )
+              ],
+            ),
           ),
         ),
-      
-      ),
-      
-       body: TabBarView(
-            controller: controller,
-            children: [
-              PageBeli(),
-            
-            ])
-    
-            );
-       
-        
-        
+        body: TabBarView(controller: controller, children: [
+          PageBeli(),
+        ]));
   }
+}
 
-    }
-
-  
 class PageBeli extends StatelessWidget {
-final List data;
-final List kategori;
+  final List data;
+  final List kategori;
 
-const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
-  
-  
-    @override
+  const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
+
+  @override
   Widget build(BuildContext context) {
-
-   void _showAlert(BuildContext context) {
+    void _showAlert(BuildContext context) {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Peringatan"),
-            content: Text("Yakin Mau Keluar"),
-            actions: <Widget>[
-              new FlatButton(
-              child: new Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              ),
-              new FlatButton(
-              child: new Text("OK"),
-              onPressed: () async {
-               
-                final pref = await SharedPreferences.getInstance();
-                await pref.clear();
-                Navigator.of(context).pushAndRemoveUntil(
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new LoginPage()),
-                    (Route<dynamic> route) => false);
+                title: Text("Peringatan"),
+                content: Text("Yakin Mau Keluar"),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("Cancel"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  new FlatButton(
+                    child: new Text("OK"),
+                    onPressed: () async {
+                      final pref = await SharedPreferences.getInstance();
+                      await pref.clear();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new LoginPage()),
+                          (Route<dynamic> route) => false);
+                    },
+                  ),
+                ],
+              ));
+    }
 
-              },
-              ),
-            ],
-          )
-      );}
     return Container(
       color: Colors.grey[200],
-      height:  MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height,
       child: ListView(
-        
-        padding: const EdgeInsets.only(top:10),
+        padding: const EdgeInsets.only(top: 10),
         children: <Widget>[
           RekomToko(),
           Container(
-            color: Colors.grey[200],
-              padding: const EdgeInsets.only(top:10),
+              color: Colors.grey[200],
+              padding: const EdgeInsets.only(top: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -164,53 +179,54 @@ const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
                     color: Colors.white,
                     child: ListTile(
                       title: Text("10 Kata Bijak"),
-                onTap: ()=> Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => SecondScreen(),
-                  )),
-                leading: Icon(Icons.people),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => SecondScreen(),
+                          )),
+                      leading: Icon(Icons.people),
                     ),
                   ),
-                    Container(
+                  Container(
                     color: Colors.grey[200],
                     height: 1,
                   ),
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Cara Belanja"), 
-                      onTap: ()=>    Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Pagekedua(),
-                  )),             
-                leading: Icon(Icons.shopping_basket),
+                      title: Text("Cara Belanja"),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => Pagekedua(),
+                          )),
+                      leading: Icon(Icons.shopping_basket),
                     ),
                   ),
-                   Container(
+                  Container(
                     color: Colors.grey[200],
                     height: 1,
                   ),
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Cara Berjualan Online"),                 
-                leading: Icon(Icons.signal_cellular_connected_no_internet_4_bar),
+                      title: Text("Cara Berjualan Online"),
+                      leading: Icon(
+                          Icons.signal_cellular_connected_no_internet_4_bar),
                     ),
                   ),
 
                   //batas bawah
 
-                    Container(
+                  Container(
                     color: Colors.grey[200],
                     height: 50,
                   ),
-                   Container(
+                  Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Pusat Bantuan"),                 
-                leading: Icon(Icons.person_pin_circle),
+                      title: Text("Pusat Bantuan"),
+                      leading: Icon(Icons.person_pin_circle),
                     ),
                   ),
                   Container(
@@ -220,11 +236,11 @@ const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
                   Container(
                     color: Colors.white,
                     child: ListTile(
-                      title: Text("Mitra Sipplah"),                 
-                leading: Icon(Icons.public),
+                      title: Text("Mitra Sipplah"),
+                      leading: Icon(Icons.public),
                     ),
                   ),
-                     Container(
+                  Container(
                     color: Colors.grey[200],
                     height: 1,
                   ),
@@ -232,35 +248,36 @@ const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
                     color: Colors.white,
                     child: ListTile(
                       title: Text("Syarat Dan Ketentuan"),
-                      onTap: ()=> Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Pageketiga(),
-                  )
-                  ),               
-                leading: Icon(Icons.book),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => Pageketiga(),
+                          )),
+                      leading: Icon(Icons.book),
                     ),
                   ),
-                
-                    Container(
+
+                  Container(
                     color: Colors.grey[200],
                     height: 59,
                   ),
-                    Container(
+                  Container(
                     color: Colors.white,
                     child: ListTile(
-                      onTap: (){
-                       _showAlert(context);
+                      onTap: () {
+                        _showAlert(context);
                       },
                       title: Column(
                         children: <Widget>[
-                          Text("LOGOUT",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
+                          Text(
+                            "LOGOUT",
+                            style: TextStyle(
+                                color: Colors.red, fontWeight: FontWeight.bold),
+                          ),
                         ],
-                      ),                 
-               
+                      ),
                     ),
                   ),
-                
                 ],
               )),
         ],
@@ -323,7 +340,7 @@ const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: _listTr.map((f) {
             return InkWell(
-              onTap: (){},
+              onTap: () {},
               child: Container(
                 height: 50,
                 child: Column(
@@ -530,41 +547,53 @@ class PageJual extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.shop_two, size: 150, color: Colors.cyan,),
-          Text("Buat Toko anda sekarang", style: TextStyle(
-            fontSize: 15,
-            color: Colors.black45,
-          ),),
-          SizedBox(height: 15,),
-          MaterialButton(
+          Icon(
+            Icons.shop_two,
+            size: 150,
             color: Colors.cyan,
-              child: Text("Buat Toko", style: TextStyle(color: Colors.white),) ,onPressed: (){})
+          ),
+          Text(
+            "Buat Toko anda sekarang",
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black45,
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          MaterialButton(
+              color: Colors.cyan,
+              child: Text(
+                "Buat Toko",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {})
         ],
       ),
     );
   }
 }
+
 class Pagekedua extends StatefulWidget {
   @override
   _Pagekedua createState() => _Pagekedua();
 }
-  class _Pagekedua extends State<Pagekedua> {
 
- 
-@override
+class _Pagekedua extends State<Pagekedua> {
+  @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return WebviewScaffold(
       appBar: AppBar(
-       title: Text("Cara Menjadi Web Developer",style: TextStyle(fontSize: 14, color: Colors.white)),
-          
-        
-      ), url: "https://siplah.mascitra.co.id/blog/page/2",
+        title: Text("Cara Menjadi Web Developer",
+            style: TextStyle(fontSize: 14, color: Colors.white)),
+      ),
+      url: "https://siplah.mascitra.co.id/blog/page/2",
     );
   }
 }
@@ -573,47 +602,44 @@ class SecondScreen extends StatefulWidget {
   @override
   _SecondScreen createState() => _SecondScreen();
 }
-class _SecondScreen extends State<SecondScreen> {
 
- 
-@override
+class _SecondScreen extends State<SecondScreen> {
+  @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return WebviewScaffold(
       appBar: AppBar(
-       title: Text("10 Kata Bijak",style:TextStyle(fontSize: 14, color: Colors.white)),
-          
-        
-      ), url: "https://siplah.mascitra.co.id/blog/page/1",
+        title: Text("10 Kata Bijak",
+            style: TextStyle(fontSize: 14, color: Colors.white)),
+      ),
+      url: "https://siplah.mascitra.co.id/blog/page/1",
     );
   }
 }
+
 class Pageketiga extends StatefulWidget {
   @override
   _Pageketiga createState() => _Pageketiga();
 }
-  class _Pageketiga extends State<Pageketiga> {
 
- 
-@override
+class _Pageketiga extends State<Pageketiga> {
+  @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return WebviewScaffold(
       appBar: AppBar(
-       title: Text("Syarat dan Ketentuan",style: TextStyle(fontSize: 14, color: Colors.white)),
-          
-        
-      ), url: "https://siplah.mascitra.co.id/blog/page/2",
+        title: Text("Syarat dan Ketentuan",
+            style: TextStyle(fontSize: 14, color: Colors.white)),
+      ),
+      url: "https://siplah.mascitra.co.id/blog/page/2",
     );
   }
 }

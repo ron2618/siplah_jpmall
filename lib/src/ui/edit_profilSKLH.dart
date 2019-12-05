@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 
-import 'package:path/path.dart' as path;
-import 'package:async/async.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'package:siplah_jpmall/src/bloc/kabupaten_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/kecamatan_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/provinsi_bloc.dart';
@@ -15,25 +15,24 @@ import 'package:siplah_jpmall/src/models/provinsi_model.dart';
 import 'package:siplah_jpmall/src/ui/login.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:siplah_jpmall/src/ui/page_profile.dart';
-import 'package:http/http.dart' as http;
 
-class Editprofile extends StatefulWidget {
+class EditprofileSKL extends StatefulWidget {
   @override
-  _Editprofile createState() => _Editprofile();
+  _EditprofileSKL createState() => _EditprofileSKL();
 }
 
-class _Editprofile extends State<Editprofile> {
-  String foto, npsn, nama, email, alamat, kodepos, telepon;
+class _EditprofileSKL extends State<EditprofileSKL> {
+  String foto, npsn, nama;
   List data;
+
   @override
   void initState() {}
 
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
-        Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
+
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -41,9 +40,10 @@ class _Editprofile extends State<Editprofile> {
           "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
         },
         body: {
+          "user_id": "" + nama,
           "id": "" + nama
         });
-    print(response.body);
+    //print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
@@ -61,7 +61,7 @@ class _Editprofile extends State<Editprofile> {
       // kodepos = pref.getString("kodepos");
       // telepon = pref.getString("telepon");
     });
-    print("id profile = " + nama);
+    print("id profile sklh= " + nama);
   }
 
   @override
@@ -82,49 +82,43 @@ class _Editprofile extends State<Editprofile> {
         //CODE BARU YANG DITAMBAHKAN
         body: ListView(padding: const EdgeInsets.all(0), children: <Widget>[
           Column(children: <Widget>[
-            
-               Row(
+             Row(
                 children: <Widget>[
                   SizedBox(
                     width: 10,
                   ),
-                  
-                    CircleAvatar(
+            CircleAvatar(
                       radius: 50,
                         
                       child:Center(
                         child:
                       Image.network(
-                         data[0]['foto'] != null
-                              ? data[0]['foto']
+                         data[0]['logo'] != null
+                              ? data[0]['logo']
                               : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
                     ),
                       ),
                     ),
-                  
-                ],
-              ),
-            
+                ]),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
                 SizedBox(
                   height: 10,
                 ),
-                Text(data[0]["rekening_nama_pemilik"] != null
-                    ? "Nama Pemilik Rekening : " +
-                        data[0]["rekening_nama_pemilik"]
+                Text(data[0]["nama_sekolah"] != null
+                    ? "Nama Sekolah : " + data[0]["nama_sekolah"]
                     : "Kosong"),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
+              child: Column(children: <Widget>[
                 SizedBox(
                   height: 10,
                 ),
-                Text(data[0]["rekening_no"] != null
-                    ? "No. Rekening : " + data[0]["rekening_no"]
+                Text(data[0]["alamat_sekolah"] != null
+                    ? "Alamat Sekolah : " + data[0]["alamat_sekolah"]
                     : "kosong"),
               ]),
             ),
@@ -134,19 +128,8 @@ class _Editprofile extends State<Editprofile> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(data[0]["bank"] != null
-                    ? "Bank : " + data[0]["bank"]
-                    : "kosong"),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["nama"] != null
-                    ? "Nama : " + data[0]["nama"]
+                Text(data[0]["npsn"] != null
+                    ? "NPSN : " + data[0]["npsn"]
                     : "kosong"),
               ]),
             ),
@@ -167,74 +150,6 @@ class _Editprofile extends State<Editprofile> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(data[0]["telepon"] != null
-                    ? "Telepon : " + data[0]["telepon"]
-                    : "kosong"),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["alamat"] != null
-                    ? "Alamat : " + data[0]["alamat"]
-                    : "kosong"),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["provinsi_nama"] != null
-                    ? "Provinsi : " + data[0]["provinsi_nama"]
-                    : "kosong"),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["nama_kabupaten"] != null
-                    ? "Kabupaten : " + data[0]["nama_kabupaten"]
-                    : "kosong"),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["kecamatan_nama"] != null
-                    ? "Kecamatan : " + data[0]["kecamatan_nama"]
-                    : "kosong"),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["kode_pos"] != null
-                    ? "Kode Pos : " + data[0]["kode_pos"]
-                    : "kosong"),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
                 Text(data[0]["email"] != null
                     ? "Email : " + data[0]["email"]
                     : "kosong"),
@@ -246,8 +161,8 @@ class _Editprofile extends State<Editprofile> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(data[0]["penanda_tangan"] != null
-                    ? "Penanda Tangan : " + data[0]["penanda_tangan"]
+                Text(data[0]["telepon"] != null
+                    ? "Telepon Kantor : " + data[0]["telepon"]
                     : "kosong"),
               ]),
             ),
@@ -257,9 +172,52 @@ class _Editprofile extends State<Editprofile> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(data[0]["penanda_tangan_posisi"] != null
-                    ? "Posisi Penanda Tanganan : " +
-                        data[0]["penanda_tangan_posisi"]
+                Text(data[0]["no_hp"] != null
+                    ? "Nomor Hp : " + data[0]["no_hp"]
+                    : "kosong"),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Text(data[0]["kepala_sekolah_nama"] != null
+                    ? "Nama Kepala Sekolah : " + data[0]["kepala_sekolah_nama"]
+                    : "kosong"),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Text(data[0]["kepala_sekolah_nip"] != null
+                    ? "NIP Kepala Sekolah : " + data[0]["kepala_sekolah_nip"]
+                    : "kosong"),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Text(data[0]["bendahara_nama"] != null
+                    ? "Nama Bendahara : " + data[0]["bendahara_nama"]
+                    : "kosong"),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Text(data[0]["bendahara_nip"] != null
+                    ? "NIP Bendahara : " + data[0]["bendahara_nip"]
                     : "kosong"),
               ]),
             ),
@@ -276,7 +234,7 @@ class _Editprofile extends State<Editprofile> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => FormEdit(),
+                  builder: (BuildContext context) => FormEdit2(),
                 ));
             // Add your onPressed code here!
           },
@@ -287,12 +245,12 @@ class _Editprofile extends State<Editprofile> {
   }
 }
 
-class FormEdit extends StatefulWidget {
+class FormEdit2 extends StatefulWidget {
   @override
-  _FormEdit createState() => _FormEdit();
+  _FormEdit2 createState() => _FormEdit2();
 }
 
-class _FormEdit extends State<FormEdit> {
+class _FormEdit2 extends State<FormEdit2> {
   List data;
   String id;
   Position _currentPosition;
@@ -311,11 +269,34 @@ class _FormEdit extends State<FormEdit> {
     });
   }
 
+//alert upload
+  void _showAlertupload(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Upload Photo"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Galery"),
+                  onPressed: () {
+                    _pilihGallery();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("Take A Picture"),
+                  onPressed: () async {
+                    _pilihKamera();
+                  },
+                ),
+              ],
+            ));
+  }
+
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
-        Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -361,24 +342,23 @@ class _FormEdit extends State<FormEdit> {
   bool _isFieldAgeValid;
 
   final nama = TextEditingController();
-  final email = TextEditingController();
-  final namapemilik = TextEditingController();
-  final norekening = TextEditingController();
-  final namabank = TextEditingController();
-  final namaperusahaan = TextEditingController();
+  final emailsekolah = TextEditingController();
+  final nohp = TextEditingController();
+  final kepalasekolah = TextEditingController();
+  final kepalasekolahnip = TextEditingController();
+  final namabendahara = TextEditingController();
   final npwp = TextEditingController();
   final telepon = TextEditingController();
   final alamat = TextEditingController();
   final provinsi = TextEditingController();
   final kabupaten = TextEditingController();
   final kodepos = TextEditingController();
-  final penandatangan = TextEditingController();
-  final pospenanda = TextEditingController();
-  final password = TextEditingController();
-  final konfirmasi = TextEditingController();
-  final limitasi = TextEditingController();
-  final deskripsi = TextEditingController();
+  final bendaharanip = TextEditingController();
+  final alamatsekolah = TextEditingController();
+  final namapenanggung = TextEditingController();
+  final npsn = TextEditingController();
   final fotopemilik = TextEditingController();
+  final email = TextEditingController();
 
   var placeholder = ['Loading...', 'Loading...', 'Loading...'];
   String prop, kab, kec;
@@ -402,30 +382,6 @@ class _FormEdit extends State<FormEdit> {
     getCredential();
   }
 
-//alert upload
-  void _showAlertupload(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text("Peringatan"),
-              content: Text("Upload Photo"),
-              actions: <Widget>[
-                new FlatButton(
-                  child: new Text("Galery"),
-                  onPressed: () {
-                    _pilihGallery();
-                  },
-                ),
-                new FlatButton(
-                  child: new Text("Take A Picture"),
-                  onPressed: () async {
-                    _pilihKamera();
-                  },
-                ),
-              ],
-            ));
-  }
-
   void _showAlert(BuildContext context) {
     showDialog(
         context: context,
@@ -445,34 +401,32 @@ class _FormEdit extends State<FormEdit> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.mascitra.co.id/api/mitra/user/profil_update';
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/profil/edit';
 
     Map data = {
       'user_id': id,
-      'nama_pemeilik_rekening': namapemilik.text,
-      'no_rekening': norekening.text,
-      'limitasi_minimum': limitasi.text,
-      'deskripsi': deskripsi.text,
+      'logo':
+          _imageFile != null ? base64Encode(_imageFile.readAsBytesSync()) : '',
+      'npsn': npsn.text,
       'npwp': npwp.text,
-      'bank': namabank.text,
-      'nama': namaperusahaan.text,
-      'penanda_tangan': penandatangan.text,
-      'posisi_penanda_tangan': pospenanda.text,
-      'email': email.text,
-      'password_baru': password.text,
-      'password_baru_konfirmasi': konfirmasi.text,
+      'email_sekolah': emailsekolah.text,
+      'telepon': telepon.text,
+      'no_hp': nohp.text,
+      'kepala_sekolah_nama': kepalasekolah.text,
+      'kepala_sekolah_nip': kepalasekolahnip.text,
+      'bendahara_nama': namabendahara.text,
+      'bendahara_nip': bendaharanip.text,
+      'nama': namapenanggung.text,
+      'alamat': alamat.text,
       'provinsi_id': prop,
       'kabupaten_id': kab,
       'kecamatan_id': kec,
-      'alamat': alamat.text,
+      'alamat_sekolah': alamatsekolah.text,
       'kode_pos': kodepos.text,
-      'telepon': telepon.text,
+      'email': email.text,
       'latitude': "${_currentPosition.latitude}",
       'longitude': "${_currentPosition.longitude}",
-      'foto':
-          _imageFile != null ? base64Encode(_imageFile.readAsBytesSync()) : '',
     };
-    //print(_imageFile);
     //encode Map to JSON
     var body = json.encode(data);
 
@@ -488,7 +442,7 @@ class _FormEdit extends State<FormEdit> {
 
     // print("${response.body}");
     Map<String, dynamic> map = jsonDecode(response.body);
-    //print(map);
+    print(map);
     if (map["Error"] == true || map["Error"] == "true") {
       _showAlert(context);
     } else {
@@ -520,24 +474,23 @@ class _FormEdit extends State<FormEdit> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _buildTextFieldNamaPemilik(),
-                _buildTextFieldPassword(),
-                _buildTextFieldKonfirmasi(),
-                _buildTextFieldEmail(),
-                _buildTextFieldNoRekening(),
-                _buildTextFieldNamaBank(),
-                _buildTextFieldlimitasi(),
-                _buildTextFielddeskripsi(),
-                _buildTextFieldNama(),
+                _buildTextFieldNPSN(),
                 _buildTextFieldNPWP(),
+                _buildTextFieldEmail(),
+                _buildTextFieldNohp(),
+                _buildTextFieldKepalaSekolahnama(),
+                _buildTextFieldKepalaSekolahnip(),
+                _buildTextFieldNamabendahara(),
+                _buildTextFieldBendaharaNIP(),
+                _buildTextFieldAlamatSekolah(),
+                _buildTextFieldNamaPenanggungjawab(),
                 _buildTextFieldTelepon(),
                 _buildTextFieldAlamat(),
+                _buildTextFieldEmailpenanggung(),
                 _buildTextFieldProvinsi(),
                 _buildTextFieldKabupaten(),
                 _buildTextFieldKecamatan(),
                 _buildTextFieldKodepos(),
-                _buildTextFieldPenandaTangan(),
-                _buildTextFieldPosPenandaTangan(),
                 _buildTextFieldFotoChoose(),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -590,165 +543,17 @@ class _FormEdit extends State<FormEdit> {
         ),
       ),
     );
-    // return Container(
-    //         width: double.infinity,
-    //         height: 150.0,
-    //         child: InkWell(
-    //           onTap: () {
-    //            _showAlertupload(context);
-    //           },
-    //           child: _imageFile == null
-    //               ? placeholder
-    //               : Image.file(
-    //                   _imageFile,
-    //                   fit: BoxFit.fill,
-    //                 ),
-    //         ),
-    //  );
   }
 
-  Widget _buildTextFieldNamaPemilik() {
+  Widget _buildTextFieldNPSN() {
     return TextField(
-      controller: namapemilik,
+      controller: npsn,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Nama Pemilik Rekening",
+        labelText: "NPSN",
         errorText: _isFieldNameValid == null || _isFieldNameValid
             ? null
-            : "Nama Pemilik Rekening harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldPassword() {
-    return TextField(
-      controller: password,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Password",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "Password harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldKonfirmasi() {
-    return TextField(
-      controller: konfirmasi,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Konfirmasi Password",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "Konfirmasi Password harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldNoRekening() {
-    return TextField(
-      controller: norekening,
-      keyboardType: TextInputType.phone,
-      decoration: InputDecoration(
-        labelText: "No. Rekening",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "No. Rekening harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldNamaBank() {
-    return TextField(
-      controller: namabank,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Bank ",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "Nama Bank harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldlimitasi() {
-    return TextField(
-      controller: limitasi,
-      keyboardType: TextInputType.phone,
-      decoration: InputDecoration(
-        labelText: "Limitasi",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "Limitasi harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFielddeskripsi() {
-    return TextField(
-      controller: deskripsi,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Deskripsi",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "Deskripsi harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldNama() {
-    return TextField(
-      controller: namaperusahaan,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Nama Perusahaan",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "Nama Perusahaan harus diisi",
+            : "NPSN  harus diisi",
       ),
       // onChanged: (value) {
       //   bool isFieldValid = value.trim().isNotEmpty;
@@ -762,9 +567,142 @@ class _FormEdit extends State<FormEdit> {
   Widget _buildTextFieldNPWP() {
     return TextField(
       controller: npwp,
-      keyboardType: TextInputType.phone,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "NPWP",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "NPWP harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldEmail() {
+    return TextField(
+      controller: emailsekolah,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        labelText: "Email Sekolah",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Email harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldTelepon() {
+    return TextField(
+      controller: telepon,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        labelText: "Telepon",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Telepon harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldNohp() {
+    return TextField(
+      controller: nohp,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        labelText: "Nomer Hp / Whatsapp ",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Nomer Hp / Whatsapp harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldKepalaSekolahnama() {
+    return TextField(
+      controller: kepalasekolah,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Nama Kepala Sekolah",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Nama Kepala Sekolah harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldKepalaSekolahnip() {
+    return TextField(
+      controller: kepalasekolahnip,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "NIP Kepala Sekolah",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "NIP Kepala Sekolah harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldNamabendahara() {
+    return TextField(
+      controller: namabendahara,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Nama Bendahara",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "Nama Bendahara harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldNameValid) {
+      //     setState(() => _isFieldNameValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldBendaharaNIP() {
+    return TextField(
+      controller: bendaharanip,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "NIP Bendahara",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "NPWP harus diisi",
@@ -778,15 +716,34 @@ class _FormEdit extends State<FormEdit> {
     );
   }
 
-  Widget _buildTextFieldTelepon() {
+  Widget _buildTextFieldAlamatSekolah() {
     return TextField(
-      controller: telepon,
-      keyboardType: TextInputType.phone,
+      controller: alamatsekolah,
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Telepon",
+        labelText: "Alamat Sekolah",
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
-            : "Nomor Telepon harus diisi",
+            : "Alamat Sekolah harus diisi",
+      ),
+      // onChanged: (value) {
+      //   bool isFieldValid = value.trim().isNotEmpty;
+      //   if (isFieldValid != _isFieldEmailValid) {
+      //     setState(() => _isFieldEmailValid = isFieldValid);
+      //   }
+      // },
+    );
+  }
+
+  Widget _buildTextFieldNamaPenanggungjawab() {
+    return TextField(
+      controller: namapenanggung,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Nama Penanggung Jawab",
+        errorText: _isFieldEmailValid == null || _isFieldEmailValid
+            ? null
+            : "Nama Penanggung Jawab harus diisi",
       ),
       // onChanged: (value) {
       //   bool isFieldValid = value.trim().isNotEmpty;
@@ -807,12 +764,19 @@ class _FormEdit extends State<FormEdit> {
             ? null
             : "Alamat harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldEmailValid) {
-      //     setState(() => _isFieldEmailValid = isFieldValid);
-      //   }
-      // },
+    );
+  }
+
+  Widget _buildTextFieldEmailpenanggung() {
+    return TextField(
+      controller: email,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Email",
+        errorText: _isFieldEmailValid == null || _isFieldEmailValid
+            ? null
+            : "Email harus diisi",
+      ),
     );
   }
 
@@ -931,63 +895,6 @@ class _FormEdit extends State<FormEdit> {
         errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "Kode Pos harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldEmailValid) {
-      //     setState(() => _isFieldEmailValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldEmail() {
-    return TextField(
-      controller: email,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        labelText: "Email",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
-            ? null
-            : "Email harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldEmailValid) {
-      //     setState(() => _isFieldEmailValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldPenandaTangan() {
-    return TextField(
-      controller: penandatangan,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Penanda Tangan",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
-            ? null
-            : "Form Penanda Tangan harus diisi",
-      ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldEmailValid) {
-      //     setState(() => _isFieldEmailValid = isFieldValid);
-      //   }
-      // },
-    );
-  }
-
-  Widget _buildTextFieldPosPenandaTangan() {
-    return TextField(
-      controller: pospenanda,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Posisi Penanda Tangan",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
-            ? null
-            : "Form Posisi Penanda Tangan harus diisi",
       ),
       // onChanged: (value) {
       //   bool isFieldValid = value.trim().isNotEmpty;

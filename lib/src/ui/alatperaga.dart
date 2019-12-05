@@ -225,19 +225,19 @@ class _AlatperagaState extends State<Alatperaga> {
   String api;
   List<String> satu = ["Buku Guru Pendidikan Jasmani Olahraga dan Kesehatan Kelas VII","","Third","4"];
   
-   _token(){
-    api="";
-    Token.getTokens("2").then((tokens){
-for(int i = 0; i<tokens.length;i++)
-     api = tokens[i].apitoken;
+//    _token(){
+//     api="";
+//     Token.getTokens("2").then((tokens){
+// for(int i = 0; i<tokens.length;i++)
+//      api = tokens[i].apitoken;
 
-    //  a=output.toString();
-     setState(() {
+//     //  a=output.toString();
+//      setState(() {
                         
-                         });
+//                          });
 
-                      });
-  }
+//                       });
+//   }
   
   @override
   void initState() {
@@ -247,7 +247,7 @@ for(int i = 0; i<tokens.length;i++)
   }
   @override
   Widget build(BuildContext context) {
-    _token();
+    //_token();
     return Container(
       height: 300,
       width: MediaQuery.of(context).size.width,
