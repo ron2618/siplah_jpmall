@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'kategori.dart';
+
 class GridKategori extends StatefulWidget {
   final List data;
+  final List dataproduk;
 
-  const GridKategori({Key key, this.data}) : super(key: key);
+  const GridKategori({Key key, this.data, this.dataproduk}) : super(key: key);
+
+
 
   @override
   _GridKategoriState createState() => _GridKategoriState();
@@ -23,12 +28,19 @@ class _GridKategoriState extends State<GridKategori> {
             itemBuilder: (context, i) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                   
-                     decoration: BoxDecoration(
-                         color: Colors.red[100],
-                       borderRadius: BorderRadius.circular(10),
-                     ),
+                  child: GestureDetector(
+                    onTap: ()=> Navigator.push(
+              context,
+              PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 350),
+                  pageBuilder: (context, _, __) =>
+                      Kategori(data: widget.data[i]['produk'],))),
+                                      child: Container(
+                     
+                       decoration: BoxDecoration(
+                           color: Colors.red[100],
+                         borderRadius: BorderRadius.circular(10),
+                       ),
             height: 100,
             width: 110,
             child: Center(
@@ -38,6 +50,7 @@ class _GridKategoriState extends State<GridKategori> {
               ),
             ),
           ),
+                  ),
                 );
        
             },
