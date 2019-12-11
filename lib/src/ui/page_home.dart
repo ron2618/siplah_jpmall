@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
       data = convertDataToJson['Data'][0]['produk'];
       data2 = convertDataToJson['Data'][1]['produk'];
       kategorilist = convertDataToJson['Data'];
+      
     });
 
     return "Success";
@@ -140,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                GridKategori(data: kategorilist,),
+                GridKategori(data: kategorilist,dataproduk: data,),
                 // RekomToko(),
                 SizedBox(height: 10.0,),
               
