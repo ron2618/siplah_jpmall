@@ -316,7 +316,6 @@ class _NontextState extends State<Nontext> {
 //                ),
 //              ],
 //            ),
-<<<<<<< HEAD
             SizedBox(height: 20,),
             
           ],
@@ -325,17 +324,6 @@ class _NontextState extends State<Nontext> {
     ):Container(
       
     ),
-=======
-                              SizedBox(
-                                height: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container(),
->>>>>>> 7d8d5f45cc0c62f82c4fcdebfecd4669aa80caec
               SizedBox(
                 width: 8.0,
               ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 import 'package:siplah_jpmall/src/ui/edit_profilSKLH.dart';
@@ -5,6 +7,8 @@ import 'package:siplah_jpmall/src/ui/edit_profile.dart';
 import 'package:siplah_jpmall/src/ui/imagecabang.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:http/http.dart' as http;
 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
@@ -22,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage>
   TabController controller;
   ScrollController _controller;
   double position = 0;
+ 
   String namauser = null;
   String nama = null;
   String level_id = null;
@@ -29,6 +34,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     getCredential();
+    getJsonData();
     _controller = ScrollController();
     _controller.addListener(onScroll);
     controller = TabController(length: 1, vsync: this);
@@ -52,28 +58,59 @@ class _ProfilePageState extends State<ProfilePage>
     });
   }
 
+void _showAlert(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text("Peringatan"),
+                content: Text("Yakin Mau Keluar"),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("Cancel"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  new FlatButton(
+                    child: new Text("OK"),
+                    onPressed: () async {
+                      final pref = await SharedPreferences.getInstance();
+                      await pref.clear();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new LoginPage()),
+                          (Route<dynamic> route) => false);
+                    },
+                  ),
+                ],
+              ));
+    }
+  List data,data2;
+Future<String> getJsonData() async {
+    var response = await http.post(
+        //Encode the url
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/blog_footer'),
+        headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},);
+    print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'][0]['page'];
+      data2 = convertDataToJson['Data'][1]['page'];
+      //print(data.length);
+      
+    });
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    //print("level id = "+level_id);
+    //print(data.length);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          // IconButton(
-          //     icon: Icon(
-          //       Icons.settings,
-          //       color: Colors.white,
-          //     ),
-          //     onPressed: () => level_id == '3'
-          //         ? Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //               builder: (BuildContext context) => Editprofile(),
-          //             ))
-          //         : Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //               builder: (BuildContext context) => EditprofileSKL(),
-          //             ))),
           Container(
             padding: const EdgeInsets.all(5),
             child: Stack(children: <Widget>[
@@ -124,75 +161,136 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ),
       ),
-      body:
-      ListView == null? "Waiting":
-      
-       ListView(
-         
-         //scrollDirection: Axis.vertical,
-         children: <Widget>[
-          Column(
-            children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-               level_id == '3' ? CabangMitra() : RekomToko(),
-                ]),
+      body: ListView == null
+          ? "Waiting"
+          : ListView(
+
+              //scrollDirection: Axis.vertical,
+              children: <Widget>[
+                  Column(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(children: <Widget>[
+                        level_id == '3' ? CabangMitra() : RekomToko(),
+                      ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(children: <Widget>[
+                        //Text("data"),
+                        // PageBeli(),
+                        //pow
+            Container(
+              height: 200,
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            //scrollDirection: Axis.vertical,
+            itemCount: data.length==null?0:data.length,
+            itemBuilder: (context, i) {
+              return Card(
+                child:Row(children: <Widget>[
+                SizedBox(
+                    height: 50,
+                    
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                     child: Row(children: <Widget>[
+                       Text(data[i]['judul']),
+                      
+                      
+                     ],),
+                    )),
+                ]));
+            },
+          ),
+        ),
+        Container(
+          height: 200,
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+           // scrollDirection: Axis.vertical,
+            // physics: ScrollPhysics(),
+            // shrinkWrap: true,
+            itemCount: data2.length==null?0:data2.length,
+            itemBuilder: (context, i) {
+              return Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0)),
+                child: SizedBox(
+                    height: 50,
+                   
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                     child: Text(data2[i]['judul']),
+                    )),
+              );
+            },
+          ),
+        ),
+      Container(
+      color: Colors.white,
+      child: ListTile(
+        onTap: () {
+          _showAlert(context);
+        },
+        title: Column(
+          children: <Widget>[
+            Text(
+              "LOGOUT",
+              style: TextStyle(
+                  color: Colors.red, fontWeight: FontWeight.bold),
             ),
-               Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: Column(
-             children: <Widget>[
-           PageBeli(),
-             ]),
-               ),
-         ]),
-         ]),
+          ],
+        ),
+      ),
+    ),
+//     //batas bawah
+
+
+                        //lol
+                      ]),
+                    ),
+                  ]),
+                ]),
       //TabBarView(controller: controller, children: <Widget>[
-       
-         
-        
-          
+
       //]),
       drawer: Drawer(
         child: ListView(
-         // padding: EdgeInsets.zero,
+          // padding: EdgeInsets.zero,
           children: <Widget>[
             level_id != '3'
-                ? Column(children: <Widget>[ 
+                ? Column(children: <Widget>[
                     SizedBox(
                       width: 380,
-                      
-                   
                       child: DrawerHeader(
-                         
                         decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            // Where the linear gradient begins and ends
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            // Add one stop for each color. Stops should increase from 0 to 1
-                            //stops: [0.1, 0.5, 0.7, 0.9],
-                            colors: [
-                              // Colors are easy thanks to Flutter's Colors class.
-                              Colors.deepPurple[800],
-                              Colors.pink[700],
-                              Colors.yellow[500],
-                            ],
-                          ),
-                           image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))
-                        ),
-                          
+                            gradient: LinearGradient(
+                              // Where the linear gradient begins and ends
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              // Add one stop for each color. Stops should increase from 0 to 1
+                              //stops: [0.1, 0.5, 0.7, 0.9],
+                              colors: [
+                                // Colors are easy thanks to Flutter's Colors class.
+                                Colors.deepPurple[800],
+                                Colors.pink[700],
+                                Colors.yellow[500],
+                              ],
+                            ),
+                            image: new DecorationImage(
+                                image: new NetworkImage(
+                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))),
                       ),
                     ),
                     ListTile(
                       title: Text('Profil'),
-                      onTap: ()async  {
+                      onTap: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) => EditprofileSKL(),
+                              builder: (BuildContext context) =>
+                                  EditprofileSKL(),
                             ));
                       },
                     ),
@@ -238,25 +336,24 @@ class _ProfilePageState extends State<ProfilePage>
                 : Column(children: <Widget>[
                     SizedBox(
                       width: 380,
-                      
                       child: DrawerHeader(
-                        
                         decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            // Where the linear gradient begins and ends
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            // Add one stop for each color. Stops should increase from 0 to 1
-                            //stops: [0.1, 0.5, 0.7, 0.9],
-                            colors: [
-                              // Colors are easy thanks to Flutter's Colors class.
-                              Colors.deepPurple[800],
-                              Colors.pink[700],
-                              Colors.yellow[500],
-                            ],
-                          ),
-                          image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))
-                        ),
+                            gradient: LinearGradient(
+                              // Where the linear gradient begins and ends
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              // Add one stop for each color. Stops should increase from 0 to 1
+                              //stops: [0.1, 0.5, 0.7, 0.9],
+                              colors: [
+                                // Colors are easy thanks to Flutter's Colors class.
+                                Colors.deepPurple[800],
+                                Colors.pink[700],
+                                Colors.yellow[500],
+                              ],
+                            ),
+                            image: new DecorationImage(
+                                image: new NetworkImage(
+                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))),
                       ),
                     ),
                     ListTile(
@@ -265,8 +362,7 @@ class _ProfilePageState extends State<ProfilePage>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  Editprofile(),
+                              builder: (BuildContext context) => Editprofile(),
                             ));
                       },
                     ),
@@ -324,20 +420,18 @@ class _ProfilePageState extends State<ProfilePage>
 }
 
 
+class PageBeli extends StatefulWidget {
+   List data;
+   List data2;
+  @override
+   _PageBeli createState() => _PageBeli();
+}
 
-class PageBeli extends StatelessWidget {
-  final List data;
-  final List kategori;
-
-  const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
-  
-
+class _PageBeli extends State<PageBeli> {
   @override
   Widget build(BuildContext context) {
     
-    
-   
-    
+    //print(data);
     void _showAlert(BuildContext context) {
       showDialog(
           context: context,
@@ -366,131 +460,28 @@ class PageBeli extends StatelessWidget {
                 ],
               ));
     }
+    
 
-    return Container(
-      color: Colors.grey[200],
-      height: MediaQuery.of(context).size.height,
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        padding: const EdgeInsets.only(top: 10),
-        children: <Widget>[
-          Container(
-              color: Colors.grey[200],
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(
-                    color: Colors.grey[200],
-                    height: 1,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      title: Text("10 Kata Bijak"),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => SecondScreen(),
-                          )),
-                      leading: Icon(Icons.people),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey[200],
-                    height: 1,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      title: Text("Cara Belanja"),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => Pagekedua(),
-                          )),
-                      leading: Icon(Icons.shopping_basket),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey[200],
-                    height: 1,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      title: Text("Cara Berjualan Online"),
-                      leading: Icon(
-                          Icons.signal_cellular_connected_no_internet_4_bar),
-                    ),
-                  ),
 
-                  //batas bawah
-
-                  Container(
-                    color: Colors.grey[200],
-                    height: 50,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      title: Text("Pusat Bantuan"),
-                      leading: Icon(Icons.person_pin_circle),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey[200],
-                    height: 1,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      title: Text("Mitra Sipplah"),
-                      leading: Icon(Icons.public),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey[200],
-                    height: 1,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      title: Text("Syarat Dan Ketentuan"),
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => Pageketiga(),
-                          )),
-                      leading: Icon(Icons.book),
-                    ),
-                  ),
-
-                  Container(
-                    color: Colors.grey[200],
-                    height: 59,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: ListTile(
-                      onTap: () {
-                        _showAlert(context);
-                      },
-                      title: Column(
-                        children: <Widget>[
-                          Text(
-                            "LOGOUT",
-                            style: TextStyle(
-                                color: Colors.red, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-        ],
+    // Container(
+    //   color: Colors.grey[200],
+    //   height: 59,
+    // ),
+    Container(
+      color: Colors.white,
+      child: ListTile(
+        onTap: () {
+          _showAlert(context);
+        },
+        title: Column(
+          children: <Widget>[
+            Text(
+              "LOGOUT",
+              style: TextStyle(
+                  color: Colors.red, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -718,9 +709,14 @@ class PageBeli extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return null;
+  }
 //  _raihCashBack()
 }
-
 class Tr {
   final int index;
   final String title;
@@ -821,13 +817,13 @@ class _SecondScreen extends State<SecondScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WebviewScaffold(
-      appBar: AppBar(
-        title: Text("10 Kata Bijak",
-            style: TextStyle(fontSize: 14, color: Colors.white)),
-      ),
-      url: "https://siplah.mascitra.co.id/blog/page/1",
-    );
+    // return WebviewScaffold(
+    //   appBar: AppBar(
+    //     title: Text("10 Kata Bijak",
+    //         style: TextStyle(fontSize: 14, color: Colors.white)),
+    //   ),
+    //   url: "https://siplah.mascitra.co.id/blog/page/1",
+    // );
   }
 }
 

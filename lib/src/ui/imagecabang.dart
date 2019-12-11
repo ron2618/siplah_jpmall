@@ -186,7 +186,7 @@ class _LihatCabang extends State<LihatCabang> {
           scrollDirection: Axis.vertical,
           // physics: ScrollPhysics(),
           // shrinkWrap: true,
-          itemCount: data.length,
+          itemCount: data.length==null?0:data.length,
           itemBuilder: (context, i) {
             //print(data[0]['nama']);
             return Card(

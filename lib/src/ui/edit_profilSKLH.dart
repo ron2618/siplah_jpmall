@@ -66,6 +66,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
 
   @override
   Widget build(BuildContext context) {
+    double c_width = MediaQuery.of(context).size.width * 0.6;
     getCredential();
     getJsonData();
 
@@ -82,140 +83,207 @@ class _EditprofileSKL extends State<EditprofileSKL> {
         //CODE BARU YANG DITAMBAHKAN
         body: ListView(padding: const EdgeInsets.all(0), children: <Widget>[
           Column(children: <Widget>[
-            Row(children: <Widget>[
-              SizedBox(
-                width: 10,
-              ),
-              CircleAvatar(
-                radius: 50,
-                child: Center(
-                  child: Image.network(
-                    data[0]['logo_sekolah'] != null
-                        ? data[0]['logo_sekolah']
-                        : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Row(children: <Widget>[
+                SizedBox(
+                  width: 170,
+                ),
+                CircleAvatar(
+                  radius: 50,
+                  child: Center(
+                    child: Image.network(
+                      data[0]['logo_sekolah'] != null
+                          ? data[0]['logo_sekolah']
+                          : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
+                    ),
                   ),
                 ),
-              ),
-            ]),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["nama_sekolah"] != null
-                    ? "Nama Sekolah : " + data[0]["nama_sekolah"]
-                    : "Kosong"),
               ]),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Text(data[0]["alamat_sekolah"] != null
-                    ? "Alamat Sekolah : " + data[0]["alamat_sekolah"]
-                    : "kosong"),
-              ]),
+            SizedBox(
+              height: 40,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
+                Row(
+                  children: <Widget>[Text("Nama Sekolah",style: TextStyle(fontWeight: FontWeight.bold), )],
                 ),
-                Text(data[0]["npsn"] != null
-                    ? "NPSN : " + data[0]["npsn"]
-                    : "kosong"),
+                SizedBox(
+                  width: 50,
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(data[0]["nama_sekolah"] != null
+                        ? ": " + data[0]["nama_sekolah"]
+                        : "Kosong"),
+                  ],
+                ),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
+                Row(
+                  children: <Widget>[Text("Alamat",style: TextStyle(fontWeight: FontWeight.bold),)],
                 ),
-                Text(data[0]["npwp"] != null
-                    ? "NPWP : " + data[0]["npwp"]
-                    : "kosong"),
+                SizedBox(
+                  width: 80,
+                ),
+                Container(
+                    padding: const EdgeInsets.all(16.0),
+                    width: c_width,
+                    child: new Column(children: <Widget>[
+                      Column(
+                        children:<Widget>[
+                      Text(data[0]["alamat_sekolah"] != null
+                          ? ": " + data[0]["alamat_sekolah"]
+                          : "kosong"),
+                        ])
+                    ])),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
+                Row(children: <Widget>[Text("NSPN",style: TextStyle(fontWeight: FontWeight.bold),)]),
                 SizedBox(
-                  height: 10,
+                  width: 105,
                 ),
-                Text(data[0]["email"] != null
-                    ? "Email : " + data[0]["email"]
-                    : "kosong"),
+                Row(
+                  children: <Widget>[
+                    Text(data[0]["npsn"] != null
+                        ? ": " + data[0]["npsn"]
+                        : "kosong"),
+                  ],
+                ),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
+                Row(children: <Widget>[Text("NPWP",style: TextStyle(fontWeight: FontWeight.bold),)]),
                 SizedBox(
-                  height: 10,
+                  width: 103,
                 ),
-                Text(data[0]["telepon"] != null
-                    ? "Telepon Kantor : " + data[0]["telepon"]
-                    : "kosong"),
+                Row(children: <Widget>[
+                  Text(data[0]["npwp"] != null
+                      ? ": " + data[0]["npwp"]
+                      : "kosong"),
+                ]),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
+                Row(children: <Widget>[Text("Email",style: TextStyle(fontWeight: FontWeight.bold),)]),
                 SizedBox(
-                  height: 10,
+                  width: 108,
                 ),
-                Text(data[0]["no_hp"] != null
-                    ? "Nomor Hp : " + data[0]["no_hp"]
-                    : "kosong"),
+                Row(children: <Widget>[
+                  Text(data[0]["email"] != null
+                      ? ": " + data[0]["email"]
+                      : "kosong"),
+                ]),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
+                Row(children: <Widget>[Text("Telepon Kantor",style: TextStyle(fontWeight: FontWeight.bold),)]),
                 SizedBox(
-                  height: 10,
+                  width: 47,
                 ),
-                Text(data[0]["kepala_sekolah_nama"] != null
-                    ? "Nama Kepala Sekolah : " + data[0]["kepala_sekolah_nama"]
-                    : "kosong"),
+                Row(children: <Widget>[
+                  Text(data[0]["telepon"] != null
+                      ? ": " + data[0]["telepon"]
+                      : "kosong"),
+                ]),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
+                Row(
+                  children: <Widget>[Text("Nomor Hp",style: TextStyle(fontWeight: FontWeight.bold),)],
                 ),
-                Text(data[0]["kepala_sekolah_nip"] != null
-                    ? "NIP Kepala Sekolah : " + data[0]["kepala_sekolah_nip"]
-                    : "kosong"),
+                SizedBox(
+                  width: 80,
+                ),
+                Row(children: <Widget>[
+                  Text(data[0]["no_hp"] != null
+                      ? ": " + data[0]["no_hp"]
+                      : "kosong"),
+                ]),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
-                SizedBox(
-                  height: 10,
+                Row(
+                  children: <Widget>[Text("Nama Kepala Sekolah",style: TextStyle(fontWeight: FontWeight.bold),)],
                 ),
-                Text(data[0]["bendahara_nama"] != null
-                    ? "Nama Bendahara : " + data[0]["bendahara_nama"]
-                    : "kosong"),
+                SizedBox(
+                  width: 5,
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(data[0]["kepala_sekolah_nama"] != null
+                        ? ": " + data[0]["kepala_sekolah_nama"]
+                        : "kosong"),
+                  ],
+                ),
               ]),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
+                Row(children: <Widget>[Text("NIP Kepala Seklah",style: TextStyle(fontWeight: FontWeight.bold),)]),
                 SizedBox(
-                  height: 10,
+                  width: 28,
                 ),
-                Text(data[0]["bendahara_nip"] != null
-                    ? "NIP Bendahara : " + data[0]["bendahara_nip"]
-                    : "kosong"),
+                Row(
+                  children: <Widget>[
+                    Text(data[0]["kepala_sekolah_nip"] != null
+                        ? ": " + data[0]["kepala_sekolah_nip"]
+                        : "kosong"),
+                  ],
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: <Widget>[
+                Row(
+                  children: <Widget>[Text("Nama Bendahara",style: TextStyle(fontWeight: FontWeight.bold),)],
+                ),
+                SizedBox(
+                  width: 35,
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(data[0]["bendahara_nama"] != null
+                        ? ": " + data[0]["bendahara_nama"]
+                        : "kosong"),
+                  ],
+                ),
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: <Widget>[
+                Row(children: <Widget>[Text("NIP Bendahara",style: TextStyle(fontWeight: FontWeight.bold),)]),
+                SizedBox(
+                  width: 50,
+                ),
+                Row(children: <Widget>[
+                  Text(data[0]["bendahara_nip"] != null
+                      ? ": " + data[0]["bendahara_nip"]
+                      : "kosong"),
+                ]),
               ]),
             ),
           ])
