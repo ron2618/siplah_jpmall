@@ -52,8 +52,6 @@ class _MainPageState extends State<MainPage> {
   final _page = [
     HomePage(),
        CartsPage(),
-    OfficialStorePage(),
-
      FeedsPage(),
     ProfilePage()
   ];
@@ -134,10 +132,10 @@ class _MainPageState extends State<MainPage> {
                 title: Text("Carts", style: TextStyle(fontSize: 12),),
                 icon: Icon(Icons.shopping_cart,)
               ),
-              BottomNavigationBarItem(
-                title: Text("Official Store", style: TextStyle(fontSize: 12),),
-                icon: Icon(Icons.store_mall_directory,)
-              ),
+              // BottomNavigationBarItem(
+              //   title: Text("Official Store", style: TextStyle(fontSize: 12),),
+              //   icon: Icon(Icons.store_mall_directory,)
+              // ),
             
                BottomNavigationBarItem(
                 title: Text("Feeds", style: TextStyle(fontSize: 12),),

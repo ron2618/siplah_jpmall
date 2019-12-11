@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 import 'package:siplah_jpmall/src/ui/edit_profilSKLH.dart';
 import 'package:siplah_jpmall/src/ui/edit_profile.dart';
+import 'package:siplah_jpmall/src/ui/imagecabang.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -22,13 +25,14 @@ class _ProfilePageState extends State<ProfilePage>
   String namauser = null;
   String nama = null;
   String level_id = null;
+  String foto = null;
   @override
   void initState() {
+    getCredential();
     _controller = ScrollController();
     _controller.addListener(onScroll);
     controller = TabController(length: 1, vsync: this);
     super.initState();
-    getCredential();
   }
 
   onScroll() {
@@ -44,6 +48,7 @@ class _ProfilePageState extends State<ProfilePage>
       namauser = pref.getString("username");
       nama = pref.getString("nama");
       level_id = pref.getString("level_id");
+      foto = pref.getString("foto");
     });
   }
 
@@ -51,83 +56,288 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     //print("level id = "+level_id);
     return Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.white,
-                ),
-                onPressed: () => level_id == '3'
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => Editprofile(),
-                        ))
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => EditprofileSKL(),
-                        ))),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Stack(children: <Widget>[
-                IconButton(
-                    icon: Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                    ),
-                    onPressed: null),
-                Positioned(
-                  left: 23,
-                  top: 5,
-                  child: CircleAvatar(
-                    child: Center(
-                        child: Text(
-                      "3",
-                      style: TextStyle(fontSize: 14, color: Colors.white),
-                    )),
-                    backgroundColor: Colors.deepOrange,
-                    radius: 8,
+      appBar: AppBar(
+        actions: <Widget>[
+          // IconButton(
+          //     icon: Icon(
+          //       Icons.settings,
+          //       color: Colors.white,
+          //     ),
+          //     onPressed: () => level_id == '3'
+          //         ? Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (BuildContext context) => Editprofile(),
+          //             ))
+          //         : Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (BuildContext context) => EditprofileSKL(),
+          //             ))),
+          Container(
+            padding: const EdgeInsets.all(5),
+            child: Stack(children: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    Icons.notifications,
+                    color: Colors.white,
                   ),
-                )
-              ]),
-            ),
-          ],
-          title: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: <Widget>[
-                CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(
-                      "https://static-2.gumroad.com/res/gumroad/1654647495106/asset_previews/df232360d4f186e2672d177431a77a68/retina/Animation_207.png"),
+                  onPressed: null),
+              Positioned(
+                left: 23,
+                top: 5,
+                child: CircleAvatar(
+                  child: Center(
+                      child: Text(
+                    "3",
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  )),
+                  backgroundColor: Colors.deepOrange,
+                  radius: 8,
                 ),
-                SizedBox(
-                  width: 10,
+              )
+            ]),
+          ),
+        ],
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Row(
+            children: <Widget>[
+              CircleAvatar(
+                radius: 20,
+                child: Center(
+                  child: Image.network(
+                    foto != null
+                        ? foto
+                        : ('https://siplah.mascitra.co.id/assets/images/user.ico'),
+                  ),
                 ),
-                Text(
-                  namauser != null ? namauser : "waiting...",
-                  style: TextStyle(color: Colors.white),
-                )
-              ],
-            ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                nama != null ? nama : "waiting...",
+                style: TextStyle(color: Colors.white),
+              )
+            ],
           ),
         ),
-        body: TabBarView(controller: controller, children: [
-          PageBeli(),
-        ]));
+      ),
+      body:
+      ListView == null? "Waiting":
+      
+       ListView(
+         
+         //scrollDirection: Axis.vertical,
+         children: <Widget>[
+          Column(
+            children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: <Widget>[
+               level_id == '3' ? CabangMitra() : RekomToko(),
+                ]),
+            ),
+               Padding(
+                 padding: const EdgeInsets.all(8.0),
+                 child: Column(
+             children: <Widget>[
+           PageBeli(),
+             ]),
+               ),
+         ]),
+         ]),
+      //TabBarView(controller: controller, children: <Widget>[
+       
+         
+        
+          
+      //]),
+      drawer: Drawer(
+        child: ListView(
+         // padding: EdgeInsets.zero,
+          children: <Widget>[
+            level_id != '3'
+                ? Column(children: <Widget>[ 
+                    SizedBox(
+                      width: 380,
+                      
+                   
+                      child: DrawerHeader(
+                         
+                        decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            // Where the linear gradient begins and ends
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            // Add one stop for each color. Stops should increase from 0 to 1
+                            //stops: [0.1, 0.5, 0.7, 0.9],
+                            colors: [
+                              // Colors are easy thanks to Flutter's Colors class.
+                              Colors.deepPurple[800],
+                              Colors.pink[700],
+                              Colors.yellow[500],
+                            ],
+                          ),
+                           image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))
+                        ),
+                          
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('Profil'),
+                      onTap: ()async  {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => EditprofileSKL(),
+                            ));
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Pesanan'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Alamat Pengiriman'),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  AlamatPemesan(),
+                            ));
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Komplain'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Produk Favorit'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ])
+                : Column(children: <Widget>[
+                    SizedBox(
+                      width: 380,
+                      
+                      child: DrawerHeader(
+                        
+                        decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            // Where the linear gradient begins and ends
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            // Add one stop for each color. Stops should increase from 0 to 1
+                            //stops: [0.1, 0.5, 0.7, 0.9],
+                            colors: [
+                              // Colors are easy thanks to Flutter's Colors class.
+                              Colors.deepPurple[800],
+                              Colors.pink[700],
+                              Colors.yellow[500],
+                            ],
+                          ),
+                          image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('Profil'),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  Editprofile(),
+                            ));
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Pesanan'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Cabang Mitra'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Komplain'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Marketing'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Kurir'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ])
+          ],
+        ),
+      ),
+    );
   }
 }
+
+
 
 class PageBeli extends StatelessWidget {
   final List data;
   final List kategori;
 
   const PageBeli({Key key, this.data, this.kategori}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
+    
+    
+   
+    
     void _showAlert(BuildContext context) {
       showDialog(
           context: context,
@@ -161,9 +371,9 @@ class PageBeli extends StatelessWidget {
       color: Colors.grey[200],
       height: MediaQuery.of(context).size.height,
       child: ListView(
+        scrollDirection: Axis.vertical,
         padding: const EdgeInsets.only(top: 10),
         children: <Widget>[
-          RekomToko(),
           Container(
               color: Colors.grey[200],
               padding: const EdgeInsets.only(top: 10),

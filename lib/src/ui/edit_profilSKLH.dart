@@ -61,7 +61,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
       // kodepos = pref.getString("kodepos");
       // telepon = pref.getString("telepon");
     });
-    print("id profile sklh= " + nama);
+    //print("id profile sklh= " + nama);
   }
 
   @override
@@ -82,24 +82,21 @@ class _EditprofileSKL extends State<EditprofileSKL> {
         //CODE BARU YANG DITAMBAHKAN
         body: ListView(padding: const EdgeInsets.all(0), children: <Widget>[
           Column(children: <Widget>[
-             Row(
-                children: <Widget>[
-                  SizedBox(
-                    width: 10,
+            Row(children: <Widget>[
+              SizedBox(
+                width: 10,
+              ),
+              CircleAvatar(
+                radius: 50,
+                child: Center(
+                  child: Image.network(
+                    data[0]['logo_sekolah'] != null
+                        ? data[0]['logo_sekolah']
+                        : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
                   ),
-            CircleAvatar(
-                      radius: 50,
-                        
-                      child:Center(
-                        child:
-                      Image.network(
-                         data[0]['logo'] != null
-                              ? data[0]['logo']
-                              : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
-                    ),
-                      ),
-                    ),
-                ]),
+                ),
+              ),
+            ]),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: <Widget>[
@@ -442,7 +439,7 @@ class _FormEdit2 extends State<FormEdit2> {
 
     // print("${response.body}");
     Map<String, dynamic> map = jsonDecode(response.body);
-    print(map);
+    //print(map);
     if (map["Error"] == true || map["Error"] == "true") {
       _showAlert(context);
     } else {

@@ -313,15 +313,16 @@ class PageKetiga extends StatelessWidget {
 class LoginPage extends StatefulWidget {
   final List npsn;
   final List levelid;
-
-  const LoginPage({Key key, this.npsn, this.levelid}) : super(key: key);
+  final List nama;
+  final List foto;
+  const LoginPage({Key key, this.npsn, this.levelid,this.nama,this.foto}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-  String levelid, npsn;
+  String levelid, npsn,nama,foto;
 
   @override
   void initState() {
@@ -347,6 +348,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         //  sharedPreferences.setString("email",widget.data1[0]["email"]);
         //  sharedPreferences.setString("alamat",widget.data1[0]["alamat"]);
         //  sharedPreferences.setString("kodepos",widget.data1[0]["kodepos"]);
+        sharedPreferences.setString("foto", foto);
+        sharedPreferences.setString("nama", nama);
         sharedPreferences.setString("id", npsn);
         sharedPreferences.setString("level_id", levelid);
         sharedPreferences.setString("username", username.text);
@@ -402,6 +405,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       Map<String, dynamic> map = jsonDecode(response.body);
 
       //var convertDataToJson = json.decode(response.body);
+      foto = map['Data'][0]['foto'];
+      nama = map['Data'][0]['nama'];
       npsn = map['Data'][0]['id'];
       levelid = map['Data'][0]['level_id'];
       //  nama = convertDataToJson["nama"];

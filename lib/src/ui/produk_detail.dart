@@ -229,7 +229,7 @@ class _DetailProduk2State extends State<DetailProduk2>
               //   elevation: 0.0,
               // ),
              CustomBottomSheet(
-               nama: widget.nama,gambar: widget.gambar,harga: widget.harga,
+               nama: widget.nama,gambar: widget.gambar,harga: widget.harga == '0'?'Harga Zona':"Rp "+widget.harga,
              ),
             ],
           ),
@@ -460,7 +460,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
               ),
               Container(
                 width: double.infinity,
-                child: Text("Rp "+ price,
+                child: Text(price,
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.red,
