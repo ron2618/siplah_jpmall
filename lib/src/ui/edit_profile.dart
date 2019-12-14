@@ -55,11 +55,6 @@ class _Editprofile extends State<Editprofile> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
-      // foto = pref.getString("foto");
-      // email = pref.getString("alamat");
-      // alamat = pref.getString("telepon");
-      // kodepos = pref.getString("kodepos");
-      // telepon = pref.getString("telepon");
     });
     //("id profile = " + nama);
   }

@@ -5,14 +5,17 @@ import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 import 'package:siplah_jpmall/src/ui/edit_profilSKLH.dart';
 import 'package:siplah_jpmall/src/ui/edit_profile.dart';
 import 'package:siplah_jpmall/src/ui/imagecabang.dart';
+import 'package:siplah_jpmall/src/ui/marketing.dart';
+import 'package:siplah_jpmall/src/ui/penjualan.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
-
-import 'package:url_launcher/url_launcher.dart';
-import 'package:siplah_jpmall/src/models/get_token.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:siplah_jpmall/src/ui/tambahcabang.dart';
 
 import 'login.dart';
 
@@ -26,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage>
   TabController controller;
   ScrollController _controller;
   double position = 0;
- 
+
   String namauser = null;
   String nama = null;
   String level_id = null;
@@ -58,52 +61,55 @@ class _ProfilePageState extends State<ProfilePage>
     });
   }
 
-void _showAlert(BuildContext context) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text("Peringatan"),
-                content: Text("Yakin Mau Keluar"),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text("Cancel"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  new FlatButton(
-                    child: new Text("OK"),
-                    onPressed: () async {
-                      final pref = await SharedPreferences.getInstance();
-                      await pref.clear();
-                      Navigator.of(context).pushAndRemoveUntil(
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  new LoginPage()),
-                          (Route<dynamic> route) => false);
-                    },
-                  ),
-                ],
-              ));
-    }
-  List data,data2;
-Future<String> getJsonData() async {
+  void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Yakin Mau Keluar"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("OK"),
+                  onPressed: () async {
+                    final pref = await SharedPreferences.getInstance();
+                    await pref.clear();
+                    Navigator.of(context).pushAndRemoveUntil(
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) => new LoginPage()),
+                        (Route<dynamic> route) => false);
+                  },
+                ),
+              ],
+            ));
+  }
+
+  List data, data2;
+  Future<String> getJsonData() async {
     var response = await http.post(
-        //Encode the url
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/blog_footer'),
-        headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},);
-    print(response.body);
+      //Encode the url
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/blog_footer'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+      },
+    );
+    //print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['Data'][0]['page'];
       data2 = convertDataToJson['Data'][1]['page'];
       //print(data.length);
-      
     });
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -180,72 +186,88 @@ Future<String> getJsonData() async {
                         //Text("data"),
                         // PageBeli(),
                         //pow
-            Container(
-              height: 200,
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            //scrollDirection: Axis.vertical,
-            itemCount: data.length==null?0:data.length,
-            itemBuilder: (context, i) {
-              return Card(
-                child:Row(children: <Widget>[
-                SizedBox(
-                    height: 50,
-                    
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                     child: Row(children: <Widget>[
-                       Text(data[i]['judul']),
-                      
-                      
-                     ],),
-                    )),
-                ]));
-            },
-          ),
-        ),
-        Container(
-          height: 200,
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-           // scrollDirection: Axis.vertical,
-            // physics: ScrollPhysics(),
-            // shrinkWrap: true,
-            itemCount: data2.length==null?0:data2.length,
-            itemBuilder: (context, i) {
-              return Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: SizedBox(
-                    height: 50,
-                   
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                     child: Text(data2[i]['judul']),
-                    )),
-              );
-            },
-          ),
-        ),
-      Container(
-      color: Colors.white,
-      child: ListTile(
-        onTap: () {
-          _showAlert(context);
-        },
-        title: Column(
-          children: <Widget>[
-            Text(
-              "LOGOUT",
-              style: TextStyle(
-                  color: Colors.red, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-    ),
+                        Container(
+                          height: 200,
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            //scrollDirection: Axis.vertical,
+                            itemCount: data.length == null ? 0 : data.length,
+                            itemBuilder: (context, i) {
+                              return GestureDetector(
+                                  onTap: ()=> Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 350),
+                                  pageBuilder: (context, _, __) => PagesiteA(
+                                      id:data[i]['id']))),
+                                  child: Card(
+                                      child: Row(children: <Widget>[
+                                    SizedBox(
+                                        height: 50,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(data[i]['judul']),
+                                            ],
+                                          ),
+                                        )),
+                                  ])));
+                            },
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            // scrollDirection: Axis.vertical,
+                            // physics: ScrollPhysics(),
+                            // shrinkWrap: true,
+                            itemCount: data2.length == null ? 0 : data2.length,
+                            itemBuilder: (context, i) {
+                              return GestureDetector(
+                                  onTap: ()=> Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 350),
+                                  pageBuilder: (context, _, __) => PagesiteB(
+                                      id:data2[i]['id']))),
+                                  child: Card(
+                                      child: Row(children: <Widget>[
+                                    SizedBox(
+                                        height: 50,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(data2[i]['judul']),
+                                            ],
+                                          ),
+                                        )),
+                                  ])));
+                            }),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: ListTile(
+                            onTap: () {
+                              _showAlert(context);
+                            },
+                            title: Column(
+                              children: <Widget>[
+                                Text(
+                                  "LOGOUT",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
 //     //batas bawah
-
 
                         //lol
                       ]),
@@ -280,7 +302,7 @@ Future<String> getJsonData() async {
                             ),
                             image: new DecorationImage(
                                 image: new NetworkImage(
-                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))),
+                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png",scale: 4))),
                       ),
                     ),
                     ListTile(
@@ -367,21 +389,23 @@ Future<String> getJsonData() async {
                       },
                     ),
                     ListTile(
-                      title: Text('Pesanan'),
+                      title: Text('Penjualan'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
+                       Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => Penjualan(),
+                            ));
                       },
                     ),
                     ListTile(
                       title: Text('Cabang Mitra'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => TambahCabang(),
+                            ));
                       },
                     ),
                     ListTile(
@@ -396,10 +420,12 @@ Future<String> getJsonData() async {
                     ListTile(
                       title: Text('Marketing'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => Marketing(),
+                            ));
+
                       },
                     ),
                     ListTile(
@@ -419,249 +445,335 @@ Future<String> getJsonData() async {
   }
 }
 
+class PagesiteA extends StatefulWidget {
+  final String id;
 
-class PageBeli extends StatefulWidget {
-   List data;
-   List data2;
+  const PagesiteA({Key key, this.id}) : super(key: key);
+
   @override
-   _PageBeli createState() => _PageBeli();
+  _PageSiteA createState() => _PageSiteA();
 }
 
-class _PageBeli extends State<PageBeli> {
+class _PageSiteA extends State<PagesiteA> {
+  @override
+  void initState() {
+    getJsonData();
+  }
+
+  List data, data2;
+  Future<String> getJsonData() async {
+    //print(widget.id);
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/tampil'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+      },
+      body: {
+        'id':widget.id
+      },
+    );
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'];
+      //print(data[0]['judul']);
+    });
+  }
+  //String a;
   @override
   Widget build(BuildContext context) {
-    
-    //print(data);
-    void _showAlert(BuildContext context) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text("Peringatan"),
-                content: Text("Yakin Mau Keluar"),
-                actions: <Widget>[
-                  new FlatButton(
-                    child: new Text("Cancel"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  new FlatButton(
-                    child: new Text("OK"),
-                    onPressed: () async {
-                      final pref = await SharedPreferences.getInstance();
-                      await pref.clear();
-                      Navigator.of(context).pushAndRemoveUntil(
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  new LoginPage()),
-                          (Route<dynamic> route) => false);
-                    },
-                  ),
-                ],
-              ));
-    }
-    
-
-
-    // Container(
-    //   color: Colors.grey[200],
-    //   height: 59,
-    // ),
-    Container(
-      color: Colors.white,
-      child: ListTile(
-        onTap: () {
-          _showAlert(context);
-        },
-        title: Column(
-          children: <Widget>[
-            Text(
-              "LOGOUT",
-              style: TextStyle(
-                  color: Colors.red, fontWeight: FontWeight.bold),
-            ),
-          ],
+    //a=a+data[0]['judul'];
+    return Scaffold(
+      appBar: AppBar(
+         iconTheme: IconThemeData(color: Colors.white),
+          title: new Text(
+            ""+data[0]['judul'],
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        body: Center(
+child: SingleChildScrollView(
+          child: Html(
+            data: ""+data[0]['content'],
+            //Optional parameters:
+            padding: EdgeInsets.all(8.0),
+            onLinkTap: (url) {
+              print("Opening $url...");
+            },
+            customRender: (node, children) {
+              if (node is dom.Element) {
+                switch (node.localName) {
+                  case "custom_tag":
+                    return Column(children: children);
+                }
+              }
+            },
+          ),
         ),
       ),
     );
+        
+    
+  }
+}
+
+class PagesiteB extends StatefulWidget {
+  final String id;
+
+  const PagesiteB({Key key, this.id}) : super(key: key);
+
+  @override
+  _PageSiteB createState() => _PageSiteB();
+}
+
+class _PageSiteB extends State<PagesiteB> {
+  @override
+  void initState() {
+    getJsonData();
   }
 
-  _bantuan(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          "Transaksi",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          height: 50,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                "Pusat Bantuan",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black87),
-              ),
-              Text(
-                "Lihat solusi terbaik atau hubungi kami",
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black45),
-              ),
-            ],
+  List data2;
+  Future<String> getJsonData() async {
+    //print(widget.id);
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/tampil'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+      },
+      body: {
+        'id':widget.id
+      },
+    );
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data2 = convertDataToJson['Data'];
+      //print(data[0]['judul']);
+    });
+  }
+  //String a;
+  @override
+  Widget build(BuildContext context) {
+    //a=a+data[0]['judul'];
+    return Scaffold(
+      appBar: AppBar(
+         iconTheme: IconThemeData(color: Colors.white),
+          title: new Text(
+            ""+data2[0]['judul'],
+            style: TextStyle(color: Colors.white),
           ),
-        )
-      ],
+        ),
+        body: Center(
+child: SingleChildScrollView(
+          child: Html(
+            data: ""+data2[0]['content'],
+            //Optional parameters:
+            padding: EdgeInsets.all(8.0),
+            onLinkTap: (url) {
+              print("Opening $url...");
+            },
+            customRender: (node, children) {
+              if (node is dom.Element) {
+                switch (node.localName) {
+                  case "custom_tag":
+                    return Column(children: children);
+                }
+              }
+            },
+          ),
+        ),
+      ),
     );
+        
+    
   }
+}
+//   _bantuan(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       mainAxisSize: MainAxisSize.min,
+//       children: <Widget>[
+//         Text(
+//           "Transaksi",
+//           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//         ),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         Container(
+//           height: 50,
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: <Widget>[
+//               Text(
+//                 "Pusat Bantuan",
+//                 style: TextStyle(
+//                     fontSize: 14,
+//                     fontWeight: FontWeight.w400,
+//                     color: Colors.black87),
+//               ),
+//               Text(
+//                 "Lihat solusi terbaik atau hubungi kami",
+//                 style: TextStyle(
+//                     fontSize: 13,
+//                     fontWeight: FontWeight.w400,
+//                     color: Colors.black45),
+//               ),
+//             ],
+//           ),
+//         )
+//       ],
+//     );
+//   }
 
-  _transaksi(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          "Transaksi",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: _listTr.map((f) {
-            return InkWell(
-              onTap: () {},
-              child: Container(
-                height: 50,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      f.title,
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black87),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      f.sub,
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black45),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        _daftarTransaksi(context),
-      ],
-    );
-  }
+//   _transaksi(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       mainAxisSize: MainAxisSize.min,
+//       children: <Widget>[
+//         Text(
+//           "Transaksi",
+//           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//         ),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: _listTr.map((f) {
+//             return InkWell(
+//               onTap: () {},
+//               child: Container(
+//                 height: 50,
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: <Widget>[
+//                     Text(
+//                       f.title,
+//                       style: TextStyle(
+//                           fontSize: 14,
+//                           fontWeight: FontWeight.w400,
+//                           color: Colors.black87),
+//                     ),
+//                     SizedBox(
+//                       height: 5,
+//                     ),
+//                     Text(
+//                       f.sub,
+//                       style: TextStyle(
+//                           fontSize: 13,
+//                           fontWeight: FontWeight.w400,
+//                           color: Colors.black45),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             );
+//           }).toList(),
+//         ),
+//         SizedBox(
+//           height: 4,
+//         ),
+//         _daftarTransaksi(context),
+//       ],
+//     );
+//   }
 
-  _daftarTransaksi(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text(
-          "Daftar Transaksi",
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.shop,
-                    size: 50,
-                    color: Colors.cyan,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Belanja",
-                    style: TextStyle(fontSize: 15),
-                  )
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.shop,
-                    size: 50,
-                    color: Colors.cyan,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Belanja",
-                    style: TextStyle(fontSize: 15),
-                  )
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.shop,
-                    size: 50,
-                    color: Colors.cyan,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Belanja",
-                    style: TextStyle(fontSize: 15),
-                  )
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Icon(
-                    Icons.shop,
-                    size: 50,
-                    color: Colors.cyan,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Belanja",
-                    style: TextStyle(fontSize: 15),
-                  )
-                ],
-              ),
-            ])
-      ],
-    );
-  }
+//   _daftarTransaksi(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       mainAxisSize: MainAxisSize.min,
+//       children: <Widget>[
+//         Text(
+//           "Daftar Transaksi",
+//           style: TextStyle(
+//               fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
+//         ),
+//         SizedBox(
+//           height: 10,
+//         ),
+//         Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceAround,
+//             children: <Widget>[
+//               Column(
+//                 children: <Widget>[
+//                   Icon(
+//                     Icons.shop,
+//                     size: 50,
+//                     color: Colors.cyan,
+//                   ),
+//                   SizedBox(
+//                     height: 5,
+//                   ),
+//                   Text(
+//                     "Belanja",
+//                     style: TextStyle(fontSize: 15),
+//                   )
+//                 ],
+//               ),
+//               Column(
+//                 children: <Widget>[
+//                   Icon(
+//                     Icons.shop,
+//                     size: 50,
+//                     color: Colors.cyan,
+//                   ),
+//                   SizedBox(
+//                     height: 5,
+//                   ),
+//                   Text(
+//                     "Belanja",
+//                     style: TextStyle(fontSize: 15),
+//                   )
+//                 ],
+//               ),
+//               Column(
+//                 children: <Widget>[
+//                   Icon(
+//                     Icons.shop,
+//                     size: 50,
+//                     color: Colors.cyan,
+//                   ),
+//                   SizedBox(
+//                     height: 5,
+//                   ),
+//                   Text(
+//                     "Belanja",
+//                     style: TextStyle(fontSize: 15),
+//                   )
+//                 ],
+//               ),
+//               Column(
+//                 children: <Widget>[
+//                   Icon(
+//                     Icons.shop,
+//                     size: 50,
+//                     color: Colors.cyan,
+//                   ),
+//                   SizedBox(
+//                     height: 5,
+//                   ),
+//                   Text(
+//                     "Belanja",
+//                     style: TextStyle(fontSize: 15),
+//                   )
+//                 ],
+//               ),
+//             ])
+//       ],
+//     );
+//   }
 
   _favoriteSaya(BuildContext context) {
     return Column(
@@ -709,14 +821,7 @@ class _PageBeli extends State<PageBeli> {
       ],
     );
   }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return null;
-  }
-//  _raihCashBack()
-}
+ 
 class Tr {
   final int index;
   final String title;

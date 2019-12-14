@@ -30,7 +30,7 @@ class _CabangMitraState extends State<CabangMitra> {
       },
       body: {"user_id": "" + id_user},
     );
-    print(response.body);
+    //print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);

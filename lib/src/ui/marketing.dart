@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/bloc/kabupaten_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/kecamatan_bloc.dart';
@@ -10,29 +11,22 @@ import 'package:siplah_jpmall/src/bloc/provinsi_bloc.dart';
 import 'package:siplah_jpmall/src/models/kabupaten_model.dart';
 import 'package:siplah_jpmall/src/models/kecamatan_model.dart';
 import 'package:siplah_jpmall/src/models/provinsi_model.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'login.dart';
 
-class AlamatPemesan extends StatefulWidget {
+class Marketing extends StatefulWidget {
   @override
-  _AlamatPemesan createState() => _AlamatPemesan();
+  _MarketingState createState() => _MarketingState();
 }
 
-class _AlamatPemesan extends State<AlamatPemesan> {
-  String foto, npsn, nama;
-  List data;
-  //String id=null;
-
-  @override
-  void initState() {}
-
+class _MarketingState extends State<Marketing> {
+  
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
-    var url =
-        'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/delete';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/hapus';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -78,45 +72,14 @@ class _AlamatPemesan extends State<AlamatPemesan> {
             ));
   }
 
-  Future<http.Response> _setlocation(String id, a) async {
-    //a=a+id;
-    //print(id);
-    print(a);
-    var url =
-        'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/set_utama';
-
-    Map data = {'user_id': "" + nama, 'id': id, 'is_utama': a};
-    //encode Map to JSON
-    var body = json.encode(data);
-
-    var response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-          "API-App": "siplah_jpmall.id",
-          "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
-        },
-        body: body);
-    // print("${response.statusCode}");
-
-    // print("${response.body}");
-    Map<String, dynamic> map = jsonDecode(response.body);
-    print(map);
-    if (map["Error"] == true || map["Error"] == "true") {
-      _showAlert(context);
-    } else {
-      // savedata();
-      _berhasil(context);
-    }
-    return response;
-  }
-
+  String nama;
+  List data;
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
+            'https://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -140,10 +103,10 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     setState(() {
       nama = pref.getString("id");
     });
-    //print("id profile sklh= " + nama);
+    //print("id o= " + nama);
   }
 
-  //refresh controler
+  //refreshcontroller
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   void _onRefresh() async {
@@ -155,177 +118,211 @@ class _AlamatPemesan extends State<AlamatPemesan> {
 
   @override
   Widget build(BuildContext context) {
-    getJsonData();
     getCredential();
-    //print(data.length);
+    getJsonData();
     return Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  Icons.add_box,
-                  color: Colors.white,
-                ),
-                onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => Tambahalamat(),
-                          )),
-                    }),
-          ],
-          iconTheme: IconThemeData(color: Colors.white),
-          title:
-              Text("Alamat Pemesanan", style: TextStyle(color: Colors.white)),
-        ),
-        body: SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: true,
-          header: WaterDropHeader(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          child: Container(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              // physics: ScrollPhysics(),
-              // shrinkWrap: true,
-              itemCount: data.length,
-              itemBuilder: (context, i) {
-                //print(data[0]['nama']);
-
-                return Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: SizedBox(
-                      height: 165,
-                      width: 100,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(children: <Widget>[
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.add_box,
+                color: Colors.white,
+              ),
+              onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => TambahMarketing(),
+                        )),
+                  }),
+        ],
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Marketing", style: TextStyle(color: Colors.white)),
+      ),
+      //body: Text(data[0]["kode"]),
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        header: WaterDropHeader(),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: ListView.builder(
+          itemExtent: 165,
+          scrollDirection: Axis.vertical,
+          itemCount: data.length,
+          itemBuilder: (context, int i) => Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0)),
+            child: SizedBox(
+                height: 150,
+                width: 100,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(children: <Widget>[
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
                               Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['nama']),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['penerima_nama']),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['alamat'],
-                                              textAlign: TextAlign.left),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child:
-                                              Text(data[i]['kabupaten_nama']),
-                                        )
-                                      ],
-                                    ),
-                                    //Text(data[i]['kecamatan_nama']),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['kode_pos']),
-                                        )
-                                      ],
-                                    )
-                                  ]),
-                              Row(children: <Widget>[
-                                Flexible(fit: FlexFit.tight, child: SizedBox()),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          _delete(data[i]['id']);
-                                        },
-                                      ),
-                                    )),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {},
-                                      ),
-                                    )),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.location_on,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          String a;
-                                          data[i]['is_location'] == 2
-                                              ? a = '1'
-                                              : a = '2';
-                                          _setlocation(data[i]['id'], a);
-                                        },
-                                      ),
-                                    )),
-                              ]),
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text("Kode                    : " +
+                                        data[i]['kode']),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text("Nama                  : " +
+                                        data[i]['nama']),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                        "Nomor Telepon : " +
+                                            data[i]['no_telepon'],
+                                        textAlign: TextAlign.left),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(data[i]['kategori'] == '1'
+                                        ? "Kategori              : Internal"
+                                        : "Kategori              : Eksternal"),
+                                  )
+                                ],
+                              ),
+                              //Text(data[i]['kecamatan_nama']),
+                              // Column(
+                              //   children: <Widget>[
+                              //     Align(
+                              //       alignment: Alignment.topLeft,
+                              //       child: Text(data[i]['kode_pos']),
+                              //     )
+                              //   ],
+                              // )
                             ]),
-                          )
+                        Row(children: <Widget>[
+                          Flexible(fit: FlexFit.tight, child: SizedBox()),
+                          Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () {
+                                    _delete(data[i]['id']);
+                                  },
+                                ),
+                              )),
+                          Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              )),
+                        
                         ]),
-                      )),
-                );
-              },
-            ),
+                      ]),
+                    )
+                  ]),
+                )),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
-class Tambahalamat extends StatefulWidget {
+class TambahMarketing extends StatefulWidget {
   @override
-  _Tambahalamat createState() => _Tambahalamat();
+  _TambahMarketingState createState() => _TambahMarketingState();
 }
 
-class _Tambahalamat extends State<Tambahalamat> {
-  String id;
+class _TambahMarketingState extends State<TambahMarketing> {
+  var katPel = ['1', '2'];
+  var jeKel = ['1', '2'];
+  String id, slctdKatPel, slctdjeKel;
   bool _isFieldNameValid;
   var placeholder = ['Loading...', 'Loading...', 'Loading...'];
   String prop, kab, kec;
+  File _imageFile;
+  //start class upload
+  _pilihGallery() async {
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, maxHeight: 1920.0, maxWidth: 1080.0);
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
+  _pilihKamera() async {
+    var image = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 1920.0,
+      maxWidth: 1080.0,
+    );
+    setState(() {
+      _imageFile = image;
+    });
+  }
+//end class upload
+
+//alert upload
+  void _showAlertupload(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Upload Photo"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Galery"),
+                  onPressed: () {
+                    _pilihGallery();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("Take A Picture"),
+                  onPressed: () async {
+                    _pilihKamera();
+                  },
+                ),
+              ],
+            ));
+  }
+
   //controller
-  final namaket = TextEditingController();
-  final namapenerima = TextEditingController();
-  final telppenerima = TextEditingController();
-  final kodepospenerima = TextEditingController();
+  final namamarketing = TextEditingController();
+  final npwp = TextEditingController();
+  final email = TextEditingController();
+  final telpn = TextEditingController();
   final provinsi = TextEditingController();
   final kabupaten = TextEditingController();
   final alamatleng = TextEditingController();
+  final jeniskel = TextEditingController();
+  final logo = TextEditingController();
+  final kategori = TextEditingController();
+
   getCredential() async {
     final pref = await SharedPreferences.getInstance();
     setState(() {
@@ -342,18 +339,22 @@ class _Tambahalamat extends State<Tambahalamat> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/add';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/tambah';
 
     Map data = {
       'user_id': id,
-      'nama': namaket.text,
-      'nama_penerima': namapenerima.text,
-      'no_hp_penerima': telppenerima.text,
-      'kode_pos': kodepospenerima.text,
+      'nama': namamarketing.text,
+      'npwp': npwp.text,
+      'no_telepon': telpn.text,
+      'email': email.text,
+      'jenis_kelamin': slctdjeKel,
+      'kategori': slctdKatPel,
       'provinsi_id': prop,
       'kabupaten_id': kab,
       'kecamatan_id': kec,
-      'alamat': alamatleng.text
+      'alamat': alamatleng.text,
+      'foto':
+          _imageFile != null ? base64Encode(_imageFile.readAsBytesSync()) : '',
     };
     //encode Map to JSON
     var body = json.encode(data);
@@ -394,7 +395,7 @@ class _Tambahalamat extends State<Tambahalamat> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Success"),
-              content: Text("Alamat berhasil ditambahkan"),
+              content: Text("Marketing telah berhasil ditambahkan"),
             ));
   }
 
@@ -403,7 +404,7 @@ class _Tambahalamat extends State<Tambahalamat> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text("Tambah Alamat", style: TextStyle(color: Colors.white)),
+        title: Text("Tambah Marketing", style: TextStyle(color: Colors.white)),
       ),
       body: ListView(
         scrollDirection: Axis.vertical,
@@ -413,15 +414,18 @@ class _Tambahalamat extends State<Tambahalamat> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  _buildTextKetAlamat(),
-                  _buildTextNamaPenerima(),
+                  _buildTextKategori(),
+                  _buildTextNamaMarketing(),
+                  _buildTextNpwp(),
                   _buildTextNomorTelpon(),
-                  _buildTextKodePos(),
+                  _buildTextEmail(),
+                  _buildTextJekel(),
                   _buildTextFieldProvinsi(),
                   _buildTextFieldKabupaten(),
                   _buildTextFieldKecamatan(),
                   _buildTextAlamat(),
-                  _buildBtnSubmit()
+                  _buildTextFieldFotoChoose(),
+                  _buildBtnSubmit(),
                 ]),
           ),
         ],
@@ -429,54 +433,113 @@ class _Tambahalamat extends State<Tambahalamat> {
     );
   }
 
-  Widget _buildTextKetAlamat() {
-    return TextField(
-      controller: namaket,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Nama Alamat",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "Nama Alamat harus diisi",
+  Widget _buildTextFieldFotoChoose() {
+    return RaisedButton(
+      onPressed: () {
+        _showAlertupload(context);
+      },
+      child: Text(
+        "Choose Picture".toUpperCase(),
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }
 
-  Widget _buildTextNamaPenerima() {
+  Widget _buildTextNamaMarketing() {
     return TextField(
-      controller: namapenerima,
+      controller: namamarketing,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-        labelText: "Nama Penerima",
+        labelText: "Nama Marketing",
         errorText: _isFieldNameValid == null || _isFieldNameValid
             ? null
-            : "Nama Penerima harus diisi",
+            : "Nama Marketing harus diisi",
+      ),
+    );
+  }
+
+  Widget _buildTextNpwp() {
+    return TextField(
+      controller: npwp,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "NPWP",
+        errorText: _isFieldNameValid == null || _isFieldNameValid
+            ? null
+            : "NPWP harus diisi",
+      ),
+    );
+  }
+
+  Widget _buildTextKategori() {
+    return CustomTile(
+      "Kategori Marketing",
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+            isExpanded: true,
+            value: slctdKatPel,
+            items: List.generate(
+                katPel.length,
+                (i) => DropdownMenuItem<String>(
+                      child: Text(katPel[i] == '1' ? "Internal" : "Eksternal"),
+                      value: katPel[i],
+                    )),
+            onChanged: (item) {
+              setState(() {
+                slctdKatPel = item;
+              });
+            }),
+      ),
+    );
+  }
+
+  Widget _buildTextJekel() {
+    return CustomTile(
+      "Kategori Marketing",
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+            isExpanded: true,
+            value: slctdjeKel,
+            items: List.generate(
+                jeKel.length,
+                (i) => DropdownMenuItem<String>(
+                      child:
+                          Text(jeKel[i] == '1' ? "Laki - laki" : "Perempuan"),
+                      value: jeKel[i],
+                    )),
+            onChanged: (item) {
+              setState(() {
+                slctdjeKel = item;
+              });
+            }),
       ),
     );
   }
 
   Widget _buildTextNomorTelpon() {
     return TextField(
-      controller: telppenerima,
+      controller: telpn,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
-        labelText: "Nomor Telpon Penerima",
+        labelText: "Nomor Telpon Penanggung Jawab",
         errorText: _isFieldNameValid == null || _isFieldNameValid
             ? null
-            : "Nomor Telepon Penerima harus diisi",
+            : "Nomor Telepon Penanggung Jawab harus diisi",
       ),
     );
   }
 
-  Widget _buildTextKodePos() {
+  Widget _buildTextEmail() {
     return TextField(
-      controller: kodepospenerima,
-      keyboardType: TextInputType.phone,
+      controller: email,
+      keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        labelText: "Kode Pos Penerima",
+        labelText: "Email",
         errorText: _isFieldNameValid == null || _isFieldNameValid
             ? null
-            : "Kode Pos Penerima harus diisi",
+            : "Email harus diisi",
       ),
     );
   }
@@ -610,3 +673,7 @@ class _Tambahalamat extends State<Tambahalamat> {
     );
   }
 }
+
+
+
+
