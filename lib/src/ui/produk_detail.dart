@@ -5,7 +5,8 @@ import 'package:siplah_jpmall/src/bloc/state_bloc.dart';
 import 'package:siplah_jpmall/src/models/produk_sample.dart';
 import 'package:siplah_jpmall/src/ui/star.dart';
 // import 'package:siplah_jpmall/src/ui/star.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class DetailProduk extends StatefulWidget {
   final String nama;
   final String harga;
@@ -28,7 +29,9 @@ class _DetailProdukState extends State<DetailProduk>
       keepPage: true,
       initialPage: currentPage,
     );
+ 
   }
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,8 +129,16 @@ class DetailProduk2 extends StatefulWidget {
    final String nama;
   final String harga;
   final String gambar;
+  final String level;
+  final String id;
+  final String produk_id;
+  final String penjual_user_id;
+  final String penjual_id;
 
-  const DetailProduk2({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
+  const DetailProduk2({Key key, this.nama, this.harga, this.gambar, this.level, this.id, this.produk_id, this.penjual_user_id, this.penjual_id}) : super(key: key);
+
+  
+  
   @override
   _DetailProduk2State createState() => _DetailProduk2State();
 }
@@ -143,10 +154,46 @@ class _DetailProduk2State extends State<DetailProduk2>
     pageController = PageController(
       keepPage: true,
       initialPage: currentPage,
+      
     );
+    
+  }
+   List data;
+  List data2;
+  List kategorilist;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+      },
+      body: {
+        "user_id":widget.id,
+        "penjual_id":widget.penjual_id,
+        "produk_id":widget.produk_id,
+        "penjual_user_id":widget.penjual_user_id,
+        "jumlah":3,
+
+      },
+    );
+    
+    // print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'];
+    });
+
+    return "Success";
   }
   @override
   Widget build(BuildContext context) {
+
+    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -229,11 +276,94 @@ class _DetailProduk2State extends State<DetailProduk2>
               //   elevation: 0.0,
               // ),
              CustomBottomSheet(
-               nama: widget.nama,gambar: widget.gambar,harga: widget.harga == '0'?'Harga Zona':"Rp "+widget.harga,
+               nama: widget.nama,gambar: widget.gambar,harga: widget.harga == '0'?"Rp "+ widget.harga:"Rp "+widget.harga,
              ),
             ],
           ),
-        ));
+          
+        ),
+       bottomNavigationBar:widget.level=='2'?Container(
+         decoration: BoxDecoration(
+           boxShadow: [
+             BoxShadow(
+               blurRadius: 4,
+               color: Colors.grey
+             )
+           ],
+           border: Border(
+             top: BorderSide(width: 2,color: Colors.grey[100]),
+           ),
+         ),
+         child: Row(
+           children: <Widget>[
+             Container(
+               height: 60,
+               width: MediaQuery.of(context).size.width/5,
+               color: Colors.white,
+               child: Center(child: IconButton(icon: Icon(Icons.shopping_cart,size: 30,)),),
+             ),
+             GestureDetector(
+               onTap: (){
+                 getJsonData();
+               },
+                            child: Container(
+                 height: 60,
+                 width: MediaQuery.of(context).size.width/3.5,
+                 color: Colors.pink,
+                 child: Center(child: Text("Beli",style: TextStyle(fontSize: 20,     color: Colors.white),)),
+               ),
+             ),
+              Expanded(
+                            child: Container(
+                 height: 60,
+                 width: MediaQuery.of(context).size.width/2,
+                 color: Colors.purple,
+                   child: Center(child: Text("Negosiasi",style: TextStyle(fontSize: 20,     color: Colors.white),)),
+             
+             ),
+              ),
+           ],
+         ),
+       ):Container(
+         decoration: BoxDecoration(
+           boxShadow: [
+             BoxShadow(
+               blurRadius: 4,
+               color: Colors.grey
+             )
+           ],
+           border: Border(
+             top: BorderSide(width: 2,color: Colors.grey[100]),
+           ),
+         ),
+         child: Row(
+           children: <Widget>[
+             Container(
+               height: 0,
+               width: MediaQuery.of(context).size.width/5,
+               color: Colors.white,
+               child: Center(child: IconButton(icon: Icon(Icons.shopping_cart,size: 30,)),),
+             ),
+             Container(
+               height: 0,
+               width: MediaQuery.of(context).size.width/3.5,
+               color: Colors.pink,
+               child: Center(child: Text("Beli",style: TextStyle(fontSize: 20,     color: Colors.white),)),
+             ),
+              Expanded(
+                            child: Container(
+                 height: 0,
+                 width: MediaQuery.of(context).size.width/2,
+                 color: Colors.purple,
+                   child: Center(child: Text("Negosiasi",style: TextStyle(fontSize: 20,     color: Colors.white),)),
+             
+             ),
+              ),
+           ],
+         ),
+       ),
+        );
+        
   }
 }
 
@@ -539,65 +669,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
         _customDivider(),
      
         _customDivider(),
-        Container(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 8.0, bottom: 8.0),
-          width: double.infinity,
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Ulasan Barang",
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(Icons.star, color: Colors.amber, size: 17),
-                  Text(" 4.3",
-                      style:
-                          TextStyle(fontSize: 17, fontWeight: FontWeight.w600))
-                ],
-              )
-            ],
-          ),
-        ),
-        Container(
-            padding: const EdgeInsets.all(20),
-            width: double.infinity,
-            color: Colors.white,
-            child: Ulasan()),
-        Container(
-            padding: const EdgeInsets.all(20),
-            width: double.infinity,
-            color: Colors.white,
-            child: Text(
-              "Lihat Semua Ulasan (24)",
-              style: TextStyle(color: Colors.cyan),
-            )),
-        _customDivider(),
-        Container(
-          padding: EdgeInsets.only(left: 20, top: 20, bottom: 8.0),
-          width: double.infinity,
-          color: Colors.white,
-          child: Text(
-            "Diskusi",
-            textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-          ),
-        ),
-        Container(
-            padding: const EdgeInsets.only(left: 20),
-            width: double.infinity,
-            color: Colors.white,
-            child: DiskusiContainer()),
-        Container(
-            padding: const EdgeInsets.all(20),
-            width: double.infinity,
-            color: Colors.white,
-            child: Text(
-              "Lihat Semua Diskusi (4)",
-              style: TextStyle(color: Colors.cyan),
-            )),
+       
         _customDivider(),
         Container(
           padding: EdgeInsets.only(left: 20, top: 20, bottom: 8.0),
@@ -755,36 +827,11 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Text(
-              "Informasi Produk",
-              textAlign: TextAlign.left,
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-            ),
-          ),
+        
           SizedBox(
             height: 10,
           ),
-          _rowku(
-              "Berat",  "3 gram"),
-          SizedBox(
-            height: 5,
-          ),
-          _rowku("Panjang",  "4 cm"),
-          SizedBox(
-            height: 5,
-          ),
-          _rowku(
-              "Lebar",  "9 cm"),
-          SizedBox(
-            height: 5,
-          ),
-          _rowku(
-              "Tebal","10 cm"),
-          SizedBox(
-            height: 10,
-          ),
+         
           Container(
             width: double.infinity,
             child: Text(
@@ -800,7 +847,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
             height: 100,
             width: double.infinity,
             child: Text(
-          '',
+          'deskripsi '+ widget.nama,
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
               textAlign: TextAlign.left,
@@ -810,10 +857,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
           SizedBox(
             height: 3.0,
           ),
-          Text(
-            "Lebih Banyak",
-            style: TextStyle(fontSize: 14, color: Colors.cyan),
-          ),
+        
         ],
       ),
     );
