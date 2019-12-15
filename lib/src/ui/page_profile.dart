@@ -113,8 +113,8 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    //print(data.length);
-    return Scaffold(
+    
+    return data==null?Container(): Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           Container(
@@ -167,8 +167,7 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ),
       ),
-      body: ListView == null
-          ? "Waiting"
+      body:data==null?Container()
           : ListView(
 
               //scrollDirection: Axis.vertical,
@@ -375,7 +374,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                             image: new DecorationImage(
                                 image: new NetworkImage(
-                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png"))),
+                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png",scale: 4))),
                       ),
                     ),
                     ListTile(
@@ -496,7 +495,7 @@ class _PageSiteA extends State<PagesiteA> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: Center(
+        body:data==null?Container(): Center(
 child: SingleChildScrollView(
           child: Html(
             data: ""+data[0]['content'],
@@ -573,7 +572,7 @@ class _PageSiteB extends State<PagesiteB> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: Center(
+        body: data2==null?Container(): Center(
 child: SingleChildScrollView(
           child: Html(
             data: ""+data2[0]['content'],

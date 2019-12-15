@@ -479,11 +479,6 @@ class _FormEdit extends State<FormEdit> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       id = pref.getString("id");
-      // foto = pref.getString("foto");
-      // email = pref.getString("alamat");
-      // alamat = pref.getString("telepon");
-      // kodepos = pref.getString("kodepos");
-      // telepon = pref.getString("telepon");
     });
     //print("id profile = "+id);
   }
@@ -729,12 +724,6 @@ class _FormEdit extends State<FormEdit> {
             ? null
             : "Password harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
     );
   }
 

@@ -21,6 +21,206 @@ class AlamatPemesan extends StatefulWidget {
 }
 
 class _AlamatPemesan extends State<AlamatPemesan> {
+  //edit
+   Future<http.Response> _edit(String idx,nama) async {
+    
+   provinceBloc.provinceFetchAll();
+  
+      var placeholder = ['Loading...', 'Loading...', 'Loading...'];
+  String prop, kab, kec;
+
+
+  //controller
+  final namaket = TextEditingController();
+  final namapenerima = TextEditingController();
+  final telppenerima = TextEditingController();
+  final kodepospenerima = TextEditingController();
+  final provinsi = TextEditingController();
+  final kabupaten = TextEditingController();
+  final alamatleng = TextEditingController();
+
+  //
+  
+  Future<http.Response> update_api() async {
+    
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/update';
+
+    Map data = {
+      'id': idx,
+      'user_id':nama,
+      'nama': namaket.text,
+      'nama_penerima': namapenerima.text,
+      'no_hp_penerima': telppenerima.text,
+      'kode_pos': kodepospenerima.text,
+      'provinsi_id': prop,
+      'kabupaten_id': kab,
+      'kecamatan_id': kec,
+      'alamat': alamatleng.text
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+      // savedata();
+      _berhasil(context);
+    }
+    return response;
+  }
+ 
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Edit Alamat Pemesanan"),
+              content: Column(
+                children:<Widget>[
+              TextField(
+                controller: namaket,
+              decoration: InputDecoration(hintText: "Nama Keterangan"),
+              ),
+               TextField(
+                controller: namapenerima,
+              decoration: InputDecoration(hintText: "Nama Penerima"),
+              ),
+               TextField(
+                controller: kodepospenerima,
+              decoration: InputDecoration(hintText: "Kode Pos"),
+              ),
+               TextField(
+                controller: telppenerima,
+              decoration: InputDecoration(hintText: "Nomer Telpon "),
+              ),
+               
+               CustomTile(
+                "Provinsi",
+                child: StreamBuilder<Province>(
+                            stream: provinceBloc.allProvince,
+                            builder: (context, snapshot) {
+                              return DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                value: prop,
+                                isExpanded: true,
+                                items: List.generate(
+                                    snapshot.hasData
+                                        ? snapshot.data.data.length
+                                        : placeholder.length,
+                                    (i) => DropdownMenuItem(
+                                          child: Text(snapshot.hasData
+                                              ? snapshot.data.data[i].nama
+                                              : placeholder[i]),
+                                          value: snapshot.hasData
+                                              ? snapshot.data.data[i].id
+                                              : placeholder[i],
+                                        )),
+                                onChanged: (item) {
+                                  setState(() {
+                                    if (item == null) {
+                                    } else {
+                                      prop = item;
+                                    }
+                                  });
+                                  kabupatenBloc.fetchKabupaten(prop);
+                                },
+                              ));
+                            }),
+                      ),
+                     CustomTile(
+                        "Kabupaten/Kota",
+                        child: StreamBuilder<Kabupaten>(
+                            stream: kabupatenBloc.allKabupaten,
+                            builder: (context, snapshot) {
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  value: kab,
+                                  isExpanded: true,
+                                  items: List.generate(
+                                      snapshot.hasData
+                                          ? snapshot.data.data.length
+                                          : placeholder.length,
+                                      (i) => DropdownMenuItem(
+                                            child: Text(snapshot.hasData
+                                                ? snapshot.data.data[i].nama
+                                                : placeholder[i]),
+                                            value: snapshot.hasData
+                                                ? snapshot.data.data[i].id
+                                                : placeholder[i],
+                                          )),
+                                  onChanged: (item) {
+                                    setState(() {
+                                      kab = item;
+                                    });
+                                    kecamatanBloc.fetchKecamatan(kab);
+                                  },
+                                ),
+                              );
+                            }),
+                      ),
+                                      CustomTile(
+                      "Kecamatan",
+                      child: StreamBuilder<Kecamatan>(
+                          stream: kecamatanBloc.allKecamatan,
+                          builder: (context, snapshot) {
+                            return DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: kec,
+                                isExpanded: true,
+                                items: List.generate(
+                                    snapshot.hasData
+                                        ? snapshot.data.data.length
+                                        : placeholder.length,
+                                    (i) => DropdownMenuItem(
+                                          child: Text(snapshot.hasData
+                                              ? snapshot.data.data[i].nama
+                                              : placeholder[i]),
+                                          value: snapshot.hasData
+                                              ? snapshot.data.data[i].id
+                                              : placeholder[i],
+                                        )),
+                                onChanged: (item) {
+                                  setState(() {
+                                    kec = item;
+                                  });
+                                },
+                              ),
+                            );
+                          }),
+                    ),
+                    TextField(
+      controller: alamatleng,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Alamat Lengkap Penerima",
+      ),
+    ),
+                ]),
+                actions: <Widget>[
+              new FlatButton(
+                child: new Text('Submit'),
+                onPressed: () {
+                 update_api();
+                },
+              ),
+            
+            ],
+                )
+                );
+  }
+
+  //end
   String foto, npsn, nama;
   List data;
   //String id=null;
@@ -275,7 +475,9 @@ class _AlamatPemesan extends State<AlamatPemesan> {
                                           Icons.edit,
                                           color: Colors.blue,
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          _edit(data[i]['id'], nama);
+                                        },
                                       ),
                                     )),
                                 Align(

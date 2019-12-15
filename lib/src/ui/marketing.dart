@@ -22,7 +22,303 @@ class Marketing extends StatefulWidget {
 }
 
 class _MarketingState extends State<Marketing> {
+  //edit
+Future<http.Response> _edit(String idx,nama) async {
+    
+   provinceBloc.provinceFetchAll();
+  var katPel = ['1', '2'];
+  var jeKel = ['1', '2'];
+  String slctdKatPel, slctdjeKel;
+      var placeholder = ['Loading...', 'Loading...', 'Loading...'];
+  String prop, kab, kec;
+  File _imageFile;
+  //start class upload
+  _pilihGallery() async {
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, maxHeight: 1920.0, maxWidth: 1080.0);
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
+  _pilihKamera() async {
+    var image = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 1920.0,
+      maxWidth: 1080.0,
+    );
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
   
+  //controller
+   final namamarketing = TextEditingController();
+  final npwp = TextEditingController();
+  final email = TextEditingController();
+  final telpn = TextEditingController();
+  final provinsi = TextEditingController();
+  final kabupaten = TextEditingController();
+  final alamatleng = TextEditingController();
+  final jeniskel = TextEditingController();
+  final logo = TextEditingController();
+  final kategori = TextEditingController();
+
+  //
+  
+  Future<http.Response> daftar_api() async {
+    
+    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/edit';
+
+    Map data = {
+      'id': idx,
+      'user_id': nama,
+      'nama': namamarketing.text,
+      'npwp': npwp.text,
+      'no_telepon': telpn.text,
+      'email': email.text,
+      'jenis_kelamin': slctdjeKel,
+      'kategori': slctdKatPel,
+      'provinsi_id': prop,
+      'kabupaten_id': kab,
+      'kecamatan_id': kec,
+      'alamat': alamatleng.text,
+      'foto':
+          _imageFile != null ? base64Encode(_imageFile.readAsBytesSync()) : '',};
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+      // savedata();
+      _berhasil(context);
+    }
+    return response;
+  }
+ void _showAlertupload(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Upload Photo"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Galery"),
+                  onPressed: () {
+                    _pilihGallery();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("Take A Picture"),
+                  onPressed: () async {
+                    _pilihKamera();
+                  },
+                ),
+              ],
+            ));
+  }
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Edit Marketing"+idx),
+              content: Column(
+                children:<Widget>[
+                  CustomTile(
+      "Kategori Marketing",
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+            isExpanded: true,
+            value: slctdKatPel,
+            items: List.generate(
+                katPel.length,
+                (i) => DropdownMenuItem<String>(
+                      child: Text(katPel[i] == '1' ? "Internal" : "Eksternal"),
+                      value: katPel[i],
+                    )),
+            onChanged: (item) {
+              setState(() {
+                slctdKatPel = item;
+              });
+            }),
+      ),
+    ),
+              TextField(
+                controller: namamarketing,
+              decoration: InputDecoration(hintText: "Nama Marketing"),
+              ),
+               TextField(
+                controller: npwp,
+              decoration: InputDecoration(hintText: "NPWP"),
+              ),
+               TextField(
+                controller: telpn,
+              decoration: InputDecoration(hintText: "No - Telepon"),
+              ),
+               TextField(
+                controller: email,
+              decoration: InputDecoration(hintText: "Email"),
+              ),
+               CustomTile(
+      "Kategori Marketing",
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+            isExpanded: true,
+            value: slctdjeKel,
+            items: List.generate(
+                jeKel.length,
+                (i) => DropdownMenuItem<String>(
+                      child:
+                          Text(jeKel[i] == '1' ? "Laki - laki" : "Perempuan"),
+                      value: jeKel[i],
+                    )),
+            onChanged: (item) {
+              setState(() {
+                slctdjeKel = item;
+              });
+            }),
+      ),
+    ),
+               CustomTile(
+                "Provinsi",
+                child: StreamBuilder<Province>(
+                            stream: provinceBloc.allProvince,
+                            builder: (context, snapshot) {
+                              return DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                value: prop,
+                                isExpanded: true,
+                                items: List.generate(
+                                    snapshot.hasData
+                                        ? snapshot.data.data.length
+                                        : placeholder.length,
+                                    (i) => DropdownMenuItem(
+                                          child: Text(snapshot.hasData
+                                              ? snapshot.data.data[i].nama
+                                              : placeholder[i]),
+                                          value: snapshot.hasData
+                                              ? snapshot.data.data[i].id
+                                              : placeholder[i],
+                                        )),
+                                onChanged: (item) {
+                                  setState(() {
+                                    if (item == null) {
+                                    } else {
+                                      prop = item;
+                                    }
+                                  });
+                                  kabupatenBloc.fetchKabupaten(prop);
+                                },
+                              ));
+                            }),
+                      ),
+                     CustomTile(
+                        "Kabupaten/Kota",
+                        child: StreamBuilder<Kabupaten>(
+                            stream: kabupatenBloc.allKabupaten,
+                            builder: (context, snapshot) {
+                              return DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  value: kab,
+                                  isExpanded: true,
+                                  items: List.generate(
+                                      snapshot.hasData
+                                          ? snapshot.data.data.length
+                                          : placeholder.length,
+                                      (i) => DropdownMenuItem(
+                                            child: Text(snapshot.hasData
+                                                ? snapshot.data.data[i].nama
+                                                : placeholder[i]),
+                                            value: snapshot.hasData
+                                                ? snapshot.data.data[i].id
+                                                : placeholder[i],
+                                          )),
+                                  onChanged: (item) {
+                                    setState(() {
+                                      kab = item;
+                                    });
+                                    kecamatanBloc.fetchKecamatan(kab);
+                                  },
+                                ),
+                              );
+                            }),
+                      ),
+                                      CustomTile(
+                      "Kecamatan",
+                      child: StreamBuilder<Kecamatan>(
+                          stream: kecamatanBloc.allKecamatan,
+                          builder: (context, snapshot) {
+                            return DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: kec,
+                                isExpanded: true,
+                                items: List.generate(
+                                    snapshot.hasData
+                                        ? snapshot.data.data.length
+                                        : placeholder.length,
+                                    (i) => DropdownMenuItem(
+                                          child: Text(snapshot.hasData
+                                              ? snapshot.data.data[i].nama
+                                              : placeholder[i]),
+                                          value: snapshot.hasData
+                                              ? snapshot.data.data[i].id
+                                              : placeholder[i],
+                                        )),
+                                onChanged: (item) {
+                                  setState(() {
+                                    kec = item;
+                                  });
+                                },
+                              ),
+                            );
+                          }),
+                    ),
+                    TextField(
+      controller: alamatleng,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Alamat Lengkap Penerima",
+      ),
+    ),
+                ]),
+                actions: <Widget>[
+              new FlatButton(
+                child: new Text('Submit'),
+                onPressed: () {
+                 daftar_api();
+                },
+              ),
+              RaisedButton(
+      onPressed: () {
+        _showAlertupload(context);
+      },
+      child: Text(
+        "Choose Picture".toUpperCase(),
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    ),
+            ],
+                )
+                );
+  }
+
+  //end
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
@@ -204,15 +500,7 @@ class _MarketingState extends State<Marketing> {
                                   )
                                 ],
                               ),
-                              //Text(data[i]['kecamatan_nama']),
-                              // Column(
-                              //   children: <Widget>[
-                              //     Align(
-                              //       alignment: Alignment.topLeft,
-                              //       child: Text(data[i]['kode_pos']),
-                              //     )
-                              //   ],
-                              // )
+                         
                             ]),
                         Row(children: <Widget>[
                           Flexible(fit: FlexFit.tight, child: SizedBox()),
@@ -237,7 +525,9 @@ class _MarketingState extends State<Marketing> {
                                     Icons.edit,
                                     color: Colors.blue,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _edit(data[i]['id'], nama);
+                                  },
                                 ),
                               )),
                         

@@ -10,7 +10,7 @@ class Penjualan extends StatefulWidget{
 
 }
 class _PenjualanState extends State<Penjualan>{
-
+  
   String nama;
   List data,data2;
   Future<String> getJsonData() async {
@@ -48,8 +48,10 @@ class _PenjualanState extends State<Penjualan>{
 
   @override
   Widget build(BuildContext context) {
+     double c_width = MediaQuery.of(context).size.width * 0.6;
     getCredential();
     getJsonData();
+    String b =null;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -60,11 +62,20 @@ class _PenjualanState extends State<Penjualan>{
         scrollDirection: Axis.vertical,
         itemCount: data.length,
         itemBuilder: (context, i){
-          return Column(
+          
+          // var a=int.parse(data2[i]['harga']);
+          // var b=int.parse(data2[i]['jumlah']);
+          //  var c=int.parse(data[i]['kurir_ongkir']);
+          //  int jumlah = a*b+c;
+          
+        
+        //  print(value);
+          
+          return Container(
+
+           child: Column(
             children:<Widget>[
           Card(
-             
-              
             child:Row(children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -83,16 +94,80 @@ class _PenjualanState extends State<Penjualan>{
               padding: const EdgeInsets.all(8.0),
               child: Text(data[i]['status_nama']==null?"kosong":data[i]['status_nama']),
             ),
-            ],)
-          
+            ],),
+            
+            
           ),
           Card(
-          child:Row(
-            children: <Widget>[
-              //Text(data2[i]['id']==null?"kosong":data2[i]['id'])
-            ],
-          ))
-            ]);
+            child: Row(
+            children:<Widget>[
+              Container(
+                child:Align(alignment: Alignment.topLeft,
+            child:Column(children: <Widget>[
+              
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text("Alamat Pengiriman",textAlign: TextAlign.left,),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(data[i]['data_alamat_pengiriman_penerima_nama']==null?"kosong":data[i]['data_alamat_pengiriman_penerima_nama']),
+              ),
+             Container(
+                    padding: const EdgeInsets.all(5.0),
+                    width: c_width,
+                    child: new Column(children: <Widget>[
+                      Column(
+                        children:<Widget>[
+                       Text(data[0]["data_alamat_pengiriman_alamat"] != null
+                    ? data[0]["data_alamat_pengiriman_alamat"]
+                    : "kosong"),
+                        ])
+                    ])),
+ 
+                //Text(data[i]['data_alamat_pengiriman_alamat']==null?"kosong":data[i]['data_alamat_pengiriman_alamat']),
+              
+            ])),
+          ),
+          Container(
+            
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Kurir"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(data[i]['kurir_kode']==null?"":data[i]['kurir_kode']),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(""),
+                )
+              ],
+            ),
+          ),
+          Container(
+            child: Column(children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Total Harga"),
+              ),
+              
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                
+                child: Text(data[i]["kurir_ongkir"]),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(""),
+              )
+            ],),
+          )
+            ])),
+            ]));
         }
 
       ),
