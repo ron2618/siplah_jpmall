@@ -7,6 +7,7 @@ import 'package:siplah_jpmall/src/ui/edit_profile.dart';
 import 'package:siplah_jpmall/src/ui/imagecabang.dart';
 import 'package:siplah_jpmall/src/ui/marketing.dart';
 import 'package:siplah_jpmall/src/ui/penjualan.dart';
+import 'package:siplah_jpmall/src/ui/pesanan.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -317,11 +318,13 @@ class _ProfilePageState extends State<ProfilePage>
                     ),
                     ListTile(
                       title: Text('Pesanan'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
+                      onTap: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  PesananState(),
+                            ));
                       },
                     ),
                     ListTile(
@@ -487,7 +490,7 @@ class _PageSiteA extends State<PagesiteA> {
   @override
   Widget build(BuildContext context) {
     //a=a+data[0]['judul'];
-    return Scaffold(
+    return data==null?Scaffold(): Scaffold(
       appBar: AppBar(
          iconTheme: IconThemeData(color: Colors.white),
           title: new Text(
@@ -495,7 +498,7 @@ class _PageSiteA extends State<PagesiteA> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body:data==null?Container(): Center(
+        body: Center(
 child: SingleChildScrollView(
           child: Html(
             data: ""+data[0]['content'],
@@ -564,7 +567,7 @@ class _PageSiteB extends State<PagesiteB> {
   @override
   Widget build(BuildContext context) {
     //a=a+data[0]['judul'];
-    return Scaffold(
+    return data2==null?Scaffold(): Scaffold(
       appBar: AppBar(
          iconTheme: IconThemeData(color: Colors.white),
           title: new Text(
@@ -572,7 +575,7 @@ class _PageSiteB extends State<PagesiteB> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: data2==null?Container(): Center(
+        body: Center(
 child: SingleChildScrollView(
           child: Html(
             data: ""+data2[0]['content'],

@@ -182,7 +182,7 @@ class _LihatCabang extends State<LihatCabang> {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Container(
+      body: data==null?Container():Container(
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           // physics: ScrollPhysics(),
