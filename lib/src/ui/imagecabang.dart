@@ -28,7 +28,7 @@ class _CabangMitraState extends State<CabangMitra> {
         "Api-Key": "4P1_7Pm411_51p114h",
         "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
       },
-      body: {"user_id": "" + id_user},
+      body: {"user_id": id_user},
     );
     //print(response.body);
     setState(() {
@@ -55,12 +55,13 @@ class _CabangMitraState extends State<CabangMitra> {
 
   @override
   Widget build(BuildContext context) {
+      
       getCredential();
         getJsonData();
     
     //print('id user' + id_user);
     num currentPage = 0;
-    return Column(
+    return data==null?Container():Column(
       children: <Widget>[
         Container(
             padding: const EdgeInsets.all(8.0),
@@ -89,7 +90,7 @@ class _CabangMitraState extends State<CabangMitra> {
                 ),
               ],
             )),
-        Container(
+        data==null?Container(): Container(
           height: 130,
           padding: const EdgeInsets.all(8.0),
           child: ListView.builder(

@@ -27,7 +27,7 @@ class _PenjualanState extends State<Penjualan>{
         },
         body: {
           "user_id": "" + nama,
-          //"id": "" + nama
+          
         });
     //print(response.body);
     setState(() {
@@ -58,7 +58,7 @@ class _PenjualanState extends State<Penjualan>{
           title:
               Text("Penjualan", style: TextStyle(color: Colors.white)),
       ),
-      body: ListView.builder(
+      body: data==null?Container():data2==null?Container():ListView.builder(
         scrollDirection: Axis.vertical,
         itemCount: data.length,
         itemBuilder: (context, i){
@@ -106,15 +106,15 @@ class _PenjualanState extends State<Penjualan>{
             child:Column(children: <Widget>[
               
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Text("Alamat Pengiriman",textAlign: TextAlign.left,),
               ),
               Padding(
-                padding: const EdgeInsets.all(5.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Text(data[i]['data_alamat_pengiriman_penerima_nama']==null?"kosong":data[i]['data_alamat_pengiriman_penerima_nama']),
               ),
              Container(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(6.0),
                     width: c_width,
                     child: new Column(children: <Widget>[
                       Column(
@@ -134,15 +134,15 @@ class _PenjualanState extends State<Penjualan>{
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Text("Kurir"),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Text(data[i]['kurir_kode']==null?"":data[i]['kurir_kode']),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: Text(""),
                 )
               ],
@@ -151,18 +151,43 @@ class _PenjualanState extends State<Penjualan>{
           Container(
             child: Column(children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Text("Total Harga"),
               ),
               
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(6.0),
                 
                 child: Text(data[i]["kurir_ongkir"]),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(6.0),
                 child: Text(""),
+              )
+            ],),
+          ), Container(
+            child: Column(children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: Text(""),
+              ),
+              
+              Padding(
+                padding: const EdgeInsets.all(1.0),
+                
+                child: Text(""),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: IconButton(
+                                    icon: Icon(
+                                      Icons.remove_red_eye,
+                                      color: Colors.blue,
+                                    ),
+                                    onPressed: () {
+                                     
+                                    },
+                                  ),
               )
             ],),
           )

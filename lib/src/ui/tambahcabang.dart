@@ -424,7 +424,7 @@ class _TambahCabangState extends State<TambahCabang> {
       ),
       body: 
 
-          Container(
+          data==null?Container():Container(
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           // physics: ScrollPhysics(),

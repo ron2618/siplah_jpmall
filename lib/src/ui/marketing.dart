@@ -436,7 +436,7 @@ Future<http.Response> _edit(String idx,nama) async {
         title: Text("Marketing", style: TextStyle(color: Colors.white)),
       ),
       //body: Text(data[0]["kode"]),
-      body: SmartRefresher(
+      body: data==null?Container():SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
         header: WaterDropHeader(),

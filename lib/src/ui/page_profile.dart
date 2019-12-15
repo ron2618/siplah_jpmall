@@ -175,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage>
                   Column(children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(children: <Widget>[
+                      child: level_id==null?Container():Column(children: <Widget>[
                         level_id == '3' ? CabangMitra() : RekomToko(),
                       ]),
                     ),
@@ -188,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage>
                         Container(
                           height: 200,
                           padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
+                          child: data==null?Container():ListView.builder(
                             //scrollDirection: Axis.vertical,
                             itemCount: data.length == null ? 0 : data.length,
                             itemBuilder: (context, i) {

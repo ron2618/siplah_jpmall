@@ -76,7 +76,7 @@ class _Editprofile extends State<Editprofile> {
         ),
 
         //CODE BARU YANG DITAMBAHKAN
-        body: ListView(padding: const EdgeInsets.all(0), children: <Widget>[
+        body: data==null?Container(): ListView(padding: const EdgeInsets.all(0), children: <Widget>[
           Column(children: <Widget>[
             SizedBox(
               height: 40,
