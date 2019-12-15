@@ -176,7 +176,7 @@ class _DetailProduk2State extends State<DetailProduk2>
         "penjual_id":widget.penjual_id,
         "produk_id":widget.produk_id,
         "penjual_user_id":widget.penjual_user_id,
-        "jumlah":3,
+        "jumlah":'3',
 
       },
     );
