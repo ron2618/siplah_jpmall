@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class CartsPage extends StatefulWidget {
   @override
@@ -10,88 +15,142 @@ class _CartsPageState extends State<CartsPage> {
   var linkimage = "http://cahyamotor.co.id/images/empty-cart-icon.jpg";
 
   var item = false;
-
   ScrollController _controllerProduk;
   TextEditingController _qty;
-
+  int totalqty = 1;
 
   @override
   void initState() {
     _controllerProduk = ScrollController();
     super.initState();
+   
+    getCredential();
+  }
+  List data;
+  List data2;
+
+   Future<String> getJsonData() async {
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/isi'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+      },
+      body: {
+        "user_id": id,
+      },
+    );
+    // print(response.body);
+
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'];
+      data2 = convertDataToJson['Data'][0]['Produk'];
+    });
+
+    return "Success";
+  }
+    String nama;
+  String namauser;
+  String level_id;
+  String foto;
+  String id;
+getCredential() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      namauser = pref.getString("username");
+      nama = pref.getString("nama");
+      level_id = pref.getString("level_id");
+      foto = pref.getString("foto");
+      id = pref.getString('id');
+    });
+    getJsonData();
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          Center(child: Text("hapus")),
-          SizedBox(width: 10,)
-        ],
-         automaticallyImplyLeading: false,
-        title: Text("Keranjang"),
-        bottom: PreferredSize(
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            height: 50,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.check_box, color: Colors.white),
-                SizedBox(width: 5.0,),
-                Text("Pilih Semua", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
-              ],
-            ),
-          ),
-          preferredSize: Size(double.infinity, 50),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(10),
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: <BoxShadow>[
-            BoxShadow(color: Colors.black12,
-            offset: Offset(0, -3))
-          ]
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              // mainAxisAlignment: Main,
-              children: <Widget>[
-                Text("Total Harga"),
-                Text("Rp. 50.000", style: TextStyle(fontSize: 14, color: Colors.cyan),)
-              ],
-            ),
-            Container(
-              height: 38,
-              width: 100,
-              color: Colors.cyan,
-              child: Center(
-                child: Text("Beli(3)", style: TextStyle(color: Colors.white),)
-              ),
-            )
+    print(data);
+    return Container(
+    
+      child: Scaffold(
+        
+        appBar: AppBar(
+          flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Colors.purple, Colors.yellow]))),
+          actions: <Widget>[
+            Center(child: Text("hapus")),
+            SizedBox(width: 10,)
           ],
+           automaticallyImplyLeading: false,
+          title: Text("Keranjang"),
+          bottom: PreferredSize(
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              height: 50,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.check_box, color: Colors.white),
+                  SizedBox(width: 5.0,),
+                  Text("Pilih Semua", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)
+                ],
+              ),
+            ),
+            preferredSize: Size(double.infinity, 50),
+          ),
         ),
-      ),
-      body: Container(
-        color: Colors.black12,
-        child: _itemada(context),
-        // child: ListView(
-        //   children: <Widget>[
-        //     // item == false
-        //     // ?
-        //     _itemkosong(context),
-        //     // Divider()
-        //     // : _itemada(),
-        //     // _terakhirdilihat(),
-        //     // _rekomendasi()
-        //   ],
-        // ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.all(10),
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: <BoxShadow>[
+              BoxShadow(color: Colors.black12,
+              offset: Offset(0, -3))
+            ]
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                // mainAxisAlignment: Main,
+                children: <Widget>[
+                  Text("Total Harga"),
+                  Text("Rp. 50.000", style: TextStyle(fontSize: 14, color: Colors.cyan),)
+                ],
+              ),
+              Container(
+                height: 38,
+                width: 100,
+                color: Colors.cyan,
+                child: Center(
+                  child: Text("Beli(3)", style: TextStyle(color: Colors.white),)
+                ),
+              )
+            ],
+          ),
+        ),
+        body: Container(
+          color: Colors.black12,
+          child: data != null ?_itemada(context) : Container(),
+          // child: ListView(
+          //   children: <Widget>[
+          //     // item == false
+          //     // ?
+          //     _itemkosong(context),
+          //     // Divider()
+          //     // : _itemada(),
+          //     // _terakhirdilihat(),
+          //     // _rekomendasi()
+          //   ],
+          // ),
+        ),
       ),
     );
   }
@@ -99,9 +158,9 @@ class _CartsPageState extends State<CartsPage> {
   _itemada(BuildContext context) {
     return ListView.builder(
       // padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      itemCount: _listk.length,
+      itemCount: 1,
       itemBuilder: (context, i) {
-        final x = _listk[i];
+        final x = data[i]['Produk'];
         return Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Container(
@@ -120,9 +179,9 @@ class _CartsPageState extends State<CartsPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(x.toko.title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),),
+                        Text(x[0]['penjual_nama'], style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),),
                         SizedBox(height: 3.0,),
-                        Text(x.toko.lokasi, style: TextStyle(color: Colors.black26),),
+                        Text(x[0]['penjual_kabupaten_nama'], style: TextStyle(color: Colors.black26),),
                       ],
                     ),
                   ],
@@ -133,10 +192,12 @@ class _CartsPageState extends State<CartsPage> {
                     controller: _controllerProduk,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: x.produk.length,
+                    itemCount: data2.length,
                     itemBuilder: (context, i) {
-                      final y = x.produk[i];
-                      _qty = TextEditingController(text: y.qty.toString()); 
+                      // final y = x.produk[i];
+                      final x = data[0]['Produk'];
+                      
+                      _qty = TextEditingController(text: totalqty.toString()); 
                       return Column(// produk
                       crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -147,15 +208,15 @@ class _CartsPageState extends State<CartsPage> {
                               Container(
                                   height: 50,
                                   width: 50,
-                                  child: Image.network(y.url)),
+                                  child: Image.network(x[i]['produk_foto']!=null ? x[i]['produk_foto'][0]['foto']:'https://siplah.mascitra.co.id/assets/images/no-image.png')),
                               Column(
                                 // mainAxisAlignment: ,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Container(width: 250, child: Text(y.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(
+                                  Container(width: 250, child: Text(x[i]['produk_nama'], maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(
                                     fontSize: 14, fontWeight: FontWeight.w500,
                                   ),)),
-                                  Container(child: Text(y.price.toString(), style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: Colors.cyan,)))
+                                  Container(child: Text(x[i]['produk_harga'], style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: Colors.cyan,)))
                                 ],
                               ),
                               Icon(
@@ -188,14 +249,22 @@ class _CartsPageState extends State<CartsPage> {
                               Container(
                                 child: Row(
                                   children: <Widget>[
-                                    Container(
-                                        height: 35,
-                                        width: 35,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all()
-                                            ),
-                                        child: Center(child: Icon(Icons.add))),
+                                    GestureDetector(
+                                      onTap: (){
+                                        setState(() {
+                                           totalqty = totalqty +1;
+                                        });
+                                       
+                                      },
+                                                                          child: Container(
+                                          height: 35,
+                                          width: 35,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all()
+                                              ),
+                                          child: Center(child: Icon(Icons.add))),
+                                    ),
                                     Container(
                                       width: 50,
                                       height: 30,
@@ -204,15 +273,23 @@ class _CartsPageState extends State<CartsPage> {
                                         controller: _qty,
                                       ),
                                     ),
-                                    Container(
-                                        height: 35,
-                                        width: 35,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all()
-                                            ),
-                                        child: Center(
-                                            child: Icon(Icons.remove))),
+                                    GestureDetector(
+                                      onTap: (){
+                                        setState(() {
+                                          
+                                          totalqty !=  0? totalqty = totalqty -1:totalqty =totalqty;
+                                        });
+                                      },
+                                                                          child: Container(
+                                          height: 35,
+                                          width: 35,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all()
+                                              ),
+                                          child: Center(
+                                              child: Icon(Icons.remove))),
+                                    ),
                                   ],
                                 ),
                               )
@@ -286,64 +363,7 @@ class _CartsPageState extends State<CartsPage> {
   }
 }
 
-class KeranjangModel {
-  final int index;
-  final TokoModel toko;
-  final List<ProdukModel> produk;
 
-  KeranjangModel({this.index, this.toko, this.produk});
-}
 
-class TokoModel {
-  final String title;
-  final String lokasi;
-  final bool official;
 
-  TokoModel(this.title, this.lokasi, this.official);
-}
 
-class ProdukModel {
-  final int index;
-  final String name;
-  final int qty;
-  final int price;
-  final String url;
-  final bool favorite;
-
-  ProdukModel(
-      this.index, this.name, this.qty, this.price, this.url, this.favorite);
-}
-
-List<KeranjangModel> _listk = <KeranjangModel>[
-  KeranjangModel(
-      index: 1,
-      toko: TokoModel("@Kiosk", "Jakarta Barat", true),
-      produk: [
-        ProdukModel(
-            1,
-            "ADATA ED600 Eksternal Case HDD/SSD 2.5 Shock & Dust & Wtaer Proof",
-            1,
-            149000,
-            "http://ecs7.tokopedia.net/img/cache/700/product-1/2018/11/29/8751793/8751793_ed567273-2a7c-413a-a1c5-bd05b87f84e0_425_425.jpg",
-            false),
-        ProdukModel(
-            1,
-            "ADATA ED600 Eksternal Case HDD/SSD 2.5 Shock & Dust & Wtaer Proof",
-            1,
-            149000,
-            "http://ecs7.tokopedia.net/img/cache/700/product-1/2018/11/29/8751793/8751793_ed567273-2a7c-413a-a1c5-bd05b87f84e0_425_425.jpg",
-            false),
-      ]),
-  KeranjangModel(
-      index: 2,
-      toko: TokoModel("Selalu Rame", "Jakarta Barat", false),
-      produk: [
-        ProdukModel(
-            1,
-            "ADATA ED600 Eksternal Case HDD/SSD 2.5 Shock & Dust & Wtaer Proof",
-            1,
-            149000,
-            "http://ecs7.tokopedia.net/img/cache/700/product-1/2018/11/29/8751793/8751793_ed567273-2a7c-413a-a1c5-bd05b87f84e0_425_425.jpg",
-            false),
-      ])
-];
