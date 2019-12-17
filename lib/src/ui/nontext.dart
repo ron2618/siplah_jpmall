@@ -242,7 +242,7 @@ class _NontextState extends State<Nontext> {
   Widget build(BuildContext context) {
    
     return Container(
-      height: 300,
+      height: 225,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(color: colors[index], boxShadow: [
         BoxShadow(color: Colors.black26, offset: Offset(0, 3), blurRadius: 3)
@@ -414,7 +414,7 @@ class _NontextState extends State<Nontext> {
                                   child: Text(
                                     widget.data[index]['produk'],
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
                                     overflow: TextOverflow.ellipsis,

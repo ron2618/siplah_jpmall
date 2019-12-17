@@ -386,6 +386,12 @@ class FormEdit extends StatefulWidget {
 }
 
 class _FormEdit extends State<FormEdit> {
+  bool _obscureText = true;
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
   List data;
   String id;
   Position _currentPosition;
@@ -717,6 +723,7 @@ class _FormEdit extends State<FormEdit> {
   Widget _buildTextFieldPassword() {
     return TextField(
       controller: password,
+      obscureText: _obscureText,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Password",
@@ -730,6 +737,7 @@ class _FormEdit extends State<FormEdit> {
   Widget _buildTextFieldKonfirmasi() {
     return TextField(
       controller: konfirmasi,
+      obscureText: _obscureText,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Konfirmasi Password",

@@ -164,7 +164,7 @@ class _KomplainState extends State<KomplainSekolah>{
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text("Edit Cabang"),
+              title: Text("Komplain"),
               content: Column(
                  
                 children:<Widget>[

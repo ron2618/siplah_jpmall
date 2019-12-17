@@ -358,26 +358,26 @@ class _FormEdit2 extends State<FormEdit2> {
             ));
   }
 
-  Future<String> getJsonData() async {
-    var response = await http.post(
-        //Encode the url
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "API-App": "siplah_jpmall.id",
-          "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
-        },
-        body: {
-          "id": "" + id
-        });
-    // print(response.body);
-    setState(() {
-      // ignore: deprecated_member_use
-      var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
-    });
-  }
+  // Future<String> getJsonData() async {
+  //   var response = await http.post(
+  //       //Encode the url
+  //       Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
+  //       headers: {
+  //         "Content-Type": "application/x-www-form-urlencoded",
+  //         "API-App": "siplah_jpmall.id",
+  //         "Api-Key": "4P1_7Pm411_51p114h",
+  //         "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+  //       },
+  //       body: {
+  //         "id": "" + id
+  //       });
+  //   // print(response.body);
+  //   setState(() {
+  //     // ignore: deprecated_member_use
+  //     var convertDataToJson = json.decode(response.body);
+  //     data = convertDataToJson['Data'];
+  //   });
+  // }
 
 //start class upload
   _pilihGallery() async {
@@ -519,7 +519,7 @@ class _FormEdit2 extends State<FormEdit2> {
 
   @override
   Widget build(BuildContext context) {
-    getJsonData();
+  //  getJsonData();
     _getCurrentLocation();
     //print(_currentPosition.latitude);
     // print("id profil edit ="+id);
