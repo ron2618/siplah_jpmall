@@ -137,7 +137,8 @@ class DetailProduk2 extends StatefulWidget {
 
   const DetailProduk2({Key key, this.nama, this.harga, this.gambar, this.level, this.id, this.produk_id, this.penjual_user_id, this.penjual_id}) : super(key: key);
 
-  
+
+ 
   
   @override
   _DetailProduk2State createState() => _DetailProduk2State();
@@ -164,7 +165,7 @@ class _DetailProduk2State extends State<DetailProduk2>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -181,7 +182,7 @@ class _DetailProduk2State extends State<DetailProduk2>
       },
     );
     
-    // print(response.body);
+     //print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
@@ -193,7 +194,6 @@ class _DetailProduk2State extends State<DetailProduk2>
   @override
   Widget build(BuildContext context) {
 
-    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -276,7 +276,7 @@ class _DetailProduk2State extends State<DetailProduk2>
               //   elevation: 0.0,
               // ),
              CustomBottomSheet(
-               nama: widget.nama,gambar: widget.gambar,harga: widget.harga == '0'?"Rp "+ widget.harga:"Rp "+widget.harga,
+               nama: widget.nama,gambar: widget.gambar,harga: widget.harga == '0'?"Rp "+ widget.harga:"Rp "+widget.harga,penjual_user_id: widget.penjual_user_id,
              ),
             ],
           ),
@@ -371,9 +371,12 @@ class SheetContainer extends StatelessWidget {
   final String nama;
   final String harga;
   final String gambar;
+  final String penjual_user_id;
 
-  const SheetContainer({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
- 
+  const SheetContainer({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id}) : super(key: key);
+
+  
+
   @override
   Widget build(BuildContext context) {
     // double sheetItemHeight = 110;
@@ -391,9 +394,8 @@ class SheetContainer extends StatelessWidget {
           Expanded(
               flex: 1,
               child: SheetItems(
-                nama: nama,gambar: gambar,harga: harga,
-              ))
-        ],
+                nama: nama,gambar: gambar,harga: harga,penjual_user_id: penjual_user_id,)
+          )],
       ),
     );
   }
@@ -422,8 +424,9 @@ class CustomBottomSheet extends StatefulWidget {
    final String nama;
   final String harga;
   final String gambar;
+  final String penjual_user_id;
 
-  const CustomBottomSheet({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
+  const CustomBottomSheet({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id}) : super(key: key);
 
   @override
   _CustomBottomSheetState createState() => _CustomBottomSheetState();
@@ -497,7 +500,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
             return;
           }
         },
-        child: SheetContainer(nama: widget.nama,gambar: widget.gambar,harga: widget.harga,),
+        child: SheetContainer(nama: widget.nama,gambar: widget.gambar,harga: widget.harga,penjual_user_id: widget.penjual_user_id,),
       ),
     );
   }
@@ -506,9 +509,14 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
 class SheetItems extends StatefulWidget {
    final String nama;
   final String harga;
-  final String gambar;
+  final String gambar;  
+  final String penjual_user_id;
 
-  const SheetItems({Key key, this.nama, this.harga, this.gambar}) : super(key: key);
+  const SheetItems({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id}) : super(key: key);
+
+
+ 
+  
 
   @override
   _SheetItemsState createState() => _SheetItemsState();
@@ -543,7 +551,6 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var price  = widget.harga;
-
     return ListView(
       children: <Widget>[
         Container(
@@ -685,7 +692,8 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
             padding: const EdgeInsets.only(left: 20),
             width: double.infinity,
             color: Colors.white,
-            child: _otherProduk()),
+            child: _otherProduk()
+            ),
         Container(
           height: 100,
         )
@@ -699,8 +707,37 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
       ],
     );
   }
+List data2;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+      },
+      body: {
+        "user_id":widget.penjual_user_id,
+      }
+    );
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      
+      data2 = convertDataToJson['Data'][0]["produk"];
+     
+    });
+  }
 
   _otherProduk() {
+getJsonData();
+data2==null?Container():
+ListView.builder(
+  itemCount: data2.length,
+  itemBuilder: (context,i){
     return Container(
       height: 300,
       width: double.infinity,
@@ -732,8 +769,7 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10))),
-                            child: Image.network(
-                              "http://ecs7.tokopedia.net/img/cache/700/product-1/2019/5/3/370667535/370667535_e643982c-71ee-49f4-99a6-8e96f30f5038_1080_1080.jpg",
+                            child: Image.network(data2[i]['foto']==null?'https://siplah.mascitra.co.id/assets/images/no-image.png':data2[i]['foto'],
                               fit: BoxFit.fill,
                             )),
                         Positioned(
@@ -819,6 +855,8 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
         ],
       ),
     );
+    }
+);
   }
 
  

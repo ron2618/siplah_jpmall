@@ -5,9 +5,11 @@ import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 import 'package:siplah_jpmall/src/ui/edit_profilSKLH.dart';
 import 'package:siplah_jpmall/src/ui/edit_profile.dart';
 import 'package:siplah_jpmall/src/ui/imagecabang.dart';
+import 'package:siplah_jpmall/src/ui/komplain.dart';
 import 'package:siplah_jpmall/src/ui/marketing.dart';
 import 'package:siplah_jpmall/src/ui/penjualan.dart';
 import 'package:siplah_jpmall/src/ui/pesanan.dart';
+import 'package:siplah_jpmall/src/ui/produk_favorit.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage>
   void initState() {
     getCredential();
     getJsonData();
+   
     _controller = ScrollController();
     _controller.addListener(onScroll);
     controller = TabController(length: 1, vsync: this);
@@ -51,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage>
     });
 //    print(position);
   }
-
+ 
   getCredential() async {
     final pref = await SharedPreferences.getInstance();
     setState(() {
@@ -106,9 +109,9 @@ class _ProfilePageState extends State<ProfilePage>
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'][0]['page'];
-      data2 = convertDataToJson['Data'][1]['page'];
-      //print(data.length);
+      data = convertDataToJson['Data'];
+      data2 = convertDataToJson['Data'][0]['page'];
+     
     });
   }
 
@@ -187,68 +190,76 @@ class _ProfilePageState extends State<ProfilePage>
                         // PageBeli(),
                         //pow
                         Container(
-                          height: 200,
+                          height: 500,
                           padding: const EdgeInsets.all(8.0),
                           child: data==null?Container():ListView.builder(
                             //scrollDirection: Axis.vertical,
-                            itemCount: data.length == null ? 0 : data.length,
+                            itemCount: data.length,
                             itemBuilder: (context, i) {
-                              return GestureDetector(
+                             
+                              return  Column(
+                                  children: <Widget>[
+                                    Row(children:<Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(data[i]['nama']),
+                                    ),]),
+                                  Row(
+                                    children:<Widget>[
+                                       GestureDetector(
                                   onTap: ()=> Navigator.push(
                               context,
                               PageRouteBuilder(
                                   transitionDuration:
                                       Duration(milliseconds: 350),
                                   pageBuilder: (context, _, __) => PagesiteA(
-                                      id:data[i]['id']))),
+                                      id:data[i]['page'][0]['id']))),
                                   child: Card(
+                                    shape: StadiumBorder(side: BorderSide(color: Colors.white)),
                                       child: Row(children: <Widget>[
                                     SizedBox(
-                                        height: 50,
+                                      
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Row(
                                             children: <Widget>[
-                                              Text(data[i]['judul']),
+                                              Text(data[i]['page'][0]['judul']),
                                             ],
                                           ),
                                         )),
-                                  ])));
+                                    ])))
+                                    // Padding(
+                                    //   padding: const EdgeInsets.all(8.0),
+                                    //   child: Text(data[i]['page'][0]['judul']),
+                                    // )
+                                    ]),
+                                       ],
+                              );
+                              // return GestureDetector(
+                              //     onTap: ()=> Navigator.push(
+                              // context,
+                              // PageRouteBuilder(
+                              //     transitionDuration:
+                              //         Duration(milliseconds: 350),
+                              //     pageBuilder: (context, _, __) => PagesiteA(
+                              //         id:data[i]['page'][0]['id']))),
+                              //     child: Card(
+                              //         child: Row(children: <Widget>[
+                              //       SizedBox(
+                              //           height: 50,
+                              //           child: Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             child: Row(
+                              //               children: <Widget>[
+                              //                 Text(data[i]['page'][0]['judul']),
+                              //               ],
+                              //             ),
+                              //           )),
+                              //     ])));
                             },
                           ),
                         ),
-                        Container(
-                          height: 200,
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            // scrollDirection: Axis.vertical,
-                            // physics: ScrollPhysics(),
-                            // shrinkWrap: true,
-                            itemCount: data2.length == null ? 0 : data2.length,
-                            itemBuilder: (context, i) {
-                              return GestureDetector(
-                                  onTap: ()=> Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                  transitionDuration:
-                                      Duration(milliseconds: 350),
-                                  pageBuilder: (context, _, __) => PagesiteB(
-                                      id:data2[i]['id']))),
-                                  child: Card(
-                                      child: Row(children: <Widget>[
-                                    SizedBox(
-                                        height: 50,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Text(data2[i]['judul']),
-                                            ],
-                                          ),
-                                        )),
-                                  ])));
-                            }),
-                        ),
+                        
                         Container(
                           color: Colors.white,
                           child: ListTile(
@@ -341,19 +352,24 @@ class _ProfilePageState extends State<ProfilePage>
                     ListTile(
                       title: Text('Komplain'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  KomplainSekolah(),
+                            ));
+                        
                       },
                     ),
                     ListTile(
                       title: Text('Produk Favorit'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
+                         Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  ProdukFavorit(),
+                            ));
                       },
                     ),
                   ])

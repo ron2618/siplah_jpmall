@@ -12,6 +12,54 @@ class CartsPage extends StatefulWidget {
 }
 
 class _CartsPageState extends State<CartsPage> {
+ Future<http.Response> _delete(String idx) async {
+    //a=a+id;
+    //print(id);
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/keranjang/delete';
+
+    Map data = {'user_id': "" + id, 'id': idx};
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+      // savedata();
+      _berhasil(context);
+    }
+    return response;
+  }
+  void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("maaf gagal edit"),
+            ));
+  }
+
+  void _berhasil(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Data berhasil diubah"),
+            ));
+  }
+
   var linkimage = "http://cahyamotor.co.id/images/empty-cart-icon.jpg";
 
   var item = false;
@@ -72,7 +120,7 @@ getCredential() async {
   }
   @override
   Widget build(BuildContext context) {
-    print(data);
+    //print(data);
     return Container(
     
       child: Scaffold(
@@ -156,6 +204,7 @@ getCredential() async {
   }
 
   _itemada(BuildContext context) {
+   
     return ListView.builder(
       // padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       itemCount: 1,
@@ -219,10 +268,15 @@ getCredential() async {
                                   Container(child: Text(x[i]['produk_harga'], style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: Colors.cyan,)))
                                 ],
                               ),
-                              Icon(
-                                Icons.delete,
-                                color: Colors.black26,
-                              )
+                              IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.blue,
+                                  ),
+                                  onPressed: () {
+                                    _delete(x[i]['id']);
+                                  },
+                                ),
                             ],
                           ),
                           SizedBox(

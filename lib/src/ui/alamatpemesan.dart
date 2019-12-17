@@ -22,202 +22,196 @@ class AlamatPemesan extends StatefulWidget {
 
 class _AlamatPemesan extends State<AlamatPemesan> {
   //edit
-   Future<http.Response> _edit(String idx,nama) async {
-    
-   provinceBloc.provinceFetchAll();
-  
-      var placeholder = ['Loading...', 'Loading...', 'Loading...'];
-  String prop, kab, kec;
+  Future<http.Response> _edit(String idx, nama) async {
+    provinceBloc.provinceFetchAll();
 
+    var placeholder = ['Loading...', 'Loading...', 'Loading...'];
+    String prop, kab, kec;
 
-  //controller
-  final namaket = TextEditingController();
-  final namapenerima = TextEditingController();
-  final telppenerima = TextEditingController();
-  final kodepospenerima = TextEditingController();
-  final provinsi = TextEditingController();
-  final kabupaten = TextEditingController();
-  final alamatleng = TextEditingController();
+    //controller
+    final namaket = TextEditingController();
+    final namapenerima = TextEditingController();
+    final telppenerima = TextEditingController();
+    final kodepospenerima = TextEditingController();
+    final provinsi = TextEditingController();
+    final kabupaten = TextEditingController();
+    final alamatleng = TextEditingController();
 
-  //
-  
-  Future<http.Response> update_api() async {
-    
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/update';
+    //
 
-    Map data = {
-      'id': idx,
-      'user_id':nama,
-      'nama': namaket.text,
-      'nama_penerima': namapenerima.text,
-      'no_hp_penerima': telppenerima.text,
-      'kode_pos': kodepospenerima.text,
-      'provinsi_id': prop,
-      'kabupaten_id': kab,
-      'kecamatan_id': kec,
-      'alamat': alamatleng.text
-    };
-    //encode Map to JSON
-    var body = json.encode(data);
+    Future<http.Response> update_api() async {
+      var url =
+          'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/update';
 
-    var response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-          "API-App": "siplah_jpmall.id",
-          "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
-        },
-        body: body);
-    // print("${response.statusCode}");
+      Map data = {
+        'id': idx,
+        'user_id': nama,
+        'nama': namaket.text,
+        'nama_penerima': namapenerima.text,
+        'no_hp_penerima': telppenerima.text,
+        'kode_pos': kodepospenerima.text,
+        'provinsi_id': prop,
+        'kabupaten_id': kab,
+        'kecamatan_id': kec,
+        'alamat': alamatleng.text
+      };
+      //encode Map to JSON
+      var body = json.encode(data);
 
-    // print("${response.body}");
-    Map<String, dynamic> map = jsonDecode(response.body);
-    print(map);
-    if (map["Error"] == true || map["Error"] == "true") {
-      _showAlert(context);
-    } else {
-      // savedata();
-      _berhasil(context);
+      var response = await http.post(url,
+          headers: {
+            "Content-Type": "application/json",
+            "API-App": "siplah_jpmall.id",
+            "Api-Key": "4P1_7Pm411_51p114h",
+            "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          },
+          body: body);
+      // print("${response.statusCode}");
+
+      // print("${response.body}");
+      Map<String, dynamic> map = jsonDecode(response.body);
+      print(map);
+      if (map["Error"] == true || map["Error"] == "true") {
+        _showAlert(context);
+      } else {
+        // savedata();
+        _berhasil(context);
+      }
+      return response;
     }
-    return response;
-  }
- 
+
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Edit Alamat Pemesanan"),
-              content: Column(
-                children:<Widget>[
-              TextField(
-                controller: namaket,
-              decoration: InputDecoration(hintText: "Nama Keterangan"),
-              ),
-               TextField(
-                controller: namapenerima,
-              decoration: InputDecoration(hintText: "Nama Penerima"),
-              ),
-               TextField(
-                controller: kodepospenerima,
-              decoration: InputDecoration(hintText: "Kode Pos"),
-              ),
-               TextField(
-                controller: telppenerima,
-              decoration: InputDecoration(hintText: "Nomer Telpon "),
-              ),
-               
-               CustomTile(
-                "Provinsi",
-                child: StreamBuilder<Province>(
-                            stream: provinceBloc.allProvince,
-                            builder: (context, snapshot) {
-                              return DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                value: prop,
-                                isExpanded: true,
-                                items: List.generate(
-                                    snapshot.hasData
-                                        ? snapshot.data.data.length
-                                        : placeholder.length,
-                                    (i) => DropdownMenuItem(
-                                          child: Text(snapshot.hasData
-                                              ? snapshot.data.data[i].nama
-                                              : placeholder[i]),
-                                          value: snapshot.hasData
-                                              ? snapshot.data.data[i].id
-                                              : placeholder[i],
-                                        )),
-                                onChanged: (item) {
-                                  setState(() {
-                                    if (item == null) {
-                                    } else {
-                                      prop = item;
-                                    }
-                                  });
-                                  kabupatenBloc.fetchKabupaten(prop);
-                                },
-                              ));
-                            }),
-                      ),
-                     CustomTile(
-                        "Kabupaten/Kota",
-                        child: StreamBuilder<Kabupaten>(
-                            stream: kabupatenBloc.allKabupaten,
-                            builder: (context, snapshot) {
-                              return DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  value: kab,
-                                  isExpanded: true,
-                                  items: List.generate(
-                                      snapshot.hasData
-                                          ? snapshot.data.data.length
-                                          : placeholder.length,
-                                      (i) => DropdownMenuItem(
-                                            child: Text(snapshot.hasData
-                                                ? snapshot.data.data[i].nama
-                                                : placeholder[i]),
-                                            value: snapshot.hasData
-                                                ? snapshot.data.data[i].id
-                                                : placeholder[i],
-                                          )),
-                                  onChanged: (item) {
-                                    setState(() {
-                                      kab = item;
-                                    });
-                                    kecamatanBloc.fetchKecamatan(kab);
-                                  },
-                                ),
-                              );
-                            }),
-                      ),
-                                      CustomTile(
-                      "Kecamatan",
-                      child: StreamBuilder<Kecamatan>(
-                          stream: kecamatanBloc.allKecamatan,
-                          builder: (context, snapshot) {
-                            return DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                value: kec,
-                                isExpanded: true,
-                                items: List.generate(
-                                    snapshot.hasData
-                                        ? snapshot.data.data.length
-                                        : placeholder.length,
-                                    (i) => DropdownMenuItem(
-                                          child: Text(snapshot.hasData
-                                              ? snapshot.data.data[i].nama
-                                              : placeholder[i]),
-                                          value: snapshot.hasData
-                                              ? snapshot.data.data[i].id
-                                              : placeholder[i],
-                                        )),
-                                onChanged: (item) {
-                                  setState(() {
-                                    kec = item;
-                                  });
-                                },
-                              ),
-                            );
-                          }),
-                    ),
-                    TextField(
-      controller: alamatleng,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: "Alamat Lengkap Penerima",
-      ),
-    ),
-                ]),
-                actions: <Widget>[
-              new FlatButton(
-                child: new Text('Submit'),
-                onPressed: () {
-                 update_api();
-                },
-              ),
-            
-            ],
-                )
-                );
+              content: Column(children: <Widget>[
+                TextField(
+                  controller: namaket,
+                  decoration: InputDecoration(hintText: "Nama Keterangan"),
+                ),
+                TextField(
+                  controller: namapenerima,
+                  decoration: InputDecoration(hintText: "Nama Penerima"),
+                ),
+                TextField(
+                  controller: kodepospenerima,
+                  decoration: InputDecoration(hintText: "Kode Pos"),
+                ),
+                TextField(
+                  controller: telppenerima,
+                  decoration: InputDecoration(hintText: "Nomer Telpon "),
+                ),
+                CustomTile(
+                  "Provinsi",
+                  child: StreamBuilder<Province>(
+                      stream: provinceBloc.allProvince,
+                      builder: (context, snapshot) {
+                        return DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                          value: prop,
+                          isExpanded: true,
+                          items: List.generate(
+                              snapshot.hasData
+                                  ? snapshot.data.data.length
+                                  : placeholder.length,
+                              (i) => DropdownMenuItem(
+                                    child: Text(snapshot.hasData
+                                        ? snapshot.data.data[i].nama
+                                        : placeholder[i]),
+                                    value: snapshot.hasData
+                                        ? snapshot.data.data[i].id
+                                        : placeholder[i],
+                                  )),
+                          onChanged: (item) {
+                            setState(() {
+                              if (item == null) {
+                              } else {
+                                prop = item;
+                              }
+                            });
+                            kabupatenBloc.fetchKabupaten(prop);
+                          },
+                        ));
+                      }),
+                ),
+                CustomTile(
+                  "Kabupaten/Kota",
+                  child: StreamBuilder<Kabupaten>(
+                      stream: kabupatenBloc.allKabupaten,
+                      builder: (context, snapshot) {
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            value: kab,
+                            isExpanded: true,
+                            items: List.generate(
+                                snapshot.hasData
+                                    ? snapshot.data.data.length
+                                    : placeholder.length,
+                                (i) => DropdownMenuItem(
+                                      child: Text(snapshot.hasData
+                                          ? snapshot.data.data[i].nama
+                                          : placeholder[i]),
+                                      value: snapshot.hasData
+                                          ? snapshot.data.data[i].id
+                                          : placeholder[i],
+                                    )),
+                            onChanged: (item) {
+                              setState(() {
+                                kab = item;
+                              });
+                              kecamatanBloc.fetchKecamatan(kab);
+                            },
+                          ),
+                        );
+                      }),
+                ),
+                CustomTile(
+                  "Kecamatan",
+                  child: StreamBuilder<Kecamatan>(
+                      stream: kecamatanBloc.allKecamatan,
+                      builder: (context, snapshot) {
+                        return DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            value: kec,
+                            isExpanded: true,
+                            items: List.generate(
+                                snapshot.hasData
+                                    ? snapshot.data.data.length
+                                    : placeholder.length,
+                                (i) => DropdownMenuItem(
+                                      child: Text(snapshot.hasData
+                                          ? snapshot.data.data[i].nama
+                                          : placeholder[i]),
+                                      value: snapshot.hasData
+                                          ? snapshot.data.data[i].id
+                                          : placeholder[i],
+                                    )),
+                            onChanged: (item) {
+                              setState(() {
+                                kec = item;
+                              });
+                            },
+                          ),
+                        );
+                      }),
+                ),
+                TextField(
+                  controller: alamatleng,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: "Alamat Lengkap Penerima",
+                  ),
+                ),
+              ]),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('Submit'),
+                  onPressed: () {
+                    update_api();
+                  },
+                ),
+              ],
+            ));
   }
 
   //end
@@ -358,155 +352,200 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     getJsonData();
     getCredential();
     //print(data.length);
-    return Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  Icons.add_box,
-                  color: Colors.white,
-                ),
-                onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => Tambahalamat(),
-                          )),
-                    }),
-          ],
-          iconTheme: IconThemeData(color: Colors.white),
-          title:
-              Text("Alamat Pemesanan", style: TextStyle(color: Colors.white)),
-        ),
-        body: SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: true,
-          header: WaterDropHeader(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          child: Container(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              // physics: ScrollPhysics(),
-              // shrinkWrap: true,
-              itemCount: data.length,
-              itemBuilder: (context, i) {
-                //print(data[0]['nama']);
+    return data == null
+        ? Scaffold()
+        : Scaffold(
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(
+                      Icons.add_box,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    Tambahalamat(),
+                              )),
+                        }),
+              ],
+              iconTheme: IconThemeData(color: Colors.white),
+              title: Text("Alamat Pemesanan",
+                  style: TextStyle(color: Colors.white)),
+            ),
+            body: data == null
+                ? Container()
+                : SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    header: WaterDropHeader(),
+                    controller: _refreshController,
+                    onRefresh: _onRefresh,
+                    child: Container(
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        // physics: ScrollPhysics(),
+                        // shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (context, i) {
+                         //print(data[i]['is_utama']);
 
-                return Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)),
-                  child: SizedBox(
-                      height: 165,
-                      width: 100,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(children: <Widget>[
-                              Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['nama']),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['penerima_nama']),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['alamat'],
-                                              textAlign: TextAlign.left),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child:
-                                              Text(data[i]['kabupaten_nama']),
-                                        )
-                                      ],
-                                    ),
-                                    //Text(data[i]['kecamatan_nama']),
-                                    Column(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(data[i]['kode_pos']),
-                                        )
-                                      ],
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: SizedBox(
+                                height: 165,
+                                width: 100,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(children: <Widget>[
+                                        Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Column(
+                                                children: <Widget>[
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child:
+                                                        Text(data[i]['nama']),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: <Widget>[
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(data[i]
+                                                        ['penerima_nama']),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: <Widget>[
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                        data[i]['alamat'],
+                                                        textAlign:
+                                                            TextAlign.left),
+                                                  )
+                                                ],
+                                              ),
+                                              Column(
+                                                children: <Widget>[
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(data[i]
+                                                        ['kabupaten_nama']),
+                                                  )
+                                                ],
+                                              ),
+                                              //Text(data[i]['kecamatan_nama']),
+                                              Column(
+                                                children: <Widget>[
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Text(
+                                                        data[i]['kode_pos']),
+                                                  )
+                                                ],
+                                              )
+                                            ]),
+                                        Row(children: <Widget>[
+                                          Flexible(
+                                              fit: FlexFit.tight,
+                                              child: SizedBox()),
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  onPressed: () {
+                                                    _delete(data[i]['id']);
+                                                  },
+                                                ),
+                                              )),
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.edit,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  onPressed: () {
+                                                    _edit(data[i]['id'], nama);
+                                                  },
+                                                ),
+                                              )),
+                                            
+                                               data[i]['is_utama']== '1'?
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child:
+                                               Container(
+                                               
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.check_box,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  onPressed: () {
+                                                    String a;
+                                                    data[i]['is_utama'] == '2'
+                                                        ? a = '1'
+                                                        : a = '2';
+                                                    _setlocation(
+                                                        data[i]['id'], a);
+                                                  },
+                                                ),
+                                              )
+                                              ):
+                                              Align(
+                                              alignment: Alignment.centerRight,
+                                              child:
+                                               Container(
+                                               
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.check_box_outline_blank,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  onPressed: () {
+                                                    String a;
+                                                    data[i]['is_utama'] == '1'
+                                                        ? a = '1'
+                                                        : a = '2';
+                                                    _setlocation(
+                                                        data[i]['id'], a);
+                                                  },
+                                                ),
+                                              )
+                                              )
+                                        ]),
+                                      ]),
                                     )
                                   ]),
-                              Row(children: <Widget>[
-                                Flexible(fit: FlexFit.tight, child: SizedBox()),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          _delete(data[i]['id']);
-                                        },
-                                      ),
-                                    )),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.edit,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          _edit(data[i]['id'], nama);
-                                        },
-                                      ),
-                                    )),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      child: IconButton(
-                                        icon: Icon(
-                                          Icons.location_on,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          String a;
-                                          data[i]['is_location'] == 2
-                                              ? a = '1'
-                                              : a = '2';
-                                          _setlocation(data[i]['id'], a);
-                                        },
-                                      ),
-                                    )),
-                              ]),
-                            ]),
-                          )
-                        ]),
-                      )),
-                );
-              },
-            ),
-          ),
-        ));
+                                )),
+                          );
+                        },
+                      ),
+                    ),
+                  ));
   }
 }
 

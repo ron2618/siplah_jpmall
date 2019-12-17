@@ -55,7 +55,7 @@ class _PesananState extends State<PesananState> {
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Pesanan", style: TextStyle(color: Colors.white)),
       ),
-      body: data==null?Container():ListView(
+      body:ListView( //data==null?Container():ListView(
         scrollDirection: Axis.vertical,
         children: <Widget>[
           Center(
@@ -107,8 +107,9 @@ class _PesananState extends State<PesananState> {
               ],
             )),
           ),
-          ListView.builder(
-              itemCount: data.length,
+          Card(
+          child:ListView.builder(
+              itemCount: 2,
               itemBuilder: (context, i) {
                 return Container(
                     child: Row(
@@ -118,35 +119,35 @@ class _PesananState extends State<PesananState> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("$i"),
+                      child: Text("loss"),
                     ),
                     SizedBox(
                       width: 20,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(data[i]['order_id']),
+                      child: Text("data[i]['order_id']"),
                     ),
                     SizedBox(
                       width: 30,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(data[i]['total']),
+                      child: Text("data[i]['total']"),
                     ),
                     SizedBox(
                       width: 20,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(data[i]['tanggal']),
+                      child: Text("data[i]['tanggal']"),
                     ),
                     SizedBox(
                       width: 30,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(data[i]['status_nama']),
+                      child: Text("data[i]['status_nama']"),
                     ),
                     SizedBox(
                       width: 20,
@@ -163,7 +164,7 @@ class _PesananState extends State<PesananState> {
                     )
                   ],
                 ));
-              })
+              })),
         ],
       ),
     );

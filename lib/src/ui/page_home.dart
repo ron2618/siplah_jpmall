@@ -176,7 +176,7 @@ getCredential() async {
                     ),
                   
                          Container(
-                            height:data == null ? 0 : 350 * data.length.toDouble(),
+                            height:data == null ? 0 : 325 * data.length.toDouble(),
                             child: ListView.builder(
                                     physics: NeverScrollableScrollPhysics(),
                                     itemCount:
@@ -200,7 +200,7 @@ getCredential() async {
                                           ),
                                           //Pendamping(data: data2,kategori: kategorilist,),
                                           SizedBox(
-                                            height: 10,
+                                            height: 5,
                                           ),
                                         ],
                                       ));
@@ -209,7 +209,7 @@ getCredential() async {
                           ),
 
                     SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
                     data == null ?Container():
                     GridKategori(

@@ -644,6 +644,12 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+   bool _obscureText = true;
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
   var katPel = ['Berbadan Hukum', 'Perseorangan'];
   var codetlp = ['+62', '+81'];
   final nama = TextEditingController();
@@ -712,6 +718,7 @@ class _RegisterState extends State<Register> {
                   CustomTile(
                     "Password",
                     child: TextField(
+                      obscureText: _obscureText,
                       controller: password,
                       decoration: InputDecoration(border: InputBorder.none),
                     ),
@@ -719,6 +726,7 @@ class _RegisterState extends State<Register> {
                   CustomTile(
                     "Konfirmasi Password",
                     child: TextField(
+                      obscureText: _obscureText,
                       controller: konfirmasi,
                       decoration: InputDecoration(border: InputBorder.none),
                     ),

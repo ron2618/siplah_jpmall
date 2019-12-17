@@ -240,6 +240,7 @@ class _NontextState extends State<Nontext> {
   int index = 0;
   @override
   Widget build(BuildContext context) {
+   
     return Container(
       height: 300,
       width: MediaQuery.of(context).size.width,
@@ -339,7 +340,7 @@ class _NontextState extends State<Nontext> {
                 width: 8.0,
               ),
               Container(
-                height: 220,
+                height: 180,
                 decoration: BoxDecoration(
                     color: colors[index],
                     boxShadow: [
@@ -356,7 +357,7 @@ class _NontextState extends State<Nontext> {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, int index) {
-                      print(widget.data[index]['produk']);
+                     
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: GestureDetector(
@@ -408,12 +409,12 @@ class _NontextState extends State<Nontext> {
                                   ),
                                 ),
                                 Container(
-                                  height: 50,
+                                  height: 40,
                                   width: 110,
                                   child: Text(
                                     widget.data[index]['produk'],
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w600,
                                     ),
                                     overflow: TextOverflow.ellipsis,
@@ -423,12 +424,12 @@ class _NontextState extends State<Nontext> {
                                 Container(
                                   width: 110,
                                   child: Text(
-                                    "Rp " + widget.data[index]['harga'] == '0'
-                                        ? widget.data[index]['harga']
-                                        : "0",
+                                     widget.data[index]['harga'] != '0'
+                                        ?"Rp " + widget.data[index]['harga']
+                                        : "harga zona",
                                     style: TextStyle(
                                       color: Colors.red,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                     ),
                                     overflow: TextOverflow.ellipsis,
@@ -438,31 +439,7 @@ class _NontextState extends State<Nontext> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Container(
-                                  height: 10,
-                                  width: 100,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Container(
-                                        height: 10,
-                                        width: index / 2 * 100,
-                                        decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                      )
-                                    ],
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.circular(3)),
-                                ),
-                                SizedBox(height: 5.0),
-                                Container(
-                                  width: 100,
-                                  child: Text("Tersisa ${(index)}"),
-                                )
-                              ],
+                                                              ],
                             ),
                           ),
                         ),
