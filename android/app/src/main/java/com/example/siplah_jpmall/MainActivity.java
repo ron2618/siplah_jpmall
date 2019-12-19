@@ -1,4 +1,4 @@
-package com.example.siplah_jpmall;
+package com.mascitra.sipllah;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

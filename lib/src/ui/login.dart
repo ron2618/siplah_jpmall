@@ -597,34 +597,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           ),
                         ),
                         SizedBox(height: 10),
-                        MaterialButton(
-                          onPressed: () {},
-                          color: Color(0xFFE25757),
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              "with Google",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ), //Button Login Google
-                        MaterialButton(
-                          onPressed: () {},
-                          color: Color(0xFF4D6BB4),
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              "with Facebook",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ), //Button Login facebook
+                       //Button Login Google
+                         //Button Login facebook
                       ],
                     ),
                   ),
@@ -650,7 +624,7 @@ class _RegisterState extends State<Register> {
       _obscureText = !_obscureText;
     });
   }
-  var katPel = ['Berbadan Hukum', 'Perseorangan'];
+  var katPel = ['1', '2'];
   var codetlp = ['+62', '+81'];
   final nama = TextEditingController();
   final email = TextEditingController();
@@ -691,7 +665,7 @@ class _RegisterState extends State<Register> {
                           items: List.generate(
                               katPel.length,
                               (i) => DropdownMenuItem<String>(
-                                    child: Text(katPel[i]),
+                                    child: Text(katPel[i]=='1'?"Berbadan Hukum":"Perseorangan"),
                                     value: katPel[i],
                                   )),
                           onChanged: (item) {
@@ -830,6 +804,7 @@ class _RegisterState extends State<Register> {
                                   konfirmasi: konfirmasi.text,
                                   password: password.text,
                                   telp: telp.text,
+                                  ketpel :slctdKatPel
                                 )),
                         (_) => false),
                     child: Text(
@@ -923,15 +898,10 @@ class Register2 extends StatefulWidget {
   final String password;
   final String konfirmasi;
   final String telp;
+  final String ketpel;
 
-  const Register2(
-      {Key key,
-      this.nama,
-      this.email,
-      this.password,
-      this.konfirmasi,
-      this.telp})
-      : super(key: key);
+  const Register2({Key key, this.nama, this.email, this.password, this.konfirmasi, this.telp, this.ketpel}) : super(key: key);
+
   @override
   _Register2State createState() => _Register2State();
 }
@@ -979,7 +949,8 @@ class _Register2State extends State<Register2> {
       'alamat': alamat.text,
       'kode_pos': kodepos.text,
       'telepon': widget.telp,
-      'kategori_pelanggan': 3
+      'kategori_pelanggan': 3,
+      'type': widget.ketpel
     };
     //encode Map to JSON
     var body = json.encode(data);
