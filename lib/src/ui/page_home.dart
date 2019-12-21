@@ -38,6 +38,9 @@ class _HomePageState extends State<HomePage> {
         "Api-Key": "4P1_7Pm411_51p114h",
         "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
       },
+      body: {
+        'user_id':id
+      }
     );
     // print(response.body);
     setState(() {
@@ -56,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   void _onRefresh() async {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
-  
+     getCredential(); 
     getJsonData();// if failed,use refreshFailed()
     _refreshController.refreshCompleted();
 
@@ -91,8 +94,8 @@ class _HomePageState extends State<HomePage> {
 //    print("Aspect Ratio : "+MediaQuery.of(context).size.aspectRatio.toString());
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-   getJsonData();
    getCredential();    
+   getJsonData();
   }
   String nama;
   String namauser;
@@ -112,7 +115,7 @@ getCredential() async {
   }
   @override
   Widget build(BuildContext context) {
-    //getJsonData();
+    getJsonData();
     
     return Scaffold(
       body: NestedScrollView(

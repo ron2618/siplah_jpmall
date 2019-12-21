@@ -6,6 +6,7 @@ import 'package:siplah_jpmall/src/ui/edit_profilSKLH.dart';
 import 'package:siplah_jpmall/src/ui/edit_profile.dart';
 import 'package:siplah_jpmall/src/ui/imagecabang.dart';
 import 'package:siplah_jpmall/src/ui/komplain.dart';
+import 'package:siplah_jpmall/src/ui/komplain_mitra.dart';
 import 'package:siplah_jpmall/src/ui/marketing.dart';
 import 'package:siplah_jpmall/src/ui/penjualan.dart';
 import 'package:siplah_jpmall/src/ui/pesanan.dart';
@@ -117,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    
+     int a=0;
     return data==null?Container(): Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -194,8 +195,10 @@ class _ProfilePageState extends State<ProfilePage>
                           padding: const EdgeInsets.all(8.0),
                           child: data==null?Container():ListView.builder(
                             //scrollDirection: Axis.vertical,
+                            
                             itemCount: data.length,
                             itemBuilder: (context, i) {
+                            a++;
                              
                               return  Column(
                                   children: <Widget>[
@@ -216,7 +219,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       id:data[i]['page'][0]['id']))),
                                   child: Card(
                                     shape: StadiumBorder(side: BorderSide(color: Colors.white)),
-                                      child: Row(children: <Widget>[
+                                      child: Column(children: <Widget>[
                                     SizedBox(
                                       
                                         child: Padding(
@@ -311,9 +314,10 @@ class _ProfilePageState extends State<ProfilePage>
                                 Colors.yellow[500],
                               ],
                             ),
+                        
                             image: new DecorationImage(
-                                image: new NetworkImage(
-                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png",scale: 4))),
+                              
+                                image: new  AssetImage("src/image/Icons_SIPLAH_JPSTORE_2020.png"))),
                       ),
                     ),
                     ListTile(
@@ -376,7 +380,7 @@ class _ProfilePageState extends State<ProfilePage>
                 : Column(children: <Widget>[
                     SizedBox(
                       width: 380,
-                      child: DrawerHeader(
+                      child: DrawerHeader(  
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
                               // Where the linear gradient begins and ends
@@ -392,8 +396,7 @@ class _ProfilePageState extends State<ProfilePage>
                               ],
                             ),
                             image: new DecorationImage(
-                                image: new NetworkImage(
-                                    "http://siplah.jpmall.intern.mascitra.co.id/favicon.png",scale: 4))),
+                                image: new  AssetImage("src/image/Icons_SIPLAH_JPSTORE_2020.png"))),
                       ),
                     ),
                     ListTile(
@@ -429,10 +432,11 @@ class _ProfilePageState extends State<ProfilePage>
                     ListTile(
                       title: Text('Komplain'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => KomplainMitra(),
+                            ));
                       },
                     ),
                     ListTile(
@@ -446,15 +450,7 @@ class _ProfilePageState extends State<ProfilePage>
 
                       },
                     ),
-                    ListTile(
-                      title: Text('Kurir'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
+                
                   ])
           ],
         ),

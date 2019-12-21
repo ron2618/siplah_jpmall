@@ -135,7 +135,7 @@ Future<http.Response> _edit(String idx,nama) async {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text("Edit Marketing"+idx),
+              title: Text("Edit Marketing"),
               content: Column(
                 children:<Widget>[
                   CustomTile(

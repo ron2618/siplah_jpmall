@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 // class MyAppBar extends StatelessWidget {
 //   // final String hello;
@@ -31,7 +34,7 @@ class _MyAppBarNormalState extends State<MyAppBarNormal> {
             height: 40,
             width: 140,
             decoration: new BoxDecoration(
-          image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"),
+          image: new DecorationImage(image: AssetImage("src/image/Icons_SIPLAH_JPSTORE_2020.png"),
           fit: BoxFit.scaleDown),
             ),
          ),
@@ -60,10 +63,10 @@ class _MyAppBarAbNormalState extends State<MyAppBarAbNormal> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
-            height: 20,
+            height: 50,
             width: 100,
             decoration: new BoxDecoration(
-          image: new DecorationImage(image: new NetworkImage("http://siplah.jpmall.intern.mascitra.co.id/favicon.png"),
+          image: new DecorationImage(image: AssetImage("src/image/Icons_SIPLAH_JPSTORE_2020.png"),
           fit: BoxFit.fill)
         ),
           ),

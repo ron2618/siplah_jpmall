@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siplah_jpmall/src/ui/pembayaran.dart';
 
 
 class CartsPage extends StatefulWidget {
@@ -102,6 +103,30 @@ class _CartsPageState extends State<CartsPage> {
 
     return "Success";
   }
+void _showAlert1(BuildContext context,String idx) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Yakin Mau Menghapus"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("OK"),
+                  onPressed:() {
+                    Navigator.of(context).pop();
+                   _delete(idx);
+                  }
+                ),
+              ],
+            ));
+  }
+
     String nama;
   String namauser;
   String level_id;
@@ -118,9 +143,11 @@ getCredential() async {
     });
     getJsonData();
   }
+  
   @override
   Widget build(BuildContext context) {
     //print(data);
+    
     return Container(
     
       child: Scaffold(
@@ -131,11 +158,11 @@ getCredential() async {
                         gradient: LinearGradient(
                             colors: [Colors.purple, Colors.yellow]))),
           actions: <Widget>[
-            Center(child: Text("hapus")),
+            Center(child: Text("hapus"),),
             SizedBox(width: 10,)
           ],
            automaticallyImplyLeading: false,
-          title: Text("Keranjang"),
+          title: Text("Keranjang",style: TextStyle(color: Colors.white),),
           bottom: PreferredSize(
             child: Container(
               padding: const EdgeInsets.all(8.0),
@@ -170,17 +197,28 @@ getCredential() async {
                 // mainAxisAlignment: Main,
                 children: <Widget>[
                   Text("Total Harga"),
-                  Text("Rp. 50.000", style: TextStyle(fontSize: 14, color: Colors.cyan),)
+                  Text("", style: TextStyle(fontSize: 14, color: Colors.cyan),)
                 ],
               ),
-              Container(
+              GestureDetector(
+               onTap: (){
+                 Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  PembayaranState(),
+                            ));
+                 
+               },
+              child:Container(
+                
                 height: 38,
                 width: 100,
                 color: Colors.cyan,
                 child: Center(
-                  child: Text("Beli(3)", style: TextStyle(color: Colors.white),)
+                  child: Text("Beli", style: TextStyle(color: Colors.white),)
                 ),
-              )
+              )),
             ],
           ),
         ),
@@ -245,7 +283,7 @@ getCredential() async {
                     itemBuilder: (context, i) {
                       // final y = x.produk[i];
                       final x = data[0]['Produk'];
-                      
+                     
                       _qty = TextEditingController(text: totalqty.toString()); 
                       return Column(// produk
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,7 +312,8 @@ getCredential() async {
                                     color: Colors.blue,
                                   ),
                                   onPressed: () {
-                                    _delete(x[i]['id']);
+                                      _showAlert1(context,x[i]['id']);
+                                    
                                   },
                                 ),
                             ],

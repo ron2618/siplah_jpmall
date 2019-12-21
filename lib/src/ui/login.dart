@@ -471,7 +471,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 textAlign: TextAlign.center,
                                 text: TextSpan(children: [
                                   TextSpan(
-                                      text: "JPMALL",
+                                      text: "SIPLAH",
                                       style: TextStyle(
                                           color: Colors.black54,
                                           fontWeight: FontWeight.w600,
@@ -991,7 +991,7 @@ class _Register2State extends State<Register2> {
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Text(
-                          "Register JPMALL",
+                          "Register SIPLAH",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25,

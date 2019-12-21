@@ -157,7 +157,8 @@ class _DetailProduk2State extends State<DetailProduk2>
       initialPage: currentPage,
       
     );
-    
+   
+
   }
    List data;
   List data2;
@@ -190,6 +191,29 @@ class _DetailProduk2State extends State<DetailProduk2>
     });
 
     return "Success";
+  }
+   void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Yakin Mau Membeli"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("OK"),
+                  onPressed:() {
+                    Navigator.of(context).pop();
+                    getJsonData();
+                  }
+                ),
+              ],
+            ));
   }
   @override
   Widget build(BuildContext context) {
@@ -304,7 +328,8 @@ class _DetailProduk2State extends State<DetailProduk2>
              ),
              GestureDetector(
                onTap: (){
-                 getJsonData();
+                  _showAlert(context);
+                 
                },
                             child: Container(
                  height: 60,

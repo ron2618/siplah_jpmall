@@ -132,7 +132,6 @@ class _TambahCabangState extends State<TambahCabang> {
   final password = TextEditingController();
   final konfirmasipass = TextEditingController();
   final logo = TextEditingController();
-  final kodepos = TextEditingController();
 
   //
   
@@ -148,7 +147,6 @@ class _TambahCabangState extends State<TambahCabang> {
       'telepon': telpn.text,
       'email': email.text,
       'password': password.text,
-      'kodepos': kodepos.text,
       'password_konfirmasi': konfirmasipass.text,
       'provinsi_id': prop,
       'kabupaten_id': kab,
@@ -209,7 +207,9 @@ class _TambahCabangState extends State<TambahCabang> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Edit Cabang"),
-              content: Column(
+              content: ListView(scrollDirection: Axis.vertical,
+                children:<Widget>[
+              Column(
                 children:<Widget>[
               TextField(
                 controller: namacab,
@@ -226,10 +226,6 @@ class _TambahCabangState extends State<TambahCabang> {
                TextField(
                 controller: email,
               decoration: InputDecoration(hintText: "Email"),
-              ),
-               TextField(
-                controller: kodepos,
-              decoration: InputDecoration(hintText: "Kode Pos"),
               ),
                TextField(
                 controller: password,
@@ -340,7 +336,7 @@ class _TambahCabangState extends State<TambahCabang> {
         labelText: "Alamat Lengkap Penerima",
       ),
     ),
-                ]),
+                ])]),
                 actions: <Widget>[
               new FlatButton(
                 child: new Text('Submit'),
