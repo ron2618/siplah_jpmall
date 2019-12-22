@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:siplah_jpmall/src/ui/kurir.dart';
 
 class PembayaranState extends StatefulWidget {
   @override
@@ -24,9 +25,9 @@ class _PembayaranState extends State<PembayaranState> {
         "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
       },
       body: {
-        'asal': "",
-        'tujuan': "",
-        'berat': "",
+        'asal': kabupaten,
+        'tujuan': test,
+        'berat': "100",
         'kurir': 'jne',
       },
     );
@@ -40,11 +41,13 @@ class _PembayaranState extends State<PembayaranState> {
 
     return "Success";
   }
+
   String test;
   String nama;
   String namauser;
   String level_id;
   String foto;
+  String kabupaten;
   getCredential() async {
     final pref = await SharedPreferences.getInstance();
     setState(() {
@@ -53,6 +56,7 @@ class _PembayaranState extends State<PembayaranState> {
       level_id = pref.getString("level_id");
       foto = pref.getString("foto");
       id = pref.getString('id');
+      kabupaten = pref.getString('kabupaten_id');
     });
     getCartsData();
   }
@@ -89,7 +93,7 @@ class _PembayaranState extends State<PembayaranState> {
       datax = convertDataToJson['Data'];
       data2 = convertDataToJson['Data'][0]['Produk'];
     });
-  test=data2[0]['penjual_kabupaten_id'];
+    test = data2[0]['penjual_kabupaten_id'];
     return "Success";
   }
 
@@ -122,7 +126,7 @@ class _PembayaranState extends State<PembayaranState> {
   Widget build(BuildContext context) {
     getCredential();
     getAlamatData();
-    //print(test);
+   
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -345,8 +349,64 @@ class _PembayaranState extends State<PembayaranState> {
           //   ]),
           // ),
           Container(
-            child: Column(),
-          )
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => Kurir(),
+                        ));
+                  },
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.local_shipping),
+                            ),
+                            Text("Kurir"),
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              height: 100,
+                              child: ListView.builder(
+                                itemCount: 1,
+                                itemBuilder: (context, i) {
+                                  return Padding(
+                                      padding: const EdgeInsets.only(left: 4.0),
+                                      child: Column(children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Text(
+                                              "JNE",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Container(
+                                              child: IconButton(
+                                                icon: Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ))
+                                      ]));
+                                },
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )))
         ],
       ),
     );

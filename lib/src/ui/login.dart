@@ -315,14 +315,16 @@ class LoginPage extends StatefulWidget {
   final List levelid;
   final List nama;
   final List foto;
-  const LoginPage({Key key, this.npsn, this.levelid,this.nama,this.foto}) : super(key: key);
+  final List kabupaten;
 
+  const LoginPage({Key key, this.npsn, this.levelid, this.nama, this.foto, this.kabupaten}) : super(key: key);
+ 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
-  String levelid, npsn,nama,foto;
+  String levelid, npsn,nama,foto,kabupaten;
 
   @override
   void initState() {
@@ -353,7 +355,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         sharedPreferences.setString("id", npsn);
         sharedPreferences.setString("level_id", levelid);
         sharedPreferences.setString("username", username.text);
-
+        sharedPreferences.setString('kabupaten_id', kabupaten);
         sharedPreferences.commit();
 
         //print("npsn berhasil = "+npsn);
@@ -409,6 +411,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       nama = map['Data'][0]['nama'];
       npsn = map['Data'][0]['id'];
       levelid = map['Data'][0]['level_id'];
+      kabupaten=map['Data'][0]['kabupaten_id'];
       //  nama = convertDataToJson["nama"];
       //  email = convertDataToJson["email"];
       //  alamat = convertDataToJson["alamat"];

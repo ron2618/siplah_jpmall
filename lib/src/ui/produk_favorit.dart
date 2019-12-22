@@ -12,6 +12,55 @@ class ProdukFavorit extends StatefulWidget{
 
 }
 class _ProdukFavoritState extends State<ProdukFavorit>{
+  Future<http.Response> _delete(String id) async {
+    //a=a+id;
+    print(id);
+    var url =
+        'https://siplah.mascitra.co.id/api/sekolah/produk_favorit/hapus';
+
+    Map data = {'user_id': "" + nama, 'id': id};
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+     //print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    //print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _berhasil(context);
+      
+    } else {
+      // savedata();
+     _showAlert(context);
+    }
+    return response;
+  }
+   void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("maaf gagal edit"),
+            ));
+  }
+
+  void _berhasil(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Data berhasil diubah"),
+            ));
+  }
    String nama;
   List data, data2;
   Future<String> getJsonData() async {
@@ -29,7 +78,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
         body: {
           "user_id": "" + nama,
         });
-    print(response.body);
+    //print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
@@ -47,7 +96,8 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
   }
   @override
   Widget build(BuildContext context) {
-      double c_width = MediaQuery.of(context).size.width * 0.4;
+      double c_width = MediaQuery.of(context).size.width * 0.2;
+       double c_width2 = MediaQuery.of(context).size.width * 0.5;
     getCredential();
     getJsonData();
     return Scaffold(
@@ -110,9 +160,12 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(6.0),
-                                child: Text(data[i]['nama'] == null
+                                  child:Container(
+                                  padding: const EdgeInsets.all(6.0),
+                                  width: c_width2,
+                                  child: Text(data[i]['nama'] == null
                                     ? ""
-                                    : data[i]['nama']),
+                                    : data[i]['nama'])),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(6.0),
@@ -164,7 +217,9 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
                                     Icons.delete,
                                     color: Colors.blue,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _delete(data[i]['id']);
+                                  },
                                 ),
                               )
                             ],
