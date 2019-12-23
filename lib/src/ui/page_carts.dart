@@ -13,6 +13,9 @@ class CartsPage extends StatefulWidget {
 }
 
 class _CartsPageState extends State<CartsPage> {
+int totalharga = 0;
+
+
  Future<http.Response> _delete(String idx) async {
     //a=a+id;
     //print(id);
@@ -43,6 +46,8 @@ class _CartsPageState extends State<CartsPage> {
     }
     return response;
   }
+  
+       
   void _showAlert(BuildContext context) {
     showDialog(
         context: context,
@@ -61,12 +66,49 @@ class _CartsPageState extends State<CartsPage> {
             ));
   }
 
+   Future<http.Response> qtyjson(String id_produk,String jumlah_produk) async {
+    //a=a+id;
+    //print(id);
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah_stok';
+
+   
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        },
+        body: {
+          "id" : id_produk,
+          "jumlah": jumlah_produk,
+        }
+        
+        );
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+      // savedata();
+      getJsonData();
+    }
+    return response;
+  }
+  
+
   var linkimage = "http://cahyamotor.co.id/images/empty-cart-icon.jpg";
 
   var item = false;
   ScrollController _controllerProduk;
   TextEditingController _qty;
-  int totalqty = 1;
+  
 
   @override
   void initState() {
@@ -75,6 +117,7 @@ class _CartsPageState extends State<CartsPage> {
    
     getCredential();
   }
+    
   List data;
   List data2;
 
@@ -143,11 +186,12 @@ getCredential() async {
     });
     getJsonData();
   }
+   var qtyjumlah = 0;
   
   @override
   Widget build(BuildContext context) {
     //print(data);
-    
+         
     return Container(
     
       child: Scaffold(
@@ -197,7 +241,8 @@ getCredential() async {
                 // mainAxisAlignment: Main,
                 children: <Widget>[
                   Text("Total Harga"),
-                  Text("", style: TextStyle(fontSize: 14, color: Colors.cyan),)
+
+                  totalharga == 0 ? CircularProgressIndicator():  Text(totalharga.toString(), style: TextStyle(fontSize: 14, color: Colors.cyan),)
                 ],
               ),
               GestureDetector(
@@ -247,6 +292,7 @@ getCredential() async {
       // padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
       itemCount: 1,
       itemBuilder: (context, i) {
+        
         final x = data[i]['Produk'];
         return Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
@@ -282,9 +328,18 @@ getCredential() async {
                     itemCount: data2.length,
                     itemBuilder: (context, i) {
                       // final y = x.produk[i];
-                      final x = data[0]['Produk'];
-                     
-                      _qty = TextEditingController(text: totalqty.toString()); 
+                      
+       
+                            final x = data[0]['Produk'];
+                      String a = 'aku'; 
+                      int totalqty  = int.parse(x[i]['jumlah']);
+                      String harga = x[i]['produk_harga'].replaceAll('.', '');
+                      var harga2 = int.parse(harga);
+                      qtyjumlah = int.parse(x[i]["jumlah"]);
+                      int harga3 = harga2 * qtyjumlah;
+                        totalharga = totalharga + harga3;
+                        
+                       _qty = TextEditingController(text: totalqty.toString());
                       return Column(// produk
                       crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -344,10 +399,11 @@ getCredential() async {
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: (){
-                                        setState(() {
-                                           totalqty = totalqty +1;
-                                        });
-                                       
+                                        var counteree = int.parse(_qty.text);
+                                        int add = counteree + 1;
+                                        
+                                        
+                                       qtyjson(x[i]['id'], add.toString());
                                       },
                                                                           child: Container(
                                           height: 35,
@@ -368,10 +424,11 @@ getCredential() async {
                                     ),
                                     GestureDetector(
                                       onTap: (){
-                                        setState(() {
-                                          
-                                          totalqty !=  0? totalqty = totalqty -1:totalqty =totalqty;
-                                        });
+                                       var counteree = int.parse(_qty.text);
+                                        int add = counteree - 1;
+                                        
+                                        
+                                       qtyjson(x[i]['id'], add.toString());
                                       },
                                                                           child: Container(
                                           height: 35,

@@ -13,7 +13,7 @@ import 'package:siplah_jpmall/src/ui/pesanan.dart';
 import 'package:siplah_jpmall/src/ui/produk_favorit.dart';
 import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'footer.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -116,9 +116,11 @@ class _ProfilePageState extends State<ProfilePage>
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
      int a=0;
+     
     return data==null?Container(): Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -172,122 +174,105 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ),
       ),
-      body:data==null?Container()
-          : ListView(
+      body:Container(
+        height: MediaQuery.of(context).size.height,
+        child: data==null?Container()
+            : ListView(
 
-              //scrollDirection: Axis.vertical,
-              children: <Widget>[
-                  Column(children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: level_id==null?Container():Column(children: <Widget>[
-                        level_id == '3' ? CabangMitra() : RekomToko(),
-                      ]),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(children: <Widget>[
-                        //Text("data"),
-                        // PageBeli(),
-                        //pow
-                        Container(
-                          height: 500,
-                          padding: const EdgeInsets.all(8.0),
-                          child: data==null?Container():ListView.builder(
-                            //scrollDirection: Axis.vertical,
-                            
-                            itemCount: data.length,
-                            itemBuilder: (context, i) {
-                            a++;
-                             
-                              return  Column(
-                                  children: <Widget>[
-                                    Row(children:<Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(data[i]['nama']),
-                                    ),]),
-                                  Row(
-                                    children:<Widget>[
-                                       GestureDetector(
-                                  onTap: ()=> Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                  transitionDuration:
-                                      Duration(milliseconds: 350),
-                                  pageBuilder: (context, _, __) => PagesiteA(
-                                      id:data[i]['page'][0]['id']))),
-                                  child: Card(
-                                    shape: StadiumBorder(side: BorderSide(color: Colors.white)),
-                                      child: Column(children: <Widget>[
-                                    SizedBox(
-                                      
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Text(data[i]['page'][0]['judul']),
-                                            ],
-                                          ),
-                                        )),
-                                    ])))
-                                    // Padding(
-                                    //   padding: const EdgeInsets.all(8.0),
-                                    //   child: Text(data[i]['page'][0]['judul']),
-                                    // )
-                                    ]),
-                                       ],
-                              );
-                              // return GestureDetector(
-                              //     onTap: ()=> Navigator.push(
-                              // context,
-                              // PageRouteBuilder(
-                              //     transitionDuration:
-                              //         Duration(milliseconds: 350),
-                              //     pageBuilder: (context, _, __) => PagesiteA(
-                              //         id:data[i]['page'][0]['id']))),
-                              //     child: Card(
-                              //         child: Row(children: <Widget>[
-                              //       SizedBox(
-                              //           height: 50,
-                              //           child: Padding(
-                              //             padding: const EdgeInsets.all(8.0),
-                              //             child: Row(
-                              //               children: <Widget>[
-                              //                 Text(data[i]['page'][0]['judul']),
-                              //               ],
-                              //             ),
-                              //           )),
-                              //     ])));
-                            },
-                          ),
-                        ),
-                        
-                        Container(
-                          color: Colors.white,
-                          child: ListTile(
-                            onTap: () {
-                              _showAlert(context);
-                            },
-                            title: Column(
-                              children: <Widget>[
-                                Text(
-                                  "LOGOUT",
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                scrollDirection: Axis.vertical,
+                children: <Widget>[
+                    Column(children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: level_id==null?Container():Column(children: <Widget>[
+                          level_id == '3' ? CabangMitra() : RekomToko(),
+                        ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: Column(children: <Widget>[
+                          //Text("data"),
+                          // PageBeli(),
+                          //pow
+                          Container(
+                            height: MediaQuery.of(context).size.height,
+                            padding: const EdgeInsets.all(0),
+                            child: data==null?Container():ListView.builder(
+                              //scrollDirection: Axis.vertical,
+                               physics: NeverScrollableScrollPhysics(),
+                              itemCount: data.length,
+                              itemBuilder: (context, i) {
+                              a++;
+                               
+                                return  Column(
+                                    children: <Widget>[
+                                      Row(children:<Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Text("\n   "+data[i]['nama']+"\n",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,),
+                                                               ),                         ),]),
+                                    Row(
+                                      children:<Widget>[
+                                         Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Footer(
+                                          data:data[i]['page']
+                                        ),
+                                      ),
+                                      ]),
+                                         ],
+                                );
+                                // return GestureDetector(
+                                //     onTap: ()=> Navigator.push(
+                                // context,
+                                // PageRouteBuilder(
+                                //     transitionDuration:
+                                //         Duration(milliseconds: 350),
+                                //     pageBuilder: (context, _, __) => PagesiteA(
+                                //         id:data[i]['page'][0]['id']))),
+                                //     child: Card(
+                                //         child: Row(children: <Widget>[
+                                //       SizedBox(
+                                //           height: 50,
+                                //           child: Padding(
+                                //             padding: const EdgeInsets.all(8.0),
+                                //             child: Row(
+                                //               children: <Widget>[
+                                //                 Text(data[i]['page'][0]['judul']),
+                                //               ],
+                                //             ),
+                                //           )),
+                                //     ])));
+                              },
                             ),
                           ),
-                        ),
+                          
+                          Container(
+                            color: Colors.white,
+                            child: ListTile(
+                              onTap: () {
+                                _showAlert(context);
+                              },
+                              title: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "LOGOUT",
+                                    style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
 //     //batas bawah
 
-                        //lol
-                      ]),
-                    ),
+                          //lol
+                        ]),
+                      ),
+                    ]),
                   ]),
-                ]),
+      ),
       //TabBarView(controller: controller, children: <Widget>[
 
       //]),
