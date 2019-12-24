@@ -32,7 +32,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
+        Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/profil/get'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -97,7 +97,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
                     child: Image.network(
                       data[0]['logo_sekolah'] != null
                           ? data[0]['logo_sekolah']
-                          : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
+                          : ('https://siplah.jpstore.id/assets/images/no-image.png'),
                     ),
                   ),
                 ),
@@ -361,7 +361,7 @@ class _FormEdit2 extends State<FormEdit2> {
   // Future<String> getJsonData() async {
   //   var response = await http.post(
   //       //Encode the url
-  //       Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
+  //       Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/profil/get'),
   //       headers: {
   //         "Content-Type": "application/x-www-form-urlencoded",
   //         "API-App": "siplah_jpmall.id",
@@ -466,7 +466,7 @@ class _FormEdit2 extends State<FormEdit2> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/profil/edit';
+    var url = 'https://siplah.jpstore.id/api/sekolah/profil/edit';
 
     Map data = {
       'user_id': id,

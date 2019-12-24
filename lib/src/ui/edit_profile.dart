@@ -33,7 +33,7 @@ class _Editprofile extends State<Editprofile> {
     var response = await http.post(
         //Encode the url
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
+            'https://siplah.jpstore.id/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -95,7 +95,7 @@ class _Editprofile extends State<Editprofile> {
                       Image.network(
                          data[0]['foto'] != null
                               ? data[0]['foto']
-                              : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
+                              : ('https://siplah.jpstore.id/assets/images/no-image.png'),
                     ),
                       ),
                     ),
@@ -414,7 +414,7 @@ class _FormEdit extends State<FormEdit> {
     var response = await http.post(
         //Encode the url
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
+            'https://siplah.jpstore.id/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -539,7 +539,7 @@ class _FormEdit extends State<FormEdit> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.mascitra.co.id/api/mitra/user/profil_update';
+    var url = 'https://siplah.jpstore.id/api/mitra/user/profil_update';
 
     Map data = {
       'user_id': id,

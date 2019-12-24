@@ -376,7 +376,7 @@ class _NontextState extends State<Nontext> {
                                       gambar: widget.data[index]['foto'] != null
                                           ? widget.data[index]['foto'][0]
                                               ['foto']
-                                          : 'https://siplah.mascitra.co.id/assets/images/no-image.png',
+                                          : 'https://siplah.jpstore.id/assets/images/no-image.png',
                                       harga: widget.data[index]['harga']))),
                                     
                           child: Container(
@@ -397,7 +397,7 @@ class _NontextState extends State<Nontext> {
                                               null
                                           ? widget.data[index]['foto'][0]
                                               ['foto']
-                                          : 'https://siplah.mascitra.co.id/assets/images/no-image.png',
+                                          : 'https://siplah.jpstore.id/assets/images/no-image.png',
                                       fit: BoxFit.cover,
                                     ),
                                     decoration: BoxDecoration(

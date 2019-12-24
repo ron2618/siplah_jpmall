@@ -19,7 +19,7 @@ import 'dart:async';
 //   Future<String> getJsonData() async {
 //     var response = await http.post(
 //       //Encode the url
-//       Uri.encodeFull('https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
+//       Uri.encodeFull('https://siplah.jpstore.id/api/admin/data_mitra/list'),
 //       headers: {
 //         "Content-Type": "application/x-www-form-urlencoded",
 //         "API-App": "siplah_jpmall.id",
@@ -96,7 +96,7 @@ import 'dart:async';
 //                       child: Image.network(loading == 1 &&
 //                               data[i]['foto'] != null
 //                           ? data[i]['foto']
-//                           : ('https://siplah.mascitra.co.id/assets/images/no-image.png')),
+//                           : ('https://siplah.jpstore.id/assets/images/no-image.png')),
 //                     )),
 //               );
 //             },
@@ -120,7 +120,7 @@ import 'dart:async';
 //   Future<String> getJsonData() async {
 //     var response = await http.post(
 //       //Encode the url
-//       Uri.encodeFull('https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
+//       Uri.encodeFull('https://siplah.jpstore.id/api/admin/data_mitra/list'),
 //       headers: {
 //         "Content-Type": "application/x-www-form-urlencoded",
 //         "API-App": "siplah_jpmall.id",
@@ -173,7 +173,7 @@ import 'dart:async';
 //                     padding: const EdgeInsets.all(8.0),
 //                     child: Image.network(loading == 1 && data[i]['foto'] != null
 //                         ? data[i]['foto']
-//                         : ('https://siplah.mascitra.co.id/assets/images/no-image.png')),
+//                         : ('https://siplah.jpstore.id/assets/images/no-image.png')),
 //                   )),
 //             );
 //           },

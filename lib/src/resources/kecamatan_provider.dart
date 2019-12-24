@@ -5,7 +5,7 @@ import 'package:siplah_jpmall/src/models/kecamatan_model.dart';
 
 class KecamatanProvider{
   Client client = Client();
-  final url = "https://siplah.mascitra.co.id/api/domisili/get_kecamatan"; 
+  final url = "https://siplah.jpstore.id/api/domisili/get_kecamatan"; 
   Future<Kecamatan> kecamatan(kabId)async {
     final response = await client.post(url, 
      headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"5b4eefd43a64c539788b356da4910e5e95fb573"},

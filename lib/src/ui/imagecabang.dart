@@ -21,7 +21,7 @@ class _CabangMitraState extends State<CabangMitra> {
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/cabang/list'),
+      Uri.encodeFull('https://siplah.jpstore.id/api/mitra/cabang/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -110,7 +110,7 @@ class _CabangMitraState extends State<CabangMitra> {
                       child: Image.network(loading == 1 &&
                               data[i]['foto'] != null
                           ? data[i]['foto']
-                          : ('https://siplah.mascitra.co.id/assets/images/no-image.png')),
+                          : ('https://siplah.jpstore.id/assets/images/no-image.png')),
                     )),
               );
             },
@@ -134,7 +134,7 @@ class _LihatCabang extends State<LihatCabang> {
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/cabang/list'),
+      Uri.encodeFull('https://siplah.jpstore.id/api/mitra/cabang/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -204,7 +204,7 @@ class _LihatCabang extends State<LihatCabang> {
                         child: Image.network(loading == 1 &&
                                 data[i]['foto'] != null
                             ? data[i]['foto']
-                            : ('https://siplah.mascitra.co.id/assets/images/user.ico')),
+                            : ('https://siplah.jpstore.id/assets/images/user.ico')),
                       ),
                       //
 

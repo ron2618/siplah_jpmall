@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/blog_footer'),
+      Uri.encodeFull('https://siplah.jpstore.id/api/blog/blog_footer'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -159,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage>
                   child: Image.network(
                     foto != null
                         ? foto
-                        : ('https://siplah.mascitra.co.id/assets/images/user.ico'),
+                        : ('https://siplah.jpstore.id/assets/images/user.ico'),
                   ),
                 ),
               ),
@@ -464,7 +464,7 @@ class _PageSiteA extends State<PagesiteA> {
     //print(widget.id);
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/tampil'),
+      Uri.encodeFull('https://siplah.jpstore.id/api/blog/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -541,7 +541,7 @@ class _PageSiteB extends State<PagesiteB> {
     //print(widget.id);
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/tampil'),
+      Uri.encodeFull('https://siplah.jpstore.id/api/blog/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -903,7 +903,7 @@ class _Pagekedua extends State<Pagekedua> {
         title: Text("Cara Menjadi Web Developer",
             style: TextStyle(fontSize: 14, color: Colors.white)),
       ),
-      url: "https://siplah.mascitra.co.id/blog/page/2",
+      url: "https://siplah.jpstore.id/blog/page/2",
     );
   }
 }
@@ -926,7 +926,7 @@ class _SecondScreen extends State<SecondScreen> {
     //     title: Text("10 Kata Bijak",
     //         style: TextStyle(fontSize: 14, color: Colors.white)),
     //   ),
-    //   url: "https://siplah.mascitra.co.id/blog/page/1",
+    //   url: "https://siplah.jpstore.id/blog/page/1",
     // );
   }
 }
@@ -949,7 +949,7 @@ class _Pageketiga extends State<Pageketiga> {
         title: Text("Syarat dan Ketentuan",
             style: TextStyle(fontSize: 14, color: Colors.white)),
       ),
-      url: "https://siplah.mascitra.co.id/blog/page/2",
+      url: "https://siplah.jpstore.id/blog/page/2",
     );
   }
 }

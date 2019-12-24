@@ -69,7 +69,7 @@ Future<http.Response> _edit(String idx,nama) async {
   
   Future<http.Response> daftar_api() async {
     
-    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/edit';
+    var url = 'https://siplah.jpstore.id/api/mitra/marketing/edit';
 
     Map data = {
       'id': idx,
@@ -322,7 +322,7 @@ Future<http.Response> _edit(String idx,nama) async {
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
-    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/hapus';
+    var url = 'https://siplah.jpstore.id/api/mitra/marketing/hapus';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -375,7 +375,7 @@ Future<http.Response> _edit(String idx,nama) async {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
+            'https://siplah.jpstore.id/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -629,7 +629,7 @@ class _TambahMarketingState extends State<TambahMarketing> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/tambah';
+    var url = 'https://siplah.jpstore.id/api/mitra/marketing/tambah';
 
     Map data = {
       'user_id': id,

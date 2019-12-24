@@ -7,7 +7,16 @@ import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 import 'package:http/http.dart' as http;
 import 'package:siplah_jpmall/src/ui/kurir.dart';
 
+import 'metodebayar.dart';
+
 class PembayaranState extends StatefulWidget {
+  final String imagebank;
+  final String datatype;
+  final String databank;
+
+  const PembayaranState({Key key, this.imagebank, this.datatype, this.databank}) : super(key: key);
+  
+
   @override
   _PembayaranState createState() => _PembayaranState();
 }
@@ -58,7 +67,7 @@ class _PembayaranState extends State<PembayaranState> {
       id = pref.getString('id');
       kabupaten = pref.getString('kabupaten_id');
     });
-    getCartsData();
+    // getCartsData();
   }
 
   ScrollController _controllerProduk;
@@ -74,7 +83,7 @@ class _PembayaranState extends State<PembayaranState> {
   Future<String> getCartsData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/isi'),
+      Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/keranjang/isi'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -103,7 +112,7 @@ class _PembayaranState extends State<PembayaranState> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
+            'https://siplah.jpstore.id/api/sekolah/alamat_pengiriman/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -125,7 +134,7 @@ class _PembayaranState extends State<PembayaranState> {
   @override
   Widget build(BuildContext context) {
     getCredential();
-    getAlamatData();
+    // getAlamatData();
    
     return Scaffold(
       appBar: AppBar(
@@ -148,80 +157,95 @@ class _PembayaranState extends State<PembayaranState> {
                     ));
               },
               child: Container(
-                height: 200,
-                child: data == null
-                    ? Container()
-                    : ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: data.length,
-                        itemBuilder: (context, i) {
-                          return data[i]['is_utama'] == '2'
-                              ? Card()
-                              : Card(
-                                  child: Column(children: <Widget>[
-                                  Column(children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          "Alamat Pengiriman",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(data[i]['nama']),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(data[i]['penerima_nama']),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(data[i]['penerima_no_hp']),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(data[i]['alamat']),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(data[i]['kabupaten_nama']),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(data[i]['provinsi_nama']),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(data[i]['kode_pos']),
-                                      ],
-                                    )
-                                  ]),
-                                  Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Container(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Colors.blue,
+                height: 250,
+                width:  MediaQuery.of(context).size.width,
+                child: Container(
+                  child: data == null
+                      ? Container()
+                      : ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: data.length,
+                          itemBuilder: (context, i) {
+                            return data[i]['is_utama'] == '2'
+                                ? Card()
+                                : Container(
+                                 
+                                    child: Column(children: <Widget>[
+                                   
+                                      Container(
+                                        height: 20,
+                                      ),
+                                     Container(
+                      height: 2,
+                      color: Colors.grey,
+                    ),
+                    Container(
+                      color: Colors.white,
+                    child: ListTile(
+                      leading: Icon(Icons.home),
+                      title: Text('Alamat Pengiriman'),
+                    ),
+                    ),
+                    Container(
+                      height: 2,
+                      color: Colors.grey,
+                    ),
+                   
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(data[i]['nama']),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(data[i]['penerima_nama']),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(data[i]['penerima_no_hp']),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Container(
+                                            width:  MediaQuery.of(context).size.width-30,
+                                            child: Text(data[i]['alamat'])),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(data[i]['kabupaten_nama']),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(data[i]['provinsi_nama']),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(data[i]['kode_pos']),
+                                        ],
+                                      ),
+                                    
+                                    Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                          child: IconButton(
+                                            icon: Icon(
+                                              Icons.arrow_forward_ios,
+                                              color: Colors.blue,
+                                            ),
                                           ),
-                                        ),
-                                      ))
-                                ]));
-                        },
-                      ),
+                                        ))
+                                  ]));
+                          },
+                        ),
+                ),
               ),
             ),
           ),
@@ -293,7 +317,7 @@ class _PembayaranState extends State<PembayaranState> {
           //                                                         null
           //                                                     ? x[i]['produk_foto']
           //                                                         [0]['foto']
-          //                                                     : 'https://siplah.mascitra.co.id/assets/images/no-image.png',
+          //                                                     : 'https://siplah.jpstore.id/assets/images/no-image.png',
           //                                                 scale: 4,
           //                                               ),
           //                                               SizedBox(
@@ -360,14 +384,28 @@ class _PembayaranState extends State<PembayaranState> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.local_shipping),
-                            ),
-                            Text("Kurir"),
-                          ],
-                        ),
+                        
+                        Container(
+                                      height: 20,
+                                    ),
+                        Container(
+                    height: 2,
+                    color: Colors.grey,
+                  ),
+                  Container(
+                    color: Colors.white,
+                  child: ListTile(
+                    leading: Icon(Icons.payment),
+                    title: Text('Kurir'),
+                  ),
+                  ),
+                  Container(
+                    height: 2,
+                    color: Colors.grey,
+                  ),
+                  Container(
+                                      height: 20,
+                                    ),
                         Column(
                           children: <Widget>[
                             Container(
@@ -406,7 +444,65 @@ class _PembayaranState extends State<PembayaranState> {
                         )
                       ],
                     ),
-                  )))
+                  ))),
+                  Container(
+                    height: 2,
+                    color: Colors.grey,
+                  ),
+                    Container(
+                    height: 10,
+                    color: Colors.white,
+                  ),
+                      GestureDetector(
+                        onTap: (){
+                            Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => Metode(),
+                    ));
+                        },
+                                              child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                child: Text("  Metode Pembayaran",style: TextStyle(
+                                 fontSize: 15,
+                                 fontWeight: FontWeight.bold
+                                ),),
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                              widget.imagebank == null ?  Container(
+                                width: 100,
+                                height: 50,
+                                child: Image.network("https://siplah.jpstore.id/assets/images/payment/bca.png"),
+                              ):Container(
+                                width: 100,
+                                height: 50,
+                                child: Image.network(widget.imagebank),
+                              ),
+                              Container(
+                                width: 10,
+                              ),
+                              Container(
+                                child: Icon(Icons.arrow_forward_ios,color: Colors.blue,),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                       Container(
+                    height: 10,
+                    color: Colors.white,
+                  ),
+                  Container(
+                    height: 2,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(
+                    height: 100,
+                  )
         ],
       ),
     );

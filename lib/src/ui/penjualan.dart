@@ -17,7 +17,7 @@ class _PenjualanState extends State<Penjualan> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/mitra/penjualan/tampil'),
+            'https://siplah.jpstore.id/api/mitra/penjualan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
