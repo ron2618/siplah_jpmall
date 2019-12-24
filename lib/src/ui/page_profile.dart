@@ -15,10 +15,8 @@ import 'package:siplah_jpmall/src/ui/rekomtoko.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'footer.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:siplah_jpmall/src/ui/tambahcabang.dart';
 
 import 'login.dart';
@@ -881,75 +879,6 @@ class PageJual extends StatelessWidget {
               onPressed: () {})
         ],
       ),
-    );
-  }
-}
-
-class Pagekedua extends StatefulWidget {
-  @override
-  _Pagekedua createState() => _Pagekedua();
-}
-
-class _Pagekedua extends State<Pagekedua> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WebviewScaffold(
-      appBar: AppBar(
-        title: Text("Cara Menjadi Web Developer",
-            style: TextStyle(fontSize: 14, color: Colors.white)),
-      ),
-      url: "https://siplah.mascitra.co.id/blog/page/2",
-    );
-  }
-}
-
-class SecondScreen extends StatefulWidget {
-  @override
-  _SecondScreen createState() => _SecondScreen();
-}
-
-class _SecondScreen extends State<SecondScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // return WebviewScaffold(
-    //   appBar: AppBar(
-    //     title: Text("10 Kata Bijak",
-    //         style: TextStyle(fontSize: 14, color: Colors.white)),
-    //   ),
-    //   url: "https://siplah.mascitra.co.id/blog/page/1",
-    // );
-  }
-}
-
-class Pageketiga extends StatefulWidget {
-  @override
-  _Pageketiga createState() => _Pageketiga();
-}
-
-class _Pageketiga extends State<Pageketiga> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WebviewScaffold(
-      appBar: AppBar(
-        title: Text("Syarat dan Ketentuan",
-            style: TextStyle(fontSize: 14, color: Colors.white)),
-      ),
-      url: "https://siplah.mascitra.co.id/blog/page/2",
     );
   }
 }

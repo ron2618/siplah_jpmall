@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
@@ -122,11 +123,13 @@ class _PembayaranState extends State<PembayaranState> {
     });
   }
 
+  String _selectedValue;
+  int _rgProgramming = -1;
   @override
   Widget build(BuildContext context) {
     getCredential();
     getAlamatData();
-   
+    getKurir_Jne();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -371,34 +374,53 @@ class _PembayaranState extends State<PembayaranState> {
                         Column(
                           children: <Widget>[
                             Container(
-                              height: 100,
+                              height: 800,
                               child: ListView.builder(
-                                itemCount: 1,
+                                itemCount: 10,
                                 itemBuilder: (context, i) {
+                                  final List<RadioGroup> _programmingList = [
+                                    RadioGroup(index: 1, text: "Kotlin"),
+                                    // RadioGroup(index: 2, text: "Swift"),
+                                    // RadioGroup(index: 3, text: "Flutter"),
+                                    // RadioGroup(index: 4, text: "Java"),
+                                    // RadioGroup(index: 5, text: "React Native"),
+                                  ];
+                                  
                                   return Padding(
                                       padding: const EdgeInsets.only(left: 4.0),
-                                      child: Column(children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Text(
-                                              "JNE",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Container(
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  color: Colors.blue,
-                                                ),
-                                              ),
-                                            ))
-                                      ]));
+                                      child: Column(
+                                        children: _programmingList
+                                            .map((programming) => RadioListTile(
+                                                  title: Text(programming.text),
+                                                  value: programming.index,
+                                                  groupValue: _rgProgramming,
+                                                  controlAffinity:
+                                                      ListTileControlAffinity
+                                                          .trailing,
+                                                  dense: true,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _rgProgramming = value;
+                                                      _selectedValue =
+                                                          programming.text;
+                                                    });
+                                                  },
+                                                ))
+                                            .toList(),
+                                        // <Widget>[
+                                        //   Column(
+                                        //     children: <Widget>[
+                                        //       RadioListTile(
+                                        //         title: Text("Number $i"),
+                                        //         value: i,
+                                        //         groupValue: value,
+                                        //         onChanged: (ind) =>
+                                        //             setState(() => value = ind),
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                        // ]
+                                      ));
                                 },
                               ),
                             )
