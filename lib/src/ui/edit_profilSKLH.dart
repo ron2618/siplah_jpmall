@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:siplah_jpmall/src/bloc/kabupaten_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/kecamatan_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/provinsi_bloc.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/models/kabupaten_model.dart';
 import 'package:siplah_jpmall/src/models/kecamatan_model.dart';
 import 'package:siplah_jpmall/src/models/provinsi_model.dart';
@@ -37,7 +38,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: {
           "user_id": "" + nama,
@@ -366,7 +367,7 @@ class _FormEdit2 extends State<FormEdit2> {
   //         "Content-Type": "application/x-www-form-urlencoded",
   //         "API-App": "siplah_jpmall.id",
   //         "Api-Key": "4P1_7Pm411_51p114h",
-  //         "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+  //         "API-Token": $Token({this.apitoken})fd43a64c539788b356da4910e5e95fb573"
   //       },
   //       body: {
   //         "id": "" + id
@@ -500,7 +501,7 @@ class _FormEdit2 extends State<FormEdit2> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: body);
     // print("${response.statusCode}");

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/ui/pembayaran.dart';
 
 
@@ -30,7 +31,7 @@ int totalharga = 0;
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: body);
     // print("${response.statusCode}");
@@ -80,7 +81,7 @@ int totalharga = 0;
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: {
           "id" : id_produk,
@@ -129,7 +130,7 @@ int totalharga = 0;
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        "API-Token": "$Token({this.apitoken})"
       },
       body: {
         "user_id": id,
@@ -251,7 +252,7 @@ getCredential() async {
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  PembayaranState(),
+                                  PembayaranState(totalharga:totalharga),
                             ));
                  
                },

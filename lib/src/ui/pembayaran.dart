@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:siplah_jpmall/src/ui/kurir.dart';
+import 'package:siplah_jpmall/src/ui/marketing.dart';
 
 import 'metodebayar.dart';
 
@@ -13,9 +15,21 @@ class PembayaranState extends StatefulWidget {
   final String imagebank;
   final String datatype;
   final String databank;
+  final int totalharga;
+  final String namamar;
+  final String imagekurir;
+  final int cost;
 
-  const PembayaranState({Key key, this.imagebank, this.datatype, this.databank}) : super(key: key);
-  
+  const PembayaranState(
+      {Key key,
+      this.imagebank,
+      this.datatype,
+      this.databank,
+      this.totalharga,
+      this.namamar,
+      this.imagekurir,
+      this.cost})
+      : super(key: key);
 
   @override
   _PembayaranState createState() => _PembayaranState();
@@ -31,11 +45,11 @@ class _PembayaranState extends State<PembayaranState> {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        "API-Token": "$Token({this.apitoken})"
       },
       body: {
         'asal': kabupaten,
-        'tujuan': test,
+        'tujuan': tujuan,
         'berat': "100",
         'kurir': 'jne',
       },
@@ -51,7 +65,8 @@ class _PembayaranState extends State<PembayaranState> {
     return "Success";
   }
 
-  String test;
+  String penjual = null;
+  String tujuan = null;
   String nama;
   String namauser;
   String level_id;
@@ -67,7 +82,6 @@ class _PembayaranState extends State<PembayaranState> {
       id = pref.getString('id');
       kabupaten = pref.getString('kabupaten_id');
     });
-    // getCartsData();
   }
 
   ScrollController _controllerProduk;
@@ -88,7 +102,7 @@ class _PembayaranState extends State<PembayaranState> {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        "API-Token": "$Token({this.apitoken})"
       },
       body: {
         "user_id": id,
@@ -102,7 +116,8 @@ class _PembayaranState extends State<PembayaranState> {
       datax = convertDataToJson['Data'];
       data2 = convertDataToJson['Data'][0]['Produk'];
     });
-    test = data2[0]['penjual_kabupaten_id'];
+    tujuan = data2[0]['penjual_kabupaten_id'];
+    penjual = data2[0]['penjual_id'];
     return "Success";
   }
 
@@ -117,7 +132,7 @@ class _PembayaranState extends State<PembayaranState> {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: {
           "user_id": "" + id,
@@ -134,8 +149,8 @@ class _PembayaranState extends State<PembayaranState> {
   @override
   Widget build(BuildContext context) {
     getCredential();
-    // getAlamatData();
-   
+    getAlamatData();
+    getCartsData();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -158,7 +173,7 @@ class _PembayaranState extends State<PembayaranState> {
               },
               child: Container(
                 height: 250,
-                width:  MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width,
                 child: Container(
                   child: data == null
                       ? Container()
@@ -169,69 +184,68 @@ class _PembayaranState extends State<PembayaranState> {
                             return data[i]['is_utama'] == '2'
                                 ? Card()
                                 : Container(
-                                 
                                     child: Column(children: <Widget>[
-                                   
-                                      Container(
-                                        height: 20,
+                                    Container(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      height: 2,
+                                      color: Colors.grey,
+                                    ),
+                                    Container(
+                                      color: Colors.white,
+                                      child: ListTile(
+                                        leading: Icon(Icons.home),
+                                        title: Text('Alamat Pengiriman'),
                                       ),
-                                     Container(
-                      height: 2,
-                      color: Colors.grey,
-                    ),
-                    Container(
-                      color: Colors.white,
-                    child: ListTile(
-                      leading: Icon(Icons.home),
-                      title: Text('Alamat Pengiriman'),
-                    ),
-                    ),
-                    Container(
-                      height: 2,
-                      color: Colors.grey,
-                    ),
-                   
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(data[i]['nama']),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(data[i]['penerima_nama']),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(data[i]['penerima_no_hp']),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            width:  MediaQuery.of(context).size.width-30,
+                                    ),
+                                    Container(
+                                      height: 2,
+                                      color: Colors.grey,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(data[i]['nama']),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(data[i]['penerima_nama']),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(data[i]['penerima_no_hp']),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                30,
                                             child: Text(data[i]['alamat'])),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(data[i]['kabupaten_nama']),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(data[i]['provinsi_nama']),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(data[i]['kode_pos']),
-                                        ],
-                                      ),
-                                    
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(data[i]['kabupaten_nama']),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(data[i]['provinsi_nama']),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(data[i]['kode_pos']),
+                                      ],
+                                    ),
                                     Align(
                                         alignment: Alignment.centerRight,
                                         child: Container(
@@ -372,137 +386,290 @@ class _PembayaranState extends State<PembayaranState> {
           //     )
           //   ]),
           // ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+            height: 5,
+            color: Colors.grey,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => MarketingPem(
+                        totalharga: widget.totalharga,
+                        imagebank: widget.imagebank,
+                        imagekurir: widget.imagekurir,
+                        namamar: widget.namamar,
+                        databank: widget.databank,
+                        datatype: widget.datatype,
+                        cost: widget.cost,
+                        penjual: penjual),
+                  ));
+            },
+            child: Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      "  Pilih Marketing",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  widget.namamar == null
+                      ? Container(
+                          width: 100,
+                          height: 50,
+                          child: Text("Pilih Marketing..."),
+                        )
+                      : Container(
+                          width: 100,
+                          height: 50,
+                          child: Text(widget.namamar),
+                        ),
+                  Container(
+                    width: 10,
+                  ),
+                  Container(
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.blue,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+
           Container(
               child: GestureDetector(
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => Kurir(),
+                          builder: (BuildContext context) => Kurir(
+                              kabu: kabupaten,
+                              tuju: tujuan,
+                              totalharga: widget.totalharga,
+                              imagebank: widget.imagebank,
+                              imagekurir: widget.imagekurir,
+                              namamar: widget.namamar,
+                              databank: widget.databank,
+                              datatype: widget.datatype,
+                              cost: widget.cost),
                         ));
                   },
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        
                         Container(
-                                      height: 20,
-                                    ),
+                          height: 20,
+                        ),
                         Container(
-                    height: 2,
-                    color: Colors.grey,
-                  ),
-                  Container(
-                    color: Colors.white,
-                  child: ListTile(
-                    leading: Icon(Icons.payment),
-                    title: Text('Kurir'),
-                  ),
-                  ),
-                  Container(
-                    height: 2,
-                    color: Colors.grey,
-                  ),
-                  Container(
-                                      height: 20,
-                                    ),
+                          height: 2,
+                          color: Colors.grey,
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: ListTile(
+                            leading: Icon(Icons.payment),
+                            title: Text('Kurir'),
+                          ),
+                        ),
+                        Container(
+                          height: 2,
+                          color: Colors.grey,
+                        ),
+                        Container(
+                          height: 20,
+                        ),
                         Column(
                           children: <Widget>[
                             Container(
-                              height: 100,
-                              child: ListView.builder(
-                                itemCount: 1,
-                                itemBuilder: (context, i) {
-                                  return Padding(
-                                      padding: const EdgeInsets.only(left: 4.0),
-                                      child: Column(children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Text(
-                                              "JNE",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Container(
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.arrow_forward_ios,
-                                                  color: Colors.blue,
-                                                ),
+                                height: 100,
+                                child: widget.imagekurir == null
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 4.0),
+                                        child: Column(children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              Text(
+                                                "",
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                            ))
-                                      ]));
-                                },
-                              ),
-                            )
+                                            ],
+                                          ),
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.arrow_forward_ios,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
+                                              ))
+                                        ]))
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 4.0),
+                                        child: Column(children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              Container(
+                                                width: 100,
+                                                height: 50,
+                                                child: Image.network(
+                                                    widget.imagekurir),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  widget.cost.toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.arrow_forward_ios,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
+                                              ))
+                                        ])))
                           ],
                         )
                       ],
                     ),
                   ))),
+          Container(
+            height: 2,
+            color: Colors.grey,
+          ),
+          Container(
+            height: 10,
+            color: Colors.white,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Metode(
+                        totalharga: widget.totalharga,
+                        imagebank: widget.imagebank,
+                        imagekurir: widget.imagekurir,
+                        namamar: widget.namamar,
+                        databank: widget.databank,
+                        datatype: widget.datatype,
+                        cost: widget.cost),
+                  ));
+            },
+            child: Container(
+              child: Row(
+                children: <Widget>[
                   Container(
-                    height: 2,
-                    color: Colors.grey,
+                    child: Text(
+                      "  Metode Pembayaran",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                    Container(
-                    height: 10,
-                    color: Colors.white,
+                  Expanded(
+                    child: Container(),
                   ),
-                      GestureDetector(
-                        onTap: (){
-                            Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => Metode(),
-                    ));
-                        },
-                                              child: Container(
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                child: Text("  Metode Pembayaran",style: TextStyle(
-                                 fontSize: 15,
-                                 fontWeight: FontWeight.bold
-                                ),),
-                              ),
-                              Expanded(
-                                child: Container(),
-                              ),
-                              widget.imagebank == null ?  Container(
-                                width: 100,
-                                height: 50,
-                                child: Image.network("https://siplah.jpstore.id/assets/images/payment/bca.png"),
-                              ):Container(
-                                width: 100,
-                                height: 50,
-                                child: Image.network(widget.imagebank),
-                              ),
-                              Container(
-                                width: 10,
-                              ),
-                              Container(
-                                child: Icon(Icons.arrow_forward_ios,color: Colors.blue,),
-                              )
-                            ],
-                          ),
+                  widget.imagebank == null
+                      ? Container(
+                          width: 100,
+                          height: 50,
+                          child: Image.network(
+                              "https://siplah.jpstore.id/assets/images/payment/bca.png"),
+                        )
+                      : Container(
+                          width: 100,
+                          height: 50,
+                          child: Image.network(widget.imagebank),
                         ),
-                      ),
-                       Container(
-                    height: 10,
-                    color: Colors.white,
+                  Container(
+                    width: 10,
                   ),
                   Container(
-                    height: 2,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: 100,
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.blue,
+                    ),
                   )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: 10,
+            color: Colors.white,
+          ),
+          Container(
+            height: 2,
+            color: Colors.grey,
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 5,
+                ),
+                Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                Container(
+                  color: Colors.white,
+                  child: ListTile(
+                    leading: Icon(Icons.payment),
+                    title: Text('Jumlah Pembelian'),
+                  ),
+                ),
+                Container(
+                  height: 10,
+                  color: Colors.grey,
+                ),
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(widget.totalharga.toString() == null
+                          ? "Total Harga = Rp." + widget.totalharga.toString()
+                          : "Total Harga = Rp." + widget.totalharga.toString()),
+                    )
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    
+                  ],
+                )
+              ],
+            ),
+          )
         ],
       ),
     );

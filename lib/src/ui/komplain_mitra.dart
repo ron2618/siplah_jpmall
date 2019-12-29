@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:siplah_jpmall/src/models/get_token.dart';
 
 class KomplainMitra extends StatefulWidget{
   @override
@@ -48,7 +49,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: {
           'transaksi_id': idx,
@@ -121,7 +122,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: body);
     // print("${response.statusCode}");
@@ -217,7 +218,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: {
           "mitra_id": "" + nama,

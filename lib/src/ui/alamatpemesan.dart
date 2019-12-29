@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/bloc/kabupaten_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/kecamatan_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/provinsi_bloc.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/models/kabupaten_model.dart';
 import 'package:siplah_jpmall/src/models/kecamatan_model.dart';
 import 'package:siplah_jpmall/src/models/provinsi_model.dart';
@@ -63,7 +64,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
             "Content-Type": "application/json",
             "API-App": "siplah_jpmall.id",
             "Api-Key": "4P1_7Pm411_51p114h",
-            "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+            "API-Token": "$Token({this.apitoken})"
           },
           body: body);
       // print("${response.statusCode}");
@@ -237,7 +238,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: body);
     // print("${response.statusCode}");
@@ -288,7 +289,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: body);
     // print("${response.statusCode}");
@@ -315,7 +316,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: {
           "user_id": "" + nama,
@@ -604,7 +605,7 @@ class _Tambahalamat extends State<Tambahalamat> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+          "API-Token": "$Token({this.apitoken})"
         },
         body: body);
     // print("${response.statusCode}");

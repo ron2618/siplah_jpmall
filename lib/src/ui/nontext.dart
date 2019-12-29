@@ -265,7 +265,7 @@ class _NontextState extends State<Nontext> {
                               topLeft: Radius.circular(20)),
                           image: DecorationImage(
                               image:
-                                  NetworkImage(widget.kategori))),
+                                  NetworkImage(widget.kategori!=null?widget.kategori:'https://siplah.jpstore.id/assets/images/no-image.png'))),
                       child: SizedBox(
                         height: 220,
                         width: 150,
@@ -334,8 +334,36 @@ class _NontextState extends State<Nontext> {
         ),),
       ),
     ):Container(
-      
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              topLeft: Radius.circular(20)),
+                          image: DecorationImage(
+                              image:
+                                  NetworkImage('https://siplah.jpstore.id/assets/images/no-image.png'))),
+                      child: SizedBox(
+                        height: 220,
+                        width: 150,
+                        child: Container(
+
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 15,
+                              ),
+                        
+                              SizedBox(
+                                height: 120,
+                              ),
+            SizedBox(height: 20,),
+            
+          ],
+        ),),
+      )
     ),
+
+    //end
               SizedBox(
                 width: 8.0,
               ),

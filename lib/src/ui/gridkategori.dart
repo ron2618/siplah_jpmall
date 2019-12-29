@@ -46,7 +46,7 @@ class _GridKategoriState extends State<GridKategori> {
             child: Center(
               child: Container(
                 height: 120,
-               child: Image.network(widget.data[i]['gambar'],),
+               child: Image.network(widget.data[i]['gambar']!=null?widget.data[i]['gambar']:'https://siplah.jpstore.id/assets/images/no-image.png',),
               ),
             ),
           ),

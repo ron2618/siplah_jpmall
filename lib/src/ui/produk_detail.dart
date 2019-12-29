@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
 import 'package:siplah_jpmall/src/bloc/state_bloc.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/models/produk_sample.dart';
 import 'package:siplah_jpmall/src/ui/star.dart';
 // import 'package:siplah_jpmall/src/ui/star.dart';
@@ -171,7 +172,7 @@ class _DetailProduk2State extends State<DetailProduk2>
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        "API-Token": "$Token({this.apitoken})"
       },
       body: {
         "user_id":widget.id,
@@ -741,7 +742,7 @@ List data2;
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        "API-Token": "$Token({this.apitoken})"
       },
       body: {
         "user_id":widget.penjual_user_id,

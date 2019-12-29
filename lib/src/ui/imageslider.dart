@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'dart:async';
 import 'package:siplah_jpmall/src/ui/mainpage.dart';
 import 'package:http/http.dart' as http;
@@ -111,7 +112,7 @@ class _ImageSliderState extends State<ImageSlider> {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "5b4eefd43a64c539788b356da4910e5e95fb573"
+        "API-Token": "$Token({this.apitoken})"
       },
     );
     // print(response.body);
