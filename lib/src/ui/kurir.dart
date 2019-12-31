@@ -19,20 +19,11 @@ class Kurir extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const Kurir(
-      {Key key,
-      this.kabu,
-      this.tuju,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
 
+ 
   @override
   _KurirState createState() => _KurirState();
 }
@@ -74,7 +65,8 @@ class _KurirState extends State<Kurir> {
                             namamar: widget.namamar,
                             databank: widget.databank,
                             datatype: widget.datatype,
-                            cost: widget.cost),
+                            cost: widget.cost,
+                            idmar:widget.idmar),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -108,7 +100,8 @@ class _KurirState extends State<Kurir> {
                             namamar: widget.namamar,
                             databank: widget.databank,
                             datatype: widget.datatype,
-                            cost: widget.cost),
+                            cost: widget.cost,
+                            idmar:widget.idmar),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -143,6 +136,7 @@ class _KurirState extends State<Kurir> {
                                 databank: widget.databank,
                                 datatype: widget.datatype,
                                 cost: widget.cost,
+                                idmar:widget.idmar
                               )));
                 },
                 leading: ConstrainedBox(
@@ -175,7 +169,8 @@ class _KurirState extends State<Kurir> {
                             namamar: widget.namamar,
                             databank: widget.databank,
                             datatype: widget.datatype,
-                            cost: widget.cost),
+                            cost: widget.cost,
+                            idmar:widget.idmar),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -207,20 +202,11 @@ class KurirJNE extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const KurirJNE(
-      {Key key,
-      this.kabu,
-      this.tuju,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const KurirJNE({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
 
+  
   @override
   _KurirJneState createState() => _KurirJneState();
 }
@@ -230,7 +216,7 @@ class _KurirJneState extends State<KurirJNE> {
   Future<String> getKurirJne(String a, b) async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
@@ -350,6 +336,7 @@ class _KurirJneState extends State<KurirJNE> {
                                                                 widget.databank,
                                                             datatype:
                                                                 widget.datatype,
+                                                                idmar: widget.idmar,
                                                           ),
                                                         ));
                                                   },
@@ -378,19 +365,9 @@ class KurirJNT extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const KurirJNT(
-      {Key key,
-      this.kabu,
-      this.tuju,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const KurirJNT({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
 
   @override
   _KurirJntState createState() => _KurirJntState();
@@ -401,12 +378,12 @@ class _KurirJntState extends State<KurirJNT> {
   Future<String> getKurirJnt() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         'asal': widget.kabu,
@@ -522,6 +499,7 @@ class _KurirJntState extends State<KurirJNT> {
                                                                 widget.databank,
                                                             datatype:
                                                                 widget.datatype,
+                                                                idmar: widget.idmar,
                                                           ),
                                                         ));
                                                   },
@@ -550,19 +528,9 @@ class KurirPos extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const KurirPos(
-      {Key key,
-      this.kabu,
-      this.tuju,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const KurirPos({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
 
   @override
   _KurirPosState createState() => _KurirPosState();
@@ -573,12 +541,12 @@ class _KurirPosState extends State<KurirPos> {
   Future<String> getKurirPos() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         'asal': widget.kabu,
@@ -694,6 +662,7 @@ class _KurirPosState extends State<KurirPos> {
                                                                 widget.databank,
                                                             datatype:
                                                                 widget.datatype,
+                                                                idmar: widget.idmar,
                                                           ),
                                                         ));
                                                   },
@@ -722,19 +691,9 @@ class KurirTIKI extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const KurirTIKI(
-      {Key key,
-      this.kabu,
-      this.tuju,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const KurirTIKI({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
 
   @override
   _KurirTikiState createState() => _KurirTikiState();
@@ -745,12 +704,12 @@ class _KurirTikiState extends State<KurirTIKI> {
   Future<String> getKurirTiki() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         'asal': widget.kabu,
@@ -866,6 +825,7 @@ class _KurirTikiState extends State<KurirTIKI> {
                                                                 widget.databank,
                                                             datatype:
                                                                 widget.datatype,
+                                                                idmar: widget.idmar,
                                                           ),
                                                         ));
                                                   },

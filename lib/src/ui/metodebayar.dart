@@ -9,17 +9,10 @@ class Metode extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const Metode(
-      {Key key,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const Metode({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
+
 
   @override
   _MetodeState createState() => _MetodeState();
@@ -47,13 +40,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/bca.png",
+                              "https://siplah.mascitra.co.id/assets/images/payment/bca.png",
                           datatype: "bank_tranfer",
                           databank: "bca",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -64,7 +58,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/bca.png",
+                    "https://siplah.mascitra.co.id/assets/images/payment/bca.png",
                     fit: BoxFit.fill),
               ),
               title: Text("Bank BCA"),
@@ -80,13 +74,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/mandiri.png",
+                              "https://siplah.mascitra.co.id/assets/images/payment/mandiri.png",
                           datatype: "bank_transfer",
                           databank: "mandiri",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -97,7 +92,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/mandiri.png",
+                    "https://siplah.mascitra.co.id/assets/images/payment/mandiri.png",
                     fit: BoxFit.fill),
               ),
               title: Text("Bank Mandiri"),
@@ -113,13 +108,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/bni.png",
+                              "https://siplah.mascitra.co.id/assets/images/payment/bni.png",
                           datatype: "bank_transfer",
                           databank: "bni",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -130,7 +126,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/bni.png",
+                    "https://siplah.mascitra.co.id/assets/images/payment/bni.png",
                     fit: BoxFit.fill),
               ),
               title: Text("Bank Bni"),
@@ -146,13 +142,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/bca_klikpay.jpeg.png",
+                              "https://siplah.mascitra.co.id/assets/images/payment/bca_klikpay.jpeg.png",
                           datatype: "internet_banking",
                           databank: "bca_klikpay",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -163,7 +160,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/bca_klikpay.jpeg.png",
+                    "https://siplah.mascitra.co.id/assets/images/payment/bca_klikpay.jpeg.png",
                     fit: BoxFit.fill),
               ),
               title: Text("BCA KlikPay"),
@@ -179,13 +176,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/klik_bca.png",
+                              "https://siplah.mascitra.co.id/assets/images/payment/klik_bca.png",
                           datatype: "internet_banking",
                           databank: "bca_klikbca",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -196,7 +194,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/klik_bca.png",
+                    "https://siplah.mascitra.co.id/assets/images/payment/klik_bca.png",
                     fit: BoxFit.fill),
               ),
               title: Text("Klik BCA"),
@@ -212,13 +210,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/mandiri_clickpay.png",
+                              "https://siplah.mascitra.co.id/assets/images/payment/mandiri_clickpay.png",
                           datatype: "internet_banking",
                           databank: "mandiri_clickpay",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -229,7 +228,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/mandiri_clickpay.png",
+                    "https://siplah.mascitra.co.id/assets/images/payment/mandiri_clickpay.png",
                     fit: BoxFit.fill),
               ),
               title: Text("Mandiri clickpay"),
@@ -245,13 +244,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/indomaret.jpg",
+                              "https://siplah.mascitra.co.id/assets/images/payment/indomaret.jpg",
                           datatype: "csotre",
                           databank: "Indomaret",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -262,7 +262,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/indomaret.jpg",
+                    "https://siplah.mascitra.co.id/assets/images/payment/indomaret.jpg",
                     fit: BoxFit.fill),
               ),
               title: Text("Indomaret"),
@@ -278,13 +278,14 @@ class _MetodeState extends State<Metode> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
-                              "https://siplah.jpstore.id/assets/images/payment/alfamart.png",
+                              "https://siplah.mascitra.co.id/assets/images/payment/alfamart.png",
                           datatype: "cstore",
                           databank: "alfamart",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
-                          cost: widget.cost),
+                          cost: widget.cost,
+                          idmar: widget.idmar,),
                     ));
               },
               leading: ConstrainedBox(
@@ -295,7 +296,7 @@ class _MetodeState extends State<Metode> {
                   maxHeight: 120,
                 ),
                 child: Image.network(
-                    "https://siplah.jpstore.id/assets/images/payment/alfamart.png",
+                    "https://siplah.mascitra.co.id/assets/images/payment/alfamart.png",
                     fit: BoxFit.fill),
               ),
               title: Text("Alfamart"),

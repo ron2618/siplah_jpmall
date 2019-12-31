@@ -19,33 +19,133 @@ class PembayaranState extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const PembayaranState(
-      {Key key,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const PembayaranState({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
 
+  
   @override
   _PembayaranState createState() => _PembayaranState();
 }
 
 class _PembayaranState extends State<PembayaranState> {
+
+  Future<http.Response> bayarapi(String idtr) async {
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/pembayaran/bayar';
+
+    Map data = {
+      'transaksi_id': idtr,
+      'payment': {
+      'type': widget.datatype,
+      'bank': widget.databank,
+      },
+      'detail': {
+      'total_ongkir': widget.cost,
+      'sub_total': widget.totalharga,
+      'user_id': id,
+      'token_id': "2",
+      },
+      'marketing': widget.idmar,
+      'kurir': widget.idmar,
+       
+    };
+    Map pay={
+      'payment' : data
+    };
+    //print(_imageFile);
+    //encode Map to JSON
+    var body = json.encode(pay);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+     print("Jadi Draft");
+    } else {
+      _berhasil(context);
+    }
+    return response;
+  }
+
+
+  void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("maaf gagal edit"),
+            ));
+  }
+
+  void _berhasil(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Data berhasil diubah"),
+            ));
+  }
+  List datatrans;
+  String idtrans=null;
+    Future<http.Response> daftartransaksi() async {
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah';
+
+    Map data = {
+      'keranjang_id': keranjang,
+      'user_id': id,
+   
+      
+    };
+    //print(_imageFile);
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    //print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    //print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+        
+   var convertDataToJson = json.decode(response.body);
+      datatrans = convertDataToJson['Data'];
+      idtrans=datatrans[0]['transaksi_id'];
+   
+      
+    }
+    return response;
+  }
+
   List datajne;
   Future<String> getKurir_Jne() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         'asal': kabupaten,
@@ -72,6 +172,7 @@ class _PembayaranState extends State<PembayaranState> {
   String level_id;
   String foto;
   String kabupaten;
+  String keranjang = null;
   getCredential() async {
     final pref = await SharedPreferences.getInstance();
     setState(() {
@@ -81,6 +182,7 @@ class _PembayaranState extends State<PembayaranState> {
       foto = pref.getString("foto");
       id = pref.getString('id');
       kabupaten = pref.getString('kabupaten_id');
+      getAlamatData();
     });
   }
 
@@ -97,12 +199,12 @@ class _PembayaranState extends State<PembayaranState> {
   Future<String> getCartsData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/keranjang/isi'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/isi'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         "user_id": id,
@@ -118,6 +220,7 @@ class _PembayaranState extends State<PembayaranState> {
     });
     tujuan = data2[0]['penjual_kabupaten_id'];
     penjual = data2[0]['penjual_id'];
+    keranjang = data2[0]['id'];
     return "Success";
   }
 
@@ -127,12 +230,12 @@ class _PembayaranState extends State<PembayaranState> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.jpstore.id/api/sekolah/alamat_pengiriman/list'),
+            'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "user_id": "" + id,
@@ -142,7 +245,7 @@ class _PembayaranState extends State<PembayaranState> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
     });
   }
 
@@ -176,7 +279,8 @@ class _PembayaranState extends State<PembayaranState> {
                 width: MediaQuery.of(context).size.width,
                 child: Container(
                   child: data == null
-                      ? Container()
+                      ? Column(
+                children: <Widget>[Center(child: CircularProgressIndicator())])
                       : ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: data.length,
@@ -331,7 +435,7 @@ class _PembayaranState extends State<PembayaranState> {
           //                                                         null
           //                                                     ? x[i]['produk_foto']
           //                                                         [0]['foto']
-          //                                                     : 'https://siplah.jpstore.id/assets/images/no-image.png',
+          //                                                     : 'https://siplah.mascitra.co.id/assets/images/no-image.png',
           //                                                 scale: 4,
           //                                               ),
           //                                               SizedBox(
@@ -399,6 +503,7 @@ class _PembayaranState extends State<PembayaranState> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) => MarketingPem(
+                        idmar:widget.idmar,
                         totalharga: widget.totalharga,
                         imagebank: widget.imagebank,
                         imagekurir: widget.imagekurir,
@@ -462,7 +567,8 @@ class _PembayaranState extends State<PembayaranState> {
                               namamar: widget.namamar,
                               databank: widget.databank,
                               datatype: widget.datatype,
-                              cost: widget.cost),
+                              cost: widget.cost,
+                              idmar:widget.idmar),
                         ));
                   },
                   child: Container(
@@ -579,7 +685,8 @@ class _PembayaranState extends State<PembayaranState> {
                         namamar: widget.namamar,
                         databank: widget.databank,
                         datatype: widget.datatype,
-                        cost: widget.cost),
+                        cost: widget.cost,
+                        idmar:widget.idmar),
                   ));
             },
             child: Container(
@@ -600,7 +707,7 @@ class _PembayaranState extends State<PembayaranState> {
                           width: 100,
                           height: 50,
                           child: Image.network(
-                              "https://siplah.jpstore.id/assets/images/payment/bca.png"),
+                              "https://siplah.mascitra.co.id/assets/images/payment/bca.png"),
                         )
                       : Container(
                           width: 100,
@@ -664,7 +771,27 @@ class _PembayaranState extends State<PembayaranState> {
                 ),
                 Row(
                   children: <Widget>[
-                    
+                     GestureDetector(
+               onTap: (){
+    daftartransaksi();
+               bayarapi(idtrans);
+                //  Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //               builder: (BuildContext context) =>
+                //                   PembayaranState(),
+                //             ));
+                 
+               },
+              child:Container(
+                
+                height: 38,
+                width: 100,
+                color: Colors.cyan,
+                child: Center(
+                  child: Text("Bayar", style: TextStyle(color: Colors.white),)
+                ),
+              )),
                   ],
                 )
               ],

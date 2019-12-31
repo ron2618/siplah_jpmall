@@ -68,7 +68,7 @@ class _MarketingState extends State<Marketing> {
     //
 
     Future<http.Response> daftar_api() async {
-      var url = 'https://siplah.jpstore.id/api/mitra/marketing/edit';
+      var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/edit';
 
       Map data = {
         'id': idx,
@@ -95,7 +95,7 @@ class _MarketingState extends State<Marketing> {
             "Content-Type": "application/json",
             "API-App": "siplah_jpmall.id",
             "Api-Key": "4P1_7Pm411_51p114h",
-            "API-Token": "$Token({this.apitoken})"
+            "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
           },
           body: body);
       // print("${response.statusCode}");
@@ -326,7 +326,7 @@ class _MarketingState extends State<Marketing> {
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
-    var url = 'https://siplah.jpstore.id/api/mitra/marketing/hapus';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/hapus';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -337,7 +337,7 @@ class _MarketingState extends State<Marketing> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");
@@ -378,12 +378,12 @@ class _MarketingState extends State<Marketing> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.jpstore.id/api/mitra/marketing/tampil'),
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "user_id": "" + nama,
@@ -393,7 +393,7 @@ class _MarketingState extends State<Marketing> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
     });
   }
 
@@ -634,7 +634,7 @@ class _TambahMarketingState extends State<TambahMarketing> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.jpstore.id/api/mitra/marketing/tambah';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/marketing/tambah';
 
     Map data = {
       'user_id': id,
@@ -659,7 +659,7 @@ class _TambahMarketingState extends State<TambahMarketing> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");
@@ -978,18 +978,10 @@ class MarketingPem extends StatefulWidget {
   final String namamar;
   final String imagekurir;
   final int cost;
+  final String idmar;
 
-  const MarketingPem(
-      {Key key,
-      this.penjual,
-      this.imagebank,
-      this.datatype,
-      this.databank,
-      this.totalharga,
-      this.namamar,
-      this.imagekurir,
-      this.cost})
-      : super(key: key);
+  const MarketingPem({Key key, this.penjual, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
+
 
   @override
   _MarketingPemState createState() => _MarketingPemState();
@@ -1001,12 +993,12 @@ class _MarketingPemState extends State<MarketingPem> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.jpstore.id/api/mitra/marketing/tampil'),
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "user_id": "" + widget.penjual,
@@ -1015,7 +1007,7 @@ class _MarketingPemState extends State<MarketingPem> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
     });
   }
 
@@ -1129,6 +1121,7 @@ class _MarketingPemState extends State<MarketingPem> {
                                                     builder: (BuildContext
                                                             context) =>
                                                         PembayaranState(
+                                                          idmar:data[i]['id'],
                                                             totalharga: widget
                                                                 .totalharga,
                                                             imagebank:

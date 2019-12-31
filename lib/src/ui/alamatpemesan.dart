@@ -42,7 +42,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
 
     Future<http.Response> update_api() async {
       var url =
-          'https://siplah.jpstore.id/api/sekolah/alamat_pengiriman/update';
+          'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/update';
 
       Map data = {
         'id': idx,
@@ -64,7 +64,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
             "Content-Type": "application/json",
             "API-App": "siplah_jpmall.id",
             "Api-Key": "4P1_7Pm411_51p114h",
-            "API-Token": "$Token({this.apitoken})"
+            "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
           },
           body: body);
       // print("${response.statusCode}");
@@ -227,7 +227,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     //a=a+id;
     print(id);
     var url =
-        'https://siplah.jpstore.id/api/sekolah/alamat_pengiriman/delete';
+        'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/delete';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -238,7 +238,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");
@@ -278,7 +278,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     //print(id);
     print(a);
     var url =
-        'https://siplah.jpstore.id/api/sekolah/alamat_pengiriman/set_utama';
+        'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/set_utama';
 
     Map data = {'user_id': "" + nama, 'id': id, 'is_utama': a};
     //encode Map to JSON
@@ -289,7 +289,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");
@@ -311,12 +311,12 @@ class _AlamatPemesan extends State<AlamatPemesan> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.jpstore.id/api/sekolah/alamat_pengiriman/list'),
+            'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "user_id": "" + nama,
@@ -326,7 +326,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
     });
   }
 
@@ -342,9 +342,9 @@ class _AlamatPemesan extends State<AlamatPemesan> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   void _onRefresh() async {
-    // monitor network fetch
+      // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
+      getJsonData();// if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
 
@@ -353,9 +353,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     getJsonData();
     getCredential();
     //print(data.length);
-    return data == null
-        ? Scaffold()
-        : Scaffold(
+    return Scaffold(
             appBar: AppBar(
               actions: <Widget>[
                 IconButton(
@@ -377,8 +375,9 @@ class _AlamatPemesan extends State<AlamatPemesan> {
                   style: TextStyle(color: Colors.white)),
             ),
             body: data == null
-                ? Container()
-                : SmartRefresher(
+                      ? Column(
+                children: <Widget>[Center(child: CircularProgressIndicator())])
+                      : SmartRefresher(
                     enablePullDown: true,
                     enablePullUp: true,
                     header: WaterDropHeader(),
@@ -584,7 +583,7 @@ class _Tambahalamat extends State<Tambahalamat> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.jpstore.id/api/sekolah/alamat_pengiriman/add';
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/add';
 
     Map data = {
       'user_id': id,
@@ -605,7 +604,7 @@ class _Tambahalamat extends State<Tambahalamat> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");

@@ -20,7 +20,7 @@ int totalharga = 0;
  Future<http.Response> _delete(String idx) async {
     //a=a+id;
     //print(id);
-    var url = 'https://siplah.jpstore.id/api/sekolah/keranjang/delete';
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/keranjang/delete';
 
     Map data = {'user_id': "" + id, 'id': idx};
     //encode Map to JSON
@@ -31,7 +31,7 @@ int totalharga = 0;
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");
@@ -70,7 +70,7 @@ int totalharga = 0;
    Future<http.Response> qtyjson(String id_produk,String jumlah_produk) async {
     //a=a+id;
     //print(id);
-    var url = 'https://siplah.jpstore.id/api/sekolah/keranjang/tambah_stok';
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah_stok';
 
    
     //encode Map to JSON
@@ -81,7 +81,7 @@ int totalharga = 0;
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "id" : id_produk,
@@ -125,12 +125,12 @@ int totalharga = 0;
    Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/keranjang/isi'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/isi'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         "user_id": id,
@@ -243,7 +243,7 @@ getCredential() async {
                 children: <Widget>[
                   Text("Total Harga"),
 
-                  totalharga == 0 ? CircularProgressIndicator():  Text(totalharga.toString(), style: TextStyle(fontSize: 14, color: Colors.cyan),)
+                  totalharga == 0 ? Container(height: 10, child:CircularProgressIndicator()):  Text(totalharga.toString(), style: TextStyle(fontSize: 14, color: Colors.cyan),)
                 ],
               ),
               GestureDetector(
@@ -351,7 +351,7 @@ getCredential() async {
                               Container(
                                   height: 50,
                                   width: 50,
-                                  child: Image.network(x[i]['produk_foto']!=null ? x[i]['produk_foto'][0]['foto']:'https://siplah.jpstore.id/assets/images/no-image.png')),
+                                  child: Image.network(x[i]['produk_foto']!=null ? x[i]['produk_foto'][0]['foto']:'https://siplah.mascitra.co.id/assets/images/no-image.png')),
                               Column(
                                 // mainAxisAlignment: ,
                                 crossAxisAlignment: CrossAxisAlignment.start,

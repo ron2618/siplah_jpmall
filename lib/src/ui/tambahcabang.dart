@@ -29,7 +29,7 @@ class _TambahCabangState extends State<TambahCabang> {
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
-    var url = 'https://siplah.jpstore.id/api/mitra/cabang/delete';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/cabang/delete';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -40,7 +40,7 @@ class _TambahCabangState extends State<TambahCabang> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");
@@ -138,7 +138,7 @@ class _TambahCabangState extends State<TambahCabang> {
   
   Future<http.Response> daftar_api() async {
     
-    var url = 'https://siplah.jpstore.id/api/mitra/cabang/update';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/cabang/update';
 
     Map data = {
       'id': idx,
@@ -166,7 +166,7 @@ class _TambahCabangState extends State<TambahCabang> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");
@@ -368,12 +368,12 @@ class _TambahCabangState extends State<TambahCabang> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.jpstore.id/api/mitra/cabang/list'),
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/cabang/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "user_id": "" + nama,
@@ -638,7 +638,7 @@ class _CabangADD extends State<CabangADD> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.jpstore.id/api/mitra/cabang/add';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/cabang/add';
 
     Map data = {
       'cabang_user_id': id,
@@ -667,7 +667,7 @@ class _CabangADD extends State<CabangADD> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");

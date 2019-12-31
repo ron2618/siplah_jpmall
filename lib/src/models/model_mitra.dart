@@ -20,12 +20,12 @@ class Mitra {
   }
 
   static Future<List<Mitra>> getMitra() async{
-    String apiURL = "https://siplah.jpstore.id/api/admin/data_mitra/list";
+    String apiURL = "https://siplah.mascitra.co.id/api/admin/data_mitra/list";
     
     var apiResult = await http.post(apiURL,headers: {
        "API-App":"siplah_jpmall.id",
       "API-Key":"4P1_7Pm411_51p114h",
-      "API-Token":"$Token({this.apitoken})"
+      "API-Token":"575696f2ed816e00edbfa90f917c6f757e5ce05a"
     });
     var jsonObject = json.decode(apiResult.body);
 

@@ -41,7 +41,7 @@ class _WelcomePageState extends State<WelcomePage> {
   ];
 
   Future<http.Response> postRequest() async {
-    var url = 'https://siplah.jpstore.id/api/api/get_token';
+    var url = 'https://siplah.mascitra.co.id/api/api/get_token';
 
     Map data = {'app': 'siplah_jpmall.id'};
     //encode Map to JSON
@@ -378,7 +378,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     }
 
     Future<http.Response> login_api() async {
-      var url = 'https://siplah.jpstore.id/api/user/login';
+      var url = 'https://siplah.mascitra.co.id/api/user/login';
 
       Map data = {'email': username.text, 'password': password.text};
       //encode Map to JSON
@@ -389,13 +389,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             "Content-Type": "application/json",
             "API-App": "siplah_jpmall.id",
             "Api-Key": "4P1_7Pm411_51p114h",
-            "API-Token": "$Token({this.apitoken})"
+            "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
           },
           body: body);
 
       // var response1 = await http.post(
       //       //Encode the url
-      //       Uri.encodeFull('https://siplah.jpstore.id/api/user/login'),
+      //       Uri.encodeFull('https://siplah.mascitra.co.id/api/user/login'),
       //       headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":$Token({this.apitoken})fd43a64c539788b356da4910e5e95fb573"},
       //       body:{
       //         "email":username.text,
@@ -940,7 +940,7 @@ class _Register2State extends State<Register2> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.jpstore.id/api/user/daftar';
+    var url = 'https://siplah.mascitra.co.id/api/user/daftar';
 
     Map data = {
       'nama': widget.nama,
@@ -964,7 +964,7 @@ class _Register2State extends State<Register2> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");

@@ -24,14 +24,14 @@ class Praga {
 
   static Future<List<Praga>> getUsers() async{
 
-    String apiURL = "https://siplah.jpstore.id/api/home/list?id=7" ;
+    String apiURL = "https://siplah.mascitra.co.id/api/home/list?id=7" ;
 
  
     
     var apiResult = await http.post(apiURL,headers: {
       "API-App":"siplah_jpmall.id",
       "API-Key":"4P1_7Pm411_51p114h",
-      "API-Token":"$Token({this.apitoken})"
+      "API-Token":"575696f2ed816e00edbfa90f917c6f757e5ce05a"
     });
     var jsonObject = json.decode(apiResult.body);
     Map<String, dynamic> map = jsonDecode(apiResult.body);

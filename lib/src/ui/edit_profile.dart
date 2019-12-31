@@ -34,12 +34,12 @@ class _Editprofile extends State<Editprofile> {
     var response = await http.post(
         //Encode the url
         Uri.encodeFull(
-            'https://siplah.jpstore.id/api/admin/data_mitra/list'),
+            'https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "id": "" + nama
@@ -96,7 +96,7 @@ class _Editprofile extends State<Editprofile> {
                       Image.network(
                          data[0]['foto'] != null
                               ? data[0]['foto']
-                              : ('https://siplah.jpstore.id/assets/images/no-image.png'),
+                              : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
                     ),
                       ),
                     ),
@@ -415,12 +415,12 @@ class _FormEdit extends State<FormEdit> {
     var response = await http.post(
         //Encode the url
         Uri.encodeFull(
-            'https://siplah.jpstore.id/api/admin/data_mitra/list'),
+            'https://siplah.mascitra.co.id/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "id": "" + id
@@ -540,7 +540,7 @@ class _FormEdit extends State<FormEdit> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.jpstore.id/api/mitra/user/profil_update';
+    var url = 'https://siplah.mascitra.co.id/api/mitra/user/profil_update';
 
     Map data = {
       'user_id': id,
@@ -576,7 +576,7 @@ class _FormEdit extends State<FormEdit> {
           "Content-Type": "application/json",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: body);
     // print("${response.statusCode}");

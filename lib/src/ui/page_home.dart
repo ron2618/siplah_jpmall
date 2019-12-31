@@ -32,12 +32,12 @@ class _HomePageState extends State<HomePage> {
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/api/home/list'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         'user_id':id
@@ -117,7 +117,6 @@ getCredential() async {
   @override
   Widget build(BuildContext context) {
     getJsonData();
-    
     return Scaffold(
       body: NestedScrollView(
             controller: _controller,
@@ -331,10 +330,10 @@ List<Produk> _listProduk = <Produk>[
               "http://ecs7.tokopedia.net/img/cache/700/product-1/2018/12/27/44760629/44760629_ab85161d-287f-48cb-8d73-0ceac2ba64d3_370_543.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-sd-panduan-praktis-pengembangan-karakter-dan-budaya-bangsa.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-sd-panduan-praktis-pengembangan-karakter-dan-budaya-bangsa.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-sd-panduan-praktis-pengembangan-karakter-dan-budaya-bangsa.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-sd-panduan-praktis-pengembangan-karakter-dan-budaya-bangsa.jpg"),
     ],
     loved: false,
     kategori: [
@@ -367,10 +366,10 @@ List<Produk> _listProduk = <Produk>[
               "http://ecs7.tokopedia.net/img/cache/200-square/product-1/2019/2/11/4648816/4648816_14718806-cfcf-41f3-85ba-cc783a80a7a3_393_393.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-belajar-berbahagia.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-belajar-berbahagia.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-belajar-berbahagia.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-belajar-berbahagia.jpg"),
     ],
     loved: true,
     kategori: [
@@ -396,10 +395,10 @@ List<Produk> _listProduk = <Produk>[
     gambar: [
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg"),
     ],
     loved: false,
     kategori: [
@@ -428,16 +427,16 @@ List<Produk> _listProduk = <Produk>[
     gambar: [
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
       Gambar(
           link:
-              "http://jpstore.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
+              "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg"),
     ],
     loved: false,
     kategori: [

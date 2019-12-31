@@ -167,12 +167,12 @@ class _DetailProduk2State extends State<DetailProduk2>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/keranjang/tambah'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         "user_id":widget.id,
@@ -737,12 +737,12 @@ List data2;
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/api/home/list'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "$Token({this.apitoken})"
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
         "user_id":widget.penjual_user_id,
@@ -795,7 +795,7 @@ ListView.builder(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10))),
-                            child: Image.network(data2[i]['foto']==null?'https://siplah.jpstore.id/assets/images/no-image.png':data2[i]['foto'],
+                            child: Image.network(data2[i]['foto']==null?'https://siplah.mascitra.co.id/assets/images/no-image.png':data2[i]['foto'],
                               fit: BoxFit.fill,
                             )),
                         Positioned(

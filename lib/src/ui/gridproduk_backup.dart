@@ -154,7 +154,7 @@
 //   ProList(
 //       color: Colors.red,
 //       index: 1,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Ichinose Chizuru Makinohara Shoko 12",
 //       price: 150000,
 //       qty: 1,
@@ -164,7 +164,7 @@
 //   ProList(
 //       color: Colors.cyan,
 //       index: 2,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-sd-panduan-praktis-pengembangan-karakter-dan-budaya-bangsa.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-sd-panduan-praktis-pengembangan-karakter-dan-budaya-bangsa.jpg",
 //       name: "Makinohara Shoko",
 //       price: 60000,
 //       qty: 3,
@@ -174,7 +174,7 @@
 //   ProList(
 //       color: Colors.green,
 //       index: 3,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-buku-harian-kirana-tentang-sahabatku-dan-indonesiaku.jpg",
 //       name: "Sakurajima Mai",
 //       price: 105000,
 //       qty: 5,
@@ -184,7 +184,7 @@
 //   ProList(
 //       color: Colors.lime,
 //       index: 4,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-belajar-berbahagia.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-belajar-berbahagia.jpg",
 //       name: "Yuki Setsuna",
 //       price: 1150000,
 //       qty: 10,
@@ -194,7 +194,7 @@
 //   ProList(
 //       color: Colors.blue,
 //       index: 5,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Aragaki Ayase",
 //       price: 5000,
 //       qty: 4,
@@ -204,7 +204,7 @@
 //   ProList(
 //       color: Colors.red,
 //       index: 1,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Ichinose Chizuru",
 //       price: 150000,
 //       qty: 1,
@@ -214,7 +214,7 @@
 //   ProList(
 //       color: Colors.cyan,
 //       index: 2,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Makinohara Shoko",
 //       price: 60000,
 //       qty: 3,
@@ -224,7 +224,7 @@
 //   ProList(
 //       color: Colors.green,
 //       index: 3,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Sakurajima Mai",
 //       price: 105000,
 //       qty: 5,
@@ -234,7 +234,7 @@
 //   ProList(
 //       color: Colors.lime,
 //       index: 4,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Yuki Setsuna",
 //       price: 1150000,
 //       qty: 10,
@@ -244,7 +244,7 @@
 //   ProList(
 //       color: Colors.blue,
 //       index: 5,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Aragaki Ayase",
 //       price: 5000,
 //       qty: 4,
@@ -254,7 +254,7 @@
 //   ProList(
 //       color: Colors.red,
 //       index: 1,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Ichinose Chizuru",
 //       price: 150000,
 //       qty: 1,
@@ -264,7 +264,7 @@
 //   ProList(
 //       color: Colors.cyan,
 //       index: 2,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Makinohara Shoko",
 //       price: 60000,
 //       qty: 3,
@@ -274,7 +274,7 @@
 //   ProList(
 //       color: Colors.green,
 //       index: 3,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Sakurajima Mai",
 //       price: 105000,
 //       qty: 5,
@@ -284,7 +284,7 @@
 //   ProList(
 //       color: Colors.lime,
 //       index: 4,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Yuki Setsuna",
 //       price: 1150000,
 //       qty: 10,
@@ -294,7 +294,7 @@
 //   ProList(
 //       color: Colors.blue,
 //       index: 5,
-//       link: "http://jpstore.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
+//       link: "http://mascitra.co.online/files/product/2019/buku-nonteks-smp-budidaya-pisang.jpg",
 //       name: "Aragaki Ayase",
 //       price: 5000,
 //       qty: 4,

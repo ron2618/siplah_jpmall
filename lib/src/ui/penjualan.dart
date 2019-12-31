@@ -18,12 +18,12 @@ class _PenjualanState extends State<Penjualan> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.jpstore.id/api/mitra/penjualan/tampil'),
+            'https://siplah.mascitra.co.id/api/mitra/penjualan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "$Token({this.apitoken})"
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
           "user_id": "" + nama,
