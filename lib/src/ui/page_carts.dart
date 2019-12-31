@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/ui/pembayaran.dart';
+import 'package:intl/intl.dart';
 
 
 class CartsPage extends StatefulWidget {
@@ -15,8 +16,8 @@ class CartsPage extends StatefulWidget {
 
 class _CartsPageState extends State<CartsPage> {
 int totalharga = 0;
-
-
+int load = 0;
+  final formatter = new NumberFormat("#,###");
  Future<http.Response> _delete(String idx) async {
     //a=a+id;
     //print(id);
@@ -66,7 +67,10 @@ int totalharga = 0;
               content: Text("Data berhasil diubah"),
             ));
   }
-
+ void totalmethod(){
+           getJsonData();
+           load =1;
+         }
    Future<http.Response> qtyjson(String id_produk,String jumlah_produk) async {
     //a=a+id;
     //print(id);
@@ -188,11 +192,11 @@ getCredential() async {
     getJsonData();
   }
    var qtyjumlah = 0;
-  
+     
   @override
   Widget build(BuildContext context) {
     //print(data);
-         
+     
     return Container(
     
       child: Scaffold(
@@ -243,7 +247,7 @@ getCredential() async {
                 children: <Widget>[
                   Text("Total Harga"),
 
-                  totalharga == 0 ? Container(height: 10, child:CircularProgressIndicator()):  Text(totalharga.toString(), style: TextStyle(fontSize: 14, color: Colors.cyan),)
+                  totalharga == 0 ? Container(height: 20, child:Text("Menghitung..")):  Text('Rp . '+formatter.format(totalharga), style: TextStyle(fontSize: 14, color: Colors.cyan),)
                 ],
               ),
               GestureDetector(
@@ -307,17 +311,7 @@ getCredential() async {
                 Row( // toko
                 // mainAxisAlignment: MainAxis,
                   children: <Widget>[
-                    Icon(Icons.check_box, color: Colors.cyan),
-                    SizedBox(width: 10.0,),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(x[0]['penjual_nama'], style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),),
-                        SizedBox(height: 3.0,),
-                        Text(x[0]['penjual_kabupaten_nama'], style: TextStyle(color: Colors.black26),),
-                      ],
-                    ),
+                   
                   ],
                 ),
                 SizedBox(height: 10,),
@@ -334,11 +328,15 @@ getCredential() async {
                             final x = data[0]['Produk'];
                       String a = 'aku'; 
                       int totalqty  = int.parse(x[i]['jumlah']);
-                      String harga = x[i]['produk_harga'].replaceAll('.', '');
-                      var harga2 = int.parse(harga);
+                     bool aktif = false;
+                    
                       qtyjumlah = int.parse(x[i]["jumlah"]);
-                      int harga3 = harga2 * qtyjumlah;
+                      int harga3 = x[i]['sub_total'];
                         totalharga = totalharga + harga3;
+                        if(load == 0){
+                          
+                            totalmethod();
+                        }
                         
                        _qty = TextEditingController(text: totalqty.toString());
                       return Column(// produk
@@ -347,7 +345,9 @@ getCredential() async {
                           Row( // title
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Icon(Icons.check_box, color: Colors.cyan),
+                            Container(
+                              width: 20,
+                              child: aktif == true?  IconButton(iconSize: 0.2, icon: Icon(Icons.check_box, color: Colors.cyan ) ,onPressed: (){},)  :IconButton(icon: Icon(Icons.check_box, color: Colors.cyan),onPressed: (){},)),
                               Container(
                                   height: 50,
                                   width: 50,
@@ -447,7 +447,7 @@ getCredential() async {
                             ],
                           ),
                           SizedBox(height: 15,),
-                          Text("Tulis Catatan untuk Toko", style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.w500),),
+                          // Text("Tulis Catatan untuk Toko", style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.w500),),
                           SizedBox(height: 15,),
                           // _controllerProduk.offset != _controllerProduk.position.maxScrollExtent ?  Container() :   Divider()
                         ],
