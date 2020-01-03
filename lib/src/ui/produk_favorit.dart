@@ -59,7 +59,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Peringatan"),
-              content: Text("Data berhasil diubah"),
+              content: Text("Buku telah dihapus dari daftar favorit"),
             ));
   }
    String nama;

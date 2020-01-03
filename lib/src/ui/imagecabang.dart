@@ -35,7 +35,7 @@ class _CabangMitraState extends State<CabangMitra> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
       loading = 1;
     });
   }
@@ -150,7 +150,7 @@ class _LihatCabang extends State<LihatCabang> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
       loading = 1;
       //print(data.length);
     });

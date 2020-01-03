@@ -48,7 +48,7 @@ class _Editprofile extends State<Editprofile> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
     });
   }
 

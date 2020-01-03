@@ -274,7 +274,8 @@ getCredential() async {
         ),
         body: Container(
           color: Colors.black12,
-          child: data != null ?_itemada(context) : Container(),
+          child: data != null ?_itemada(context) :Container(
+                child:Center(child: CircularProgressIndicator())),
           // child: ListView(
           //   children: <Widget>[
           //     // item == false

@@ -131,7 +131,7 @@ class _KomplainState extends State<KomplainSekolah>{
 
     // print("${response.body}");
     Map<String, dynamic> map = jsonDecode(response.body);
-    print(map);
+    //print(map);
     if (map["Error"] == true || map["Error"] == "true") {
       _showAlert(context);
     } else {
@@ -140,6 +140,29 @@ class _KomplainState extends State<KomplainSekolah>{
     }
     return response;
   }
+  //   Future<String> getJsonData() async {
+  //   var response = await http.post(
+  //     //Encode the url
+  //     Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/cabang/list'),
+  //     headers: {
+  //       "Content-Type": "application/x-www-form-urlencoded",
+  //       "API-App": "siplah_jpmall.id",
+  //       "Api-Key": "4P1_7Pm411_51p114h",
+  //       "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+  //     },
+  //     body: {
+  //       "user_id": "" + iduser,
+  //     },
+  //   );
+  //   //print(response.body);
+  //   setState(() {
+  //     // ignore: deprecated_member_use
+  //     var convertDataToJson = json.decode(response.body);
+  //     data = convertDataToJson['data'];
+  //     loading = 1;
+  //     //print(data.length);
+  //   });
+  // }
  void _showAlertupload(BuildContext context) {
     showDialog(
         context: context,
@@ -177,6 +200,12 @@ class _KomplainState extends State<KomplainSekolah>{
                TextField(
               decoration: InputDecoration(hintText: ""+po==null?"Purchase Order : -":"Purchase Order : "+po),
               enabled: false,
+              ),
+              ListView.builder(
+                itemCount: 2,
+                itemBuilder: (context,i){
+
+                }
               ),
                TextField(
                 controller: pesan,

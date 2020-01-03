@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/bloc/state_bloc.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/models/produk_sample.dart';
@@ -301,7 +302,7 @@ class _DetailProduk2State extends State<DetailProduk2>
               //   elevation: 0.0,
               // ),
              CustomBottomSheet(
-               nama: widget.nama,gambar: widget.gambar,harga: widget.harga == '0'?"Rp "+ widget.harga:"Rp "+widget.harga,penjual_user_id: widget.penjual_user_id,
+               nama: widget.nama,gambar: widget.gambar,harga: widget.harga == '0'?"Rp "+ widget.harga:"Rp "+widget.harga,penjual_user_id: widget.penjual_user_id,produk_id:widget.produk_id
              ),
             ],
           ),
@@ -398,10 +399,11 @@ class SheetContainer extends StatelessWidget {
   final String harga;
   final String gambar;
   final String penjual_user_id;
+  final String produk_id;
 
-  const SheetContainer({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id}) : super(key: key);
+  const SheetContainer({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id, this.produk_id}) : super(key: key);
 
-  
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -420,7 +422,7 @@ class SheetContainer extends StatelessWidget {
           Expanded(
               flex: 1,
               child: SheetItems(
-                nama: nama,gambar: gambar,harga: harga,penjual_user_id: penjual_user_id,)
+                nama: nama,gambar: gambar,harga: harga,penjual_user_id: penjual_user_id,produk_id:produk_id )
           )],
       ),
     );
@@ -451,9 +453,11 @@ class CustomBottomSheet extends StatefulWidget {
   final String harga;
   final String gambar;
   final String penjual_user_id;
+  final String produk_id;
 
-  const CustomBottomSheet({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id}) : super(key: key);
+  const CustomBottomSheet({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id, this.produk_id}) : super(key: key);
 
+  
   @override
   _CustomBottomSheetState createState() => _CustomBottomSheetState();
 }
@@ -526,7 +530,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet>
             return;
           }
         },
-        child: SheetContainer(nama: widget.nama,gambar: widget.gambar,harga: widget.harga,penjual_user_id: widget.penjual_user_id,),
+        child: SheetContainer(nama: widget.nama,gambar: widget.gambar,harga: widget.harga,penjual_user_id: widget.penjual_user_id,produk_id:widget.produk_id),
       ),
     );
   }
@@ -537,10 +541,11 @@ class SheetItems extends StatefulWidget {
   final String harga;
   final String gambar;  
   final String penjual_user_id;
+  final String produk_id;
 
-  const SheetItems({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id}) : super(key: key);
+  const SheetItems({Key key, this.nama, this.harga, this.gambar, this.penjual_user_id, this.produk_id}) : super(key: key);
 
-
+ 
  
   
 
@@ -555,7 +560,15 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
 
   Animation<double> animation;
   AnimationController controller;
-
+  String nama,level_id;
+getCredential() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      nama = pref.getString("id");
+       level_id = pref.getString("level_id");
+    });
+    //print("id profile sklh= " + nama);
+  }
   @override
   void initState() {
     super.initState();
@@ -574,8 +587,59 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
 
   bool isExpanded = false;
 
+ Future<http.Response> _setfavorit(String id) async {
+    //a=a+id;
+    //print(id);
+  
+    var url =
+        'https://siplah.mascitra.co.id/api/sekolah/produk_favorit/tambah';
+
+    Map data = {'user_id': "" + nama, 'produk_id':id, };
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+      // savedata();
+      _berhasil(context);
+    }
+    return response;
+  }
+  void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("maaf gagal edit"),
+            ));
+  }
+
+  void _berhasil(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("Buku Telah Masuk Dalam Menu Favorit"),
+            ));
+  }
   @override
   Widget build(BuildContext context) {
+    getCredential();
+   
     var price  = widget.harga;
     return ListView(
       children: <Widget>[
@@ -607,18 +671,27 @@ class _SheetItemsState extends State<SheetItems> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
+                  //edit
+                 
+                          level_id == '2' ? 
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.grey,
                     child: true == true
-                        ? Icon(
+                        ?     IconButton(
+                    icon: Icon(
                             Icons.favorite,
                             color: Colors.redAccent,
-                          )
+                          ),
+                    onPressed: () => {
+                          _setfavorit(widget.produk_id)
+                        })
                         : Icon(
                             Icons.favorite_border,
                           ),
-                  ),
+                  ):Container()
+
+
                 ],
               ),
               Container(

@@ -383,7 +383,7 @@ class _TambahCabangState extends State<TambahCabang> {
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
     });
   }
 

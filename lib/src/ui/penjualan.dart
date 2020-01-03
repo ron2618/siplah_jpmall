@@ -205,7 +205,8 @@ class _PenjualanState extends State<Penjualan> {
                           ),
                         )
                       ])),
-                    ]));
+                    ])
+                    );
                   }),
     );
   }

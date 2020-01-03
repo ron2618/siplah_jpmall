@@ -264,7 +264,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
             ));
   }
 
-  void _berhasil(BuildContext context) {
+  void _berhasil(BuildContext context,) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -272,7 +272,15 @@ class _AlamatPemesan extends State<AlamatPemesan> {
               content: Text("Data berhasil diubah"),
             ));
   }
-
+   void _berhasil1(BuildContext context,z) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text(""+z),
+            ));
+  }
+String z;
   Future<http.Response> _setlocation(String id, a) async {
     //a=a+id;
     //print(id);
@@ -296,12 +304,13 @@ class _AlamatPemesan extends State<AlamatPemesan> {
 
     // print("${response.body}");
     Map<String, dynamic> map = jsonDecode(response.body);
-    print(map);
+    //print(map);
     if (map["Error"] == true || map["Error"] == "true") {
       _showAlert(context);
     } else {
+     z=map["Pesan_sys"]; 
       // savedata();
-      _berhasil(context);
+      _berhasil1(context,z);
     }
     return response;
   }

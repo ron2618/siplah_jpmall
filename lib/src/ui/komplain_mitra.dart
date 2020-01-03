@@ -60,7 +60,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      datakomen = convertDataToJson['Data'];
+      datakomen = convertDataToJson['data'];
     });
   }
   getKomendata();
@@ -227,7 +227,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
-      data = convertDataToJson['Data'];
+      data = convertDataToJson['data'];
     });
   }
 
