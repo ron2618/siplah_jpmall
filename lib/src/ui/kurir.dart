@@ -733,7 +733,7 @@ class _KurirTikiState extends State<KurirTIKI> {
   @override
   Widget build(BuildContext context) {
     getKurirTiki();
-
+print(widget.kabu +" an "+ widget.tuju);
     return Scaffold(
       appBar: AppBar(
         title: Text("Kurir Tiki"),

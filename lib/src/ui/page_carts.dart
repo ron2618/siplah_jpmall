@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/ui/pembayaran.dart';
 import 'package:intl/intl.dart';
+import 'globals.dart' as globals;
 
 
 class CartsPage extends StatefulWidget {
@@ -17,6 +18,10 @@ class CartsPage extends StatefulWidget {
 class _CartsPageState extends State<CartsPage> {
 int totalharga = 0;
 int load = 0;
+ bool check = false;
+ int akhirtotal= 0;
+ List<int> _subtotal = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  List<bool> _check = [false,false,false,false,false,false,false,false,false];
   final formatter = new NumberFormat("#,###");
  Future<http.Response> _delete(String idx) async {
     //a=a+id;
@@ -67,8 +72,9 @@ int load = 0;
               content: Text("Data berhasil diubah"),
             ));
   }
- void totalmethod(){
+ void totalmethod(int a){
            getJsonData();
+           totalharga = totalharga+a;
            load =1;
          }
    Future<http.Response> qtyjson(String id_produk,String jumlah_produk) async {
@@ -196,7 +202,7 @@ getCredential() async {
   @override
   Widget build(BuildContext context) {
     //print(data);
-     
+  
     return Container(
     
       child: Scaffold(
@@ -246,8 +252,7 @@ getCredential() async {
                 // mainAxisAlignment: Main,
                 children: <Widget>[
                   Text("Total Harga"),
-
-                  totalharga == 0 ? Container(height: 20, child:Text("Menghitung..")):  Text('Rp . '+formatter.format(totalharga), style: TextStyle(fontSize: 14, color: Colors.cyan),)
+Text('Rp . '+formatter.format(totalharga), style: TextStyle(fontSize: 14, color: Colors.cyan),)
                 ],
               ),
               GestureDetector(
@@ -333,11 +338,13 @@ getCredential() async {
                     
                       qtyjumlah = int.parse(x[i]["jumlah"]);
                       int harga3 = x[i]['sub_total'];
-                        totalharga = totalharga + harga3;
-                        if(load == 0){
-                          
-                            totalmethod();
-                        }
+                      _subtotal[i] = harga3;
+                      print(_subtotal);
+                      
+                      
+                           
+                           
+                        
                         
                        _qty = TextEditingController(text: totalqty.toString());
                       return Column(// produk
@@ -348,7 +355,21 @@ getCredential() async {
                             children: <Widget>[
                             Container(
                               width: 20,
-                              child: aktif == true?  IconButton(iconSize: 0.2, icon: Icon(Icons.check_box, color: Colors.cyan ) ,onPressed: (){},)  :IconButton(icon: Icon(Icons.check_box, color: Colors.cyan),onPressed: (){},)),
+                              child: Checkbox(
+            value: _check[i] == false ? false : true,
+            onChanged: (bool value) {
+                setState(() {
+                    _check[i]=value;
+                    if (value == true){
+                         totalmethod(_subtotal[i]);
+                    }else{
+                       totalmethod(_subtotal[i]-_subtotal[i]*2);
+                    }
+                    
+                });
+            },
+        ),
+                            ),
                               Container(
                                   height: 50,
                                   width: 50,
