@@ -747,7 +747,7 @@ print(widget.kabu +" an "+ widget.tuju);
                 scrollDirection: Axis.vertical,
                 // physics: ScrollPhysics(),
                 // shrinkWrap: true,
-                itemCount: pnjngtiki.length,
+                itemCount: 2,
                 itemBuilder: (context, i) {
                   //print(data[i]['is_utama']);
                   final x = datatiki[i]['costs'];
@@ -772,7 +772,7 @@ print(widget.kabu +" an "+ widget.tuju);
                                           children: <Widget>[
                                             Align(
                                               alignment: Alignment.topLeft,
-                                              child: Text(datatiki[i]['code']),
+                                              child: Text(y[i]['code']),
                                             )
                                           ],
                                         ),
@@ -784,15 +784,15 @@ print(widget.kabu +" an "+ widget.tuju);
                                             )
                                           ],
                                         ),
-                                        Column(
-                                          children: <Widget>[
-                                            Align(
-                                              alignment: Alignment.topLeft,
-                                              child: Text(y[i]['etd'],
-                                                  textAlign: TextAlign.left),
-                                            )
-                                          ],
-                                        ),
+                                        // Column(
+                                        //   children: <Widget>[
+                                        //     Align(
+                                        //       alignment: Alignment.topLeft,
+                                        //       child: Text(y[i]['etd'],
+                                        //           textAlign: TextAlign.left),
+                                        //     )
+                                        //   ],
+                                        // ),
                                         Row(children: <Widget>[
                                           Flexible(
                                               fit: FlexFit.tight,

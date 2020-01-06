@@ -92,15 +92,22 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+      getJsonData();
     });
     //print("id o= " + nama);
   }
   @override
+  void initState() {
+    super.initState();  
+    getCredential();
+    
+  }
+  @override
   Widget build(BuildContext context) {
+    double cwidth1= MediaQuery.of(context).size.width/3.5 ;
+    double cwidth = MediaQuery.of(context).size.width/10 ;
       double c_width = MediaQuery.of(context).size.width * 0.2;
        double c_width2 = MediaQuery.of(context).size.width * 0.5;
-    getCredential();
-    getJsonData();
     return Scaffold(
       appBar: AppBar(
          iconTheme: IconThemeData(color: Colors.white),
@@ -112,10 +119,12 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
           int a;
           a=i+1;
           return Container(
+
             child: Column(children: <Widget>[
                Card(
                           child: Row(children: <Widget>[
                             Container(
+                              width: cwidth,
                           child: Column(
                             children: <Widget>[
                               Padding(
@@ -153,6 +162,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
                               ])),
                         ),
                         Container(
+                           width: cwidth1,
                           child: Column(
                             children: <Widget>[
                               Padding(

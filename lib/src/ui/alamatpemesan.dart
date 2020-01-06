@@ -71,7 +71,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
 
       // print("${response.body}");
       Map<String, dynamic> map = jsonDecode(response.body);
-      print(map);
+      //print(map);
       if (map["Error"] == true || map["Error"] == "true") {
         _showAlert(context);
       } else {
@@ -220,9 +220,6 @@ class _AlamatPemesan extends State<AlamatPemesan> {
   List data;
   //String id=null;
 
-  @override
-  void initState() {}
-
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
@@ -343,6 +340,7 @@ String z;
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+      getJsonData();
     });
     //print("id profile sklh= " + nama);
   }
@@ -356,11 +354,16 @@ String z;
       getJsonData();// if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
+  @override
+  void initState() {
+    super.initState();  
+    getCredential();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
-    getJsonData();
-    getCredential();
+   double c_width = MediaQuery.of(context).size.width/2;
     //print(data.length);
     return Scaffold(
             appBar: AppBar(
@@ -393,6 +396,7 @@ String z;
                     controller: _refreshController,
                     onRefresh: _onRefresh,
                     child: Container(
+                     
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
                         // physics: ScrollPhysics(),
@@ -405,7 +409,7 @@ String z;
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                             child: SizedBox(
-                                height: 165,
+                                height: c_width,
                                 width: 100,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),

@@ -391,14 +391,20 @@ class _TambahCabangState extends State<TambahCabang> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+      getJsonData();
     });
     //print("id o= " + nama);
   }
 
+@override
+  void initState() {
+    super.initState();  
+    getCredential();
+    
+  }
   @override
   Widget build(BuildContext context) {
-    getCredential();
-    getJsonData();
+ 
     //print(data);
     return Scaffold(
       appBar: AppBar(
@@ -634,7 +640,8 @@ class _CabangADD extends State<CabangADD> {
   void initState() {
     super.initState();
     getCredential();
-    provinceBloc.provinceFetchAll();
+    provinceBloc.provinceFetchAll(); 
+    _getCurrentLocation();
   }
 
   Future<http.Response> daftar_api() async {
@@ -704,7 +711,7 @@ class _CabangADD extends State<CabangADD> {
 
   @override
   Widget build(BuildContext context) {
-    _getCurrentLocation();
+   
     //print("id= "+id);
     return Scaffold(
       appBar: AppBar(

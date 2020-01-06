@@ -41,15 +41,20 @@ class _PenjualanState extends State<Penjualan> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+        getJsonData();
     });
     //print("id o= " + nama);
   }
-
+@override
+  void initState() {
+    super.initState();  
+    getCredential();
+  
+  }
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.6;
-    getCredential();
-    getJsonData();
+    double c_width = MediaQuery.of(context).size.width /3;
+    double cwidth = MediaQuery.of(context).size.width;
     String b = null;
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +65,7 @@ class _PenjualanState extends State<Penjualan> {
           ? Container()
           : data2 == null
               ? Container()
-              : ListView.builder(
+              : Container(child:ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: data.length,
                   itemBuilder: (context, i) {
@@ -74,9 +79,10 @@ class _PenjualanState extends State<Penjualan> {
                     return Container(
                         child: Column(children: <Widget>[
                       Card(
-                        child: Row(
+                        child:  Container( width: cwidth,
+                              child: Row(
                           children: <Widget>[
-                            Padding(
+                          Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(data[i]['no_invoice'] == null
                                   ? "kosong"
@@ -88,12 +94,12 @@ class _PenjualanState extends State<Penjualan> {
                                   ? "kosong"
                                   : "( " + data[i]['user_nama'] + " )"),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(data[i]['tanggal'] == null
-                                  ? "kosong"
-                                  : data[i]['tanggal']),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Text(data[i]['tanggal'] == null
+                            //       ? "kosong"
+                            //       : data[i]['tanggal']),
+                            // ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(data[i]['status_nama'] == null
@@ -101,7 +107,7 @@ class _PenjualanState extends State<Penjualan> {
                                   : data[i]['status_nama']),
                             ),
                           ],
-                        ),
+                        )),
                       ),
                       Card(
                           child: Row(children: <Widget>[
@@ -208,6 +214,6 @@ class _PenjualanState extends State<Penjualan> {
                     ])
                     );
                   }),
-    );
+    ));
   }
 }
