@@ -235,6 +235,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+      getJsonData();
     });
     //print("id o= " + nama);
   }
@@ -247,9 +248,14 @@ class _KomplainMitraState extends State<KomplainMitra>{
     _refreshController.refreshCompleted();
   }
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();  
     getCredential();
-    getJsonData();
+    
+  }
+  @override
+  Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),

@@ -266,6 +266,7 @@ class _KomplainState extends State<KomplainSekolah>{
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+      getJsonData();
     });
     //print("id o= " + nama);
   }
@@ -278,10 +279,15 @@ class _KomplainState extends State<KomplainSekolah>{
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
+   @override
+  void initState() {
+    super.initState();  
+    getCredential();
+    
+  }
   @override
   Widget build(BuildContext context) {
-    getCredential();
-    getJsonData();
+  
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(

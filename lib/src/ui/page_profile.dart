@@ -120,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
      int a=0;
-     
+      double cwidth = MediaQuery.of(context).size.width / 3;
     return data==null?Container(): Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -165,11 +165,13 @@ class _ProfilePageState extends State<ProfilePage>
               ),
               SizedBox(
                 width: 10,
-              ),
-              Text(
+              ),Container(
+                width: cwidth,
+              child:Text(
                 nama != null ? nama : "waiting...",
                 style: TextStyle(color: Colors.white),
               )
+              ),
             ],
           ),
         ),

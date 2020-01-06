@@ -41,16 +41,22 @@ class _PesananState extends State<PesananState> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+       getJsonData();
     });
     //print("id o= " + nama);
   }
 
   int no = 0;
 
+@override
+  void initState() {
+    super.initState();  
+    getCredential();
+   
+  }
   @override
   Widget build(BuildContext context) {
-    getCredential();
-    getJsonData();
+   
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),

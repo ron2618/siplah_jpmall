@@ -92,15 +92,20 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+      getJsonData();
     });
     //print("id o= " + nama);
+  }
+  @override
+  void initState() {
+    super.initState();  
+    getCredential();
+    
   }
   @override
   Widget build(BuildContext context) {
       double c_width = MediaQuery.of(context).size.width * 0.2;
        double c_width2 = MediaQuery.of(context).size.width * 0.5;
-    getCredential();
-    getJsonData();
     return Scaffold(
       appBar: AppBar(
          iconTheme: IconThemeData(color: Colors.white),

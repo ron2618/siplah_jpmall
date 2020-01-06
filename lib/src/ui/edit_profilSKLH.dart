@@ -26,9 +26,6 @@ class _EditprofileSKL extends State<EditprofileSKL> {
   String foto, npsn, nama;
   List data;
 
-  @override
-  void initState() {}
-
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
@@ -56,6 +53,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+      getJsonData();
       // foto = pref.getString("foto");
       // email = pref.getString("alamat");
       // alamat = pref.getString("telepon");
@@ -64,12 +62,16 @@ class _EditprofileSKL extends State<EditprofileSKL> {
     });
     //print("id profile sklh= " + nama);
   }
-
+@override
+  void initState() {
+    super.initState();  
+    getCredential();
+    
+  }
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.6;
-    getCredential();
-    getJsonData();
+    double c_width = MediaQuery.of(context).size.width /2;
+  
 
     //print(data);
     return Scaffold(

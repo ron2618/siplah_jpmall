@@ -27,9 +27,7 @@ class Editprofile extends StatefulWidget {
 class _Editprofile extends State<Editprofile> {
   String foto, npsn, nama, email, alamat, kodepos, telepon;
   List data;
-  @override
-  void initState() {}
-
+ 
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
@@ -44,11 +42,13 @@ class _Editprofile extends State<Editprofile> {
         body: {
           "id": "" + nama
         });
-    //print(response.body);
+    
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['data'];
+      //print(response.body);
     });
   }
 
@@ -56,16 +56,22 @@ class _Editprofile extends State<Editprofile> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
+       getJsonData();
     });
     //("id profile = " + nama);
   }
 
+@override
+  void initState() {
+    super.initState();  
+    getCredential();
+   
+  }
   @override
   Widget build(BuildContext context) {
-     double c_width = MediaQuery.of(context).size.width * 0.6;
-    getCredential();
-    getJsonData();
-
+     double c_width = MediaQuery.of(context).size.width / 3;
+ double cwidth = MediaQuery.of(context).size.width;
+  //print(data);
     //print(data);
     return Scaffold(
         appBar: AppBar(
@@ -77,7 +83,7 @@ class _Editprofile extends State<Editprofile> {
         ),
 
         //CODE BARU YANG DITAMBAHKAN
-        body: data==null?Container(): ListView(padding: const EdgeInsets.all(0), children: <Widget>[
+        body: data==null?Container(): Container(width: cwidth, child:ListView(padding: const EdgeInsets.all(0), children: <Widget>[
           Column(children: <Widget>[
             SizedBox(
               height: 40,
@@ -85,7 +91,7 @@ class _Editprofile extends State<Editprofile> {
                Row(
                 children: <Widget>[
                   SizedBox(
-                    width: 200,
+                    width: 140,
                   ),
                   
                     CircleAvatar(
@@ -358,7 +364,7 @@ class _Editprofile extends State<Editprofile> {
                               ]),
             ),
           ])
-        ]),
+        ])),
         // ]
         // ),
         // ]
@@ -592,6 +598,7 @@ class _FormEdit extends State<FormEdit> {
     }
     return response;
   }
+
 
   @override
   Widget build(BuildContext context) {

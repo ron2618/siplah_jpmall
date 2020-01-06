@@ -160,6 +160,7 @@ class _LihatCabang extends State<LihatCabang> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       iduser = pref.getString("id");
+       getJsonData();
       //print('iddalem=' + iduser);
     });
   }
@@ -169,11 +170,12 @@ class _LihatCabang extends State<LihatCabang> {
     // TODO: implement initState
     super.initState();
     getCredential();
+   
   }
 
   @override
   Widget build(BuildContext context) {
-    getJsonData();
+    
 
     return Scaffold(
       appBar: AppBar(

@@ -182,7 +182,8 @@ class _PembayaranState extends State<PembayaranState> {
       foto = pref.getString("foto");
       id = pref.getString('id');
       kabupaten = pref.getString('kabupaten_id');
-      getAlamatData();
+       getAlamatData();
+    getCartsData();
     });
   }
 
@@ -192,6 +193,7 @@ class _PembayaranState extends State<PembayaranState> {
     _controllerProduk = ScrollController();
     super.initState();
     getCredential();
+   
   }
 
   String id;
@@ -251,9 +253,6 @@ class _PembayaranState extends State<PembayaranState> {
 
   @override
   Widget build(BuildContext context) {
-    getCredential();
-    getAlamatData();
-    getCartsData();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
