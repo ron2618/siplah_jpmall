@@ -56,7 +56,7 @@ class _PesananState extends State<PesananState> {
   }
   @override
   Widget build(BuildContext context) {
-   
+   double c_width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -64,7 +64,7 @@ class _PesananState extends State<PesananState> {
       ),
       body:data==null?Column(
                 children: <Widget>[Center(child: CircularProgressIndicator())]):
-          ListView.builder(
+         ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: data.length,
             itemBuilder: (context,i){
@@ -83,25 +83,25 @@ class _PesananState extends State<PesananState> {
                                   : a.toString()),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(5.0),
                               child: Text(data[i]['order_id'] == null
                                   ? "kosong"
                                   : data[i]['order_id']),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(data[i]['total'] == null
-                                  ? "kosong"
-                                  : "( " + data[i]['total'] + " )"),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Text(data[i]['total'] == null
+                            //       ? "kosong"
+                            //       : "( " + data[i]['total'] + " )"),
+                            // ),
+                             Padding(
+                              padding: const EdgeInsets.all(2.0),
                               child: Text(data[i]['tanggal'] == null
                                   ? "kosong"
                                   : data[i]['tanggal']),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(2.0),
                               child: Text(data[i]['status_nama'] == null
                                   ? "kosong"
                                   : data[i]['status_nama']),
@@ -292,6 +292,6 @@ class _PesananState extends State<PesananState> {
           //     })),
         
       
-    );
+   );
   }
 }

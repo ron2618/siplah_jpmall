@@ -363,7 +363,7 @@ String z;
 
   @override
   Widget build(BuildContext context) {
-  
+   double c_width = MediaQuery.of(context).size.width/2;
     //print(data.length);
     return Scaffold(
             appBar: AppBar(
@@ -396,6 +396,7 @@ String z;
                     controller: _refreshController,
                     onRefresh: _onRefresh,
                     child: Container(
+                     
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
                         // physics: ScrollPhysics(),
@@ -408,7 +409,7 @@ String z;
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0)),
                             child: SizedBox(
-                                height: 165,
+                                height: c_width,
                                 width: 100,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
