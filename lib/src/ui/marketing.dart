@@ -979,9 +979,11 @@ class MarketingPem extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const MarketingPem({Key key, this.penjual, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
-
+  const MarketingPem({Key key, this.penjual, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
 
   @override
   _MarketingPemState createState() => _MarketingPemState();
@@ -1136,7 +1138,8 @@ class _MarketingPemState extends State<MarketingPem> {
                                                                 widget.datatype,
                                                             cost: widget.cost,
                                                             namamar: data[i]
-                                                                ['nama']),
+                                                                ['nama'],
+                                                                idtrans: widget.idtrans),
                                                   ));
                                             },
                                           ),

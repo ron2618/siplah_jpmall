@@ -217,3 +217,37 @@ class _PenjualanState extends State<Penjualan> {
     ));
   }
 }
+
+class DetailPenjualan extends StatefulWidget{
+  @override
+  _DetailPenjualanState createState() => _DetailPenjualanState();
+
+}
+class _DetailPenjualanState extends State<DetailPenjualan>{
+  @override
+  Widget build(BuildContext context) {
+   
+    return Scaffold(
+      appBar: AppBar(
+
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Detail Penjualan", style: TextStyle(color: Colors.white)),
+      ),
+      body: ListView(children: <Widget>[
+        Container(child: ListView.builder(
+          itemCount: 2,
+          itemBuilder: (context,i){
+            return Row(children: <Widget>[
+              Text("data"),
+              Text("data")
+              
+            ],);
+          }
+        ),),
+
+      ],
+      ),
+    );
+  }
+
+}

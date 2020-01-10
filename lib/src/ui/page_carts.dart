@@ -128,10 +128,53 @@ int load = 0;
    
     getCredential();
   }
-    
+    List datatrans;
+  int idtrans;
+    Future<http.Response> daftartransaksi(keranjang) async {
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/pembayaran/tambah'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+      },
+      body: {
+        "user_id": id,
+        "keranjang_id":keranjang
+      },
+    );
+    // print("${response.statusCode}");
+
+    //print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    //print(map['Data']['transaksi_id']);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+        setState(() {
+          Map<String, dynamic> map1 = jsonDecode(response.body);
+     int payment_code =map1['Data']['transaksi_id'];
+      idtrans=payment_code;
+  idtrans==null?print(payment_code):
+     Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  PembayaranState(totalharga:totalharga,
+                                  idtrans:idtrans),
+                            ));
+
+     
+      });
+    }
+    return response;
+  }
+
   List data;
   List data2;
-
+  String keranjang;
    Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
@@ -153,6 +196,8 @@ int load = 0;
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['Data'];
       data2 = convertDataToJson['Data'][0]['Produk'];
+   keranjang = data2[0]['id'];
+   
     });
 
     return "Success";
@@ -257,12 +302,17 @@ Text('Rp . '+formatter.format(totalharga), style: TextStyle(fontSize: 14, color:
               ),
               GestureDetector(
                onTap: (){
-                 Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  PembayaranState(totalharga:totalharga),
-                            ));
+                  print(keranjang);
+                daftartransaksi(keranjang);
+                //print(idtrans);
+                //  idtrans==null? print(idtrans):
+                //  Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //               builder: (BuildContext context) =>
+                //                   PembayaranState(totalharga:totalharga,
+                //                   idtrans:idtrans),
+                //             ));
                  
                },
               child:Container(

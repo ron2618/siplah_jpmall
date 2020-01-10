@@ -194,23 +194,22 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
                                 child: Text(""),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(1.0),
+                                padding: const EdgeInsets.all(40.0),
                                 child: Text(""),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(1.0),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.remove_red_eye,
-                                    color: Colors.blue,
-                                  ),
-                                  onPressed: () {},
-                                ),
+                                child: Padding(
+                                padding: const EdgeInsets.all(1.0),
+                                child: Text(""),
+                              ),
                               )
                             ],
                           ),
                         ),
-                        Container(
+                        Align(
+                                              alignment: Alignment.centerRight,
+                                              child:Container(
                           child: Column(
                             children: <Widget>[
                               Padding(
@@ -235,7 +234,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
                               )
                             ],
                           ),
-                        ),
+                        )),
                       ])),
             ],),
           );

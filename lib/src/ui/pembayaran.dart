@@ -8,6 +8,7 @@ import 'package:siplah_jpmall/src/ui/alamatpemesan.dart';
 import 'package:http/http.dart' as http;
 import 'package:siplah_jpmall/src/ui/kurir.dart';
 import 'package:siplah_jpmall/src/ui/marketing.dart';
+import 'package:siplah_jpmall/src/ui/page_home.dart';
 
 import 'mainpage.dart';
 import 'metodebayar.dart';
@@ -21,9 +22,15 @@ class PembayaranState extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const PembayaranState({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
+  const PembayaranState({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
 
+  
+  
+  
   
   @override
   _PembayaranState createState() => _PembayaranState();
@@ -31,9 +38,14 @@ class PembayaranState extends StatefulWidget {
 
 class _PembayaranState extends State<PembayaranState> {
 
-  Future<http.Response> bayarapi(String idtr) async {
+  Future<http.Response> bayarapi(int idtr,String gettoken) async {
     var url = 'https://siplah.mascitra.co.id/api/sekolah/pembayaran/bayar';
-
+    Map kurir ={
+      'mitra_id':widget.idmar,
+      'kurir':widget.ketkur,
+      'kurir_id':widget.namakur,
+      'ongkir':widget.cost
+    };
     Map data = {
       'transaksi_id': idtr,
       'payment': {
@@ -44,10 +56,10 @@ class _PembayaranState extends State<PembayaranState> {
       'total_ongkir': widget.cost,
       'sub_total': widget.totalharga,
       'user_id': id,
-      'token_id': "2",
+      'token_id': gettoken,
       },
       'marketing': widget.idmar,
-      'kurir': widget.idmar,
+      'kurir': kurir,
        
     };
     Map pay={
@@ -67,13 +79,14 @@ class _PembayaranState extends State<PembayaranState> {
         body: body);
     // print("${response.statusCode}");
 
-    // print("${response.body}");
+    //print("${response.body}");
     Map<String, dynamic> map = jsonDecode(response.body);
     print(map);
     if (map["Error"] == true || map["Error"] == "true") {
      print("Jadi Draft");
     } else {
       _berhasil(context);
+     
     }
     return response;
   }
@@ -89,52 +102,44 @@ class _PembayaranState extends State<PembayaranState> {
   }
 
   void _berhasil(BuildContext context) {
-    showDialog(
+    
+   showDialog(
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Peringatan"),
               content: Text("Data berhasil diubah"),
             ));
   }
-  List datatrans;
-  String idtrans=null;
-    Future<http.Response> daftartransaksi() async {
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah';
+  
+  String getto;
+ Future<String> getTokenid() async {
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/midtrans/api/token'),
+      // headers: {
+      //   "Content-Type": "application/x-www-form-urlencoded",
+      //   "API-App": "siplah_jpmall.id",
+      //   "Api-Key": "4P1_7Pm411_51p114h",
+      //   "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+      // },
+      // body: {
+      //   'asal': kabupaten,
+      //   'tujuan': tujuan,
+      //   'berat': "100",
+      //   'kurir': 'jne',
+      // },
+    );
+     //print(response.body);
 
-    Map data = {
-      'keranjang_id': keranjang,
-      'user_id': id,
-   
-      
-    };
-    //print(_imageFile);
-    //encode Map to JSON
-    var body = json.encode(data);
+    setState(() {
+      // ignore: deprecated_member_use
+      // var convertDataToJson = json.decode(response.body);
+      // datajne = convertDataToJson['results'];
+       Map<String, dynamic> map = json.decode(response.body);
+       getto=map['token_id'];
+    });
 
-    var response = await http.post(url,
-        headers: {
-          "Content-Type": "application/json",
-          "API-App": "siplah_jpmall.id",
-          "Api-Key": "4P1_7Pm411_51p114h",
-          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
-        },
-        body: body);
-    // print("${response.statusCode}");
-
-    //print("${response.body}");
-    Map<String, dynamic> map = jsonDecode(response.body);
-    //print(map);
-    if (map["Error"] == true || map["Error"] == "true") {
-      _showAlert(context);
-    } else {
-        
-   var convertDataToJson = json.decode(response.body);
-      datatrans = convertDataToJson['Data'];
-      idtrans=datatrans[0]['transaksi_id'];
-   
-      
-    }
-    return response;
+    return "Success";
   }
 
   List datajne;
@@ -173,7 +178,6 @@ class _PembayaranState extends State<PembayaranState> {
   String level_id;
   String foto;
   String kabupaten;
-  String keranjang = null;
   getCredential() async {
     final pref = await SharedPreferences.getInstance();
     setState(() {
@@ -183,8 +187,11 @@ class _PembayaranState extends State<PembayaranState> {
       foto = pref.getString("foto");
       id = pref.getString('id');
       kabupaten = pref.getString('kabupaten_id');
+       
        getAlamatData();
     getCartsData();
+    getTokenid();
+    
     });
   }
 
@@ -223,7 +230,8 @@ class _PembayaranState extends State<PembayaranState> {
     });
     tujuan = data2[0]['penjual_kabupaten_id'];
     penjual = data2[0]['penjual_id'];
-    keranjang = data2[0]['id'];
+  
+   
     return "Success";
   }
 
@@ -254,6 +262,7 @@ class _PembayaranState extends State<PembayaranState> {
 
   @override
   Widget build(BuildContext context) {
+ print(id);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back),onPressed:(){
@@ -534,7 +543,10 @@ class _PembayaranState extends State<PembayaranState> {
                         databank: widget.databank,
                         datatype: widget.datatype,
                         cost: widget.cost,
-                        penjual: penjual),
+                        penjual: penjual,
+                        ketkur:widget.ketkur,
+                        namakur:widget.namakur,
+                        idtrans:widget.idtrans),
                   ));
             },
             child: 
@@ -597,7 +609,9 @@ class _PembayaranState extends State<PembayaranState> {
                               databank: widget.databank,
                               datatype: widget.datatype,
                               cost: widget.cost,
-                              idmar:widget.idmar),
+                              idmar:widget.idmar,
+                              ketkur:widget.ketkur,
+                              idtrans: widget.idtrans),
                         ));
                   },
                   child: Container(
@@ -705,7 +719,11 @@ class _PembayaranState extends State<PembayaranState> {
                         databank: widget.databank,
                         datatype: widget.datatype,
                         cost: widget.cost,
-                        idmar:widget.idmar),
+                        idmar:widget.idmar,
+                        ketkur:widget.ketkur,
+                        namakur:widget.namakur,
+                        idtrans: widget.idtrans
+                        ),
                   ));
             },
             child: Container(
@@ -793,8 +811,7 @@ class _PembayaranState extends State<PembayaranState> {
                   children: <Widget>[
                      GestureDetector(
                onTap: (){
-    daftartransaksi();
-               bayarapi(idtrans);
+                 
                 //  Navigator.push(
                 //             context,
                 //             MaterialPageRoute(
@@ -830,11 +847,16 @@ class _PembayaranState extends State<PembayaranState> {
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: <Widget>[
-            Container(
+            GestureDetector(onTap: (){
+
+              widget.idtrans==null?print(widget.idtrans):
+               bayarapi(widget.idtrans,getto);
+                HomePage();
+            }, child:Container(
               width:  MediaQuery.of(context).size.width/2,
               color: Colors.blueAccent,
               child: Center(child: Text("Bayar",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),),
-            ),
+            )),
             Container(
               color: Colors.white,
               width:  MediaQuery.of(context).size.width/2,

@@ -20,9 +20,12 @@ class Kurir extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
-
+  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
+  
  
   @override
   _KurirState createState() => _KurirState();
@@ -66,7 +69,10 @@ class _KurirState extends State<Kurir> {
                             databank: widget.databank,
                             datatype: widget.datatype,
                             cost: widget.cost,
-                            idmar:widget.idmar),
+                            idmar:widget.idmar,
+                            ketkur:widget.ketkur,
+                            namakur:widget.namakur,
+                            idtrans: widget.idtrans),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -101,7 +107,10 @@ class _KurirState extends State<Kurir> {
                             databank: widget.databank,
                             datatype: widget.datatype,
                             cost: widget.cost,
-                            idmar:widget.idmar),
+                            idmar:widget.idmar,
+                            ketkur:widget.ketkur,
+                            namakur:widget.namakur,
+                            idtrans: widget.idtrans),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -136,7 +145,10 @@ class _KurirState extends State<Kurir> {
                                 databank: widget.databank,
                                 datatype: widget.datatype,
                                 cost: widget.cost,
-                                idmar:widget.idmar
+                                idmar:widget.idmar,
+                                ketkur:widget.ketkur,
+                                namakur:widget.namakur,
+                                idtrans: widget.idtrans
                               )));
                 },
                 leading: ConstrainedBox(
@@ -170,7 +182,10 @@ class _KurirState extends State<Kurir> {
                             databank: widget.databank,
                             datatype: widget.datatype,
                             cost: widget.cost,
-                            idmar:widget.idmar),
+                            idmar:widget.idmar,
+                            ketkur:widget.ketkur,
+                            namakur:widget.namakur,
+                            idtrans: widget.idtrans),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -203,9 +218,12 @@ class KurirJNE extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const KurirJNE({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
-
+  const KurirJNE({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
+  
   
   @override
   _KurirJneState createState() => _KurirJneState();
@@ -337,6 +355,9 @@ class _KurirJneState extends State<KurirJNE> {
                                                             datatype:
                                                                 widget.datatype,
                                                                 idmar: widget.idmar,
+                                                                ketkur:"eksternal",
+                                                                namakur: "jne",
+                                                                idtrans: widget.idtrans
                                                           ),
                                                         ));
                                                   },
@@ -366,9 +387,12 @@ class KurirJNT extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const KurirJNT({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
-
+  const KurirJNT({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
+ 
   @override
   _KurirJntState createState() => _KurirJntState();
 }
@@ -500,6 +524,9 @@ class _KurirJntState extends State<KurirJNT> {
                                                             datatype:
                                                                 widget.datatype,
                                                                 idmar: widget.idmar,
+                                                                ketkur: "eksternal",
+                                                                namakur: "jnt",
+                                                                idtrans: widget.idtrans
                                                           ),
                                                         ));
                                                   },
@@ -529,9 +556,13 @@ class KurirPos extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const KurirPos({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
+  const KurirPos({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
 
+  
   @override
   _KurirPosState createState() => _KurirPosState();
 }
@@ -663,6 +694,9 @@ class _KurirPosState extends State<KurirPos> {
                                                             datatype:
                                                                 widget.datatype,
                                                                 idmar: widget.idmar,
+                                                                ketkur: "eksternal",
+                                                                namakur: "pos",
+                                                                idtrans: widget.idtrans
                                                           ),
                                                         ));
                                                   },
@@ -692,9 +726,12 @@ class KurirTIKI extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const KurirTIKI({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
-
+  const KurirTIKI({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
+  
   @override
   _KurirTikiState createState() => _KurirTikiState();
 }
@@ -826,6 +863,9 @@ print(widget.kabu +" an "+ widget.tuju);
                                                             datatype:
                                                                 widget.datatype,
                                                                 idmar: widget.idmar,
+                                                                ketkur: "eksternal",
+                                                                namakur: "tiki",
+                                                                idtrans: widget.idtrans
                                                           ),
                                                         ));
                                                   },

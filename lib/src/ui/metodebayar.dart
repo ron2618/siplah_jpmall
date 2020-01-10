@@ -10,9 +10,12 @@ class Metode extends StatefulWidget {
   final String imagekurir;
   final int cost;
   final String idmar;
+  final String ketkur;
+  final String namakur;
+  final int idtrans;
 
-  const Metode({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar}) : super(key: key);
-
+  const Metode({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
+  
 
   @override
   _MetodeState createState() => _MetodeState();
@@ -47,7 +50,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans)
                     ));
               },
               leading: ConstrainedBox(
@@ -81,7 +87,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans),
                     ));
               },
               leading: ConstrainedBox(
@@ -115,7 +124,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans),
                     ));
               },
               leading: ConstrainedBox(
@@ -149,7 +161,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans),
                     ));
               },
               leading: ConstrainedBox(
@@ -183,7 +198,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans),
                     ));
               },
               leading: ConstrainedBox(
@@ -217,7 +235,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans),
                     ));
               },
               leading: ConstrainedBox(
@@ -251,7 +272,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans),
                     ));
               },
               leading: ConstrainedBox(
@@ -285,7 +309,10 @@ class _MetodeState extends State<Metode> {
                           imagekurir: widget.imagekurir,
                           namamar: widget.namamar,
                           cost: widget.cost,
-                          idmar: widget.idmar,),
+                          idmar: widget.idmar,
+                          ketkur: widget.ketkur,
+                          namakur: widget.namakur,
+                          idtrans: widget.idtrans),
                     ));
               },
               leading: ConstrainedBox(
