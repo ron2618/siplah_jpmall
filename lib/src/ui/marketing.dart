@@ -990,8 +990,9 @@ class MarketingPem extends StatefulWidget {
 }
 
 class _MarketingPemState extends State<MarketingPem> {
+  String nama;
   List data;
-  Future<String> getJsonData() async {
+  Future<String> getdatamar() async {
     var response = await http.post(
         //Encode the url
 
@@ -1003,21 +1004,51 @@ class _MarketingPemState extends State<MarketingPem> {
           "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
-          "user_id": "" + widget.penjual,
+          "user_id": "" + nama,
+          //"id": "" + nama
         });
-    //print(response.body);
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['data'];
     });
   }
+  
+  List datax;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+        //Encode the url
 
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "transaksi_id": widget.idtrans.toString(),
+        });
+    print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      datax = convertDataToJson['Data'];
+      nama=datax[0]['id'];
+     getdatamar();
+    });
+  }
+  void initState() {
+   
+    super.initState();
+ getJsonData();
+  }
   //refreshcontroller
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   void _onRefresh() async {
-    getJsonData();
+    getdatamar();
     await Future.delayed(Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
@@ -1025,7 +1056,7 @@ class _MarketingPemState extends State<MarketingPem> {
 
   @override
   Widget build(BuildContext context) {
-    getJsonData();
+
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[],

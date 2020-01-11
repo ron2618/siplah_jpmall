@@ -266,7 +266,7 @@ class _MetodeState extends State<Metode> {
                       builder: (BuildContext context) => PembayaranState(
                           imagebank:
                               "https://siplah.mascitra.co.id/assets/images/payment/indomaret.jpg",
-                          datatype: "csotre",
+                          datatype: "cstore",
                           databank: "Indomaret",
                           totalharga: widget.totalharga,
                           imagekurir: widget.imagekurir,

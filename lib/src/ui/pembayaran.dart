@@ -41,22 +41,22 @@ class _PembayaranState extends State<PembayaranState> {
   Future<http.Response> bayarapi(int idtr,String gettoken) async {
     var url = 'https://siplah.mascitra.co.id/api/sekolah/pembayaran/bayar';
     Map kurir ={
-      'mitra_id':widget.idmar,
-      'kurir':widget.ketkur,
-      'kurir_id':widget.namakur,
+      'mitra_id':mitra,
+      'kurir':""+widget.ketkur,
+      'kurir_id':""+widget.namakur,
       'ongkir':widget.cost
     };
     Map data = {
       'transaksi_id': idtr,
       'payment': {
-      'type': widget.datatype,
-      'bank': widget.databank,
+      'type': ""+widget.datatype,
+      'bank': ""+widget.databank,
       },
       'detail': {
       'total_ongkir': widget.cost,
       'sub_total': widget.totalharga,
       'user_id': id,
-      'token_id': gettoken,
+      'token_id':""+ gettoken,
       },
       'marketing': widget.idmar,
       'kurir': kurir,
@@ -80,15 +80,16 @@ class _PembayaranState extends State<PembayaranState> {
     // print("${response.statusCode}");
 
     //print("${response.body}");
-    Map<String, dynamic> map = jsonDecode(response.body);
-    print(map);
-    if (map["Error"] == true || map["Error"] == "true") {
-     print("Jadi Draft");
-    } else {
-      _berhasil(context);
-     
-    }
-    return response;
+    print(pay);
+    // Map<String, dynamic> map = jsonDecode(response.body);
+    // print(map);
+    // if (map["Error"] == true || map["Error"] == "true") {
+    //  print("Jadi Draft");
+    // } else {
+    //   _berhasil(context);
+    //  print(pay);
+    // }
+    // return response;
   }
 
 
@@ -187,9 +188,9 @@ class _PembayaranState extends State<PembayaranState> {
       foto = pref.getString("foto");
       id = pref.getString('id');
       kabupaten = pref.getString('kabupaten_id');
-       
+         getCartsData();
        getAlamatData();
-    getCartsData();
+  
     getTokenid();
     
     });
@@ -203,13 +204,54 @@ class _PembayaranState extends State<PembayaranState> {
     getCredential();
    
   }
+// List datatrans;
+//   int idtrans;
+//     Future<http.Response> daftartransaksi(keranjang) async {
+//     var response = await http.post(
+//       //Encode the url
+//       Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah'),
+//       headers: {
+//         "Content-Type": "application/x-www-form-urlencoded",
+//         "API-App": "siplah_jpmall.id",
+//         "Api-Key": "4P1_7Pm411_51p114h",
+//         "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+//       },
+//       body: {
+//         "user_id": id,
+//         "keranjang_id":keranjang
+//       },
+//     );
+//     // print("${response.statusCode}");
 
+//     //print("${response.body}");
+//     Map<String, dynamic> map = jsonDecode(response.body);
+//     //print(map['Data']['transaksi_id']);
+//     if (map["Error"] == true || map["Error"] == "true") {
+//       _showAlert(context);
+//     } else {
+//         setState(() {
+//           Map<String, dynamic> map1 = jsonDecode(response.body);
+//      int payment_code =map1['Data']['transaksi_id'];
+//       idtrans=payment_code;
+       
+//  idtrans==null?print(idtrans):
+//               bayarapi(idtrans,getto);
+     
+
+     
+//       });
+//     }
+//     return response;
+//   }
+  String keranjang;
   String id;
   List datax, data2;
+  String mitra;
+  String berat;
   Future<String> getCartsData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/isi'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -217,19 +259,22 @@ class _PembayaranState extends State<PembayaranState> {
         "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
-        "user_id": id,
+        "transaksi_id": widget.idtrans.toString(),
       },
     );
-    // print(response.body);
+     print(response.body);
 
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       datax = convertDataToJson['Data'];
-      data2 = convertDataToJson['Data'][0]['Produk'];
+      tujuan = datax[0]['kabupaten_id'];
+    berat = datax[0]['total_berat'];
+    mitra = datax[0]['id'];
     });
-    tujuan = data2[0]['penjual_kabupaten_id'];
-    penjual = data2[0]['penjual_id'];
+    
+    keranjang = data2[0]['id'];
+    
   
    
     return "Success";
@@ -252,7 +297,7 @@ class _PembayaranState extends State<PembayaranState> {
           "user_id": "" + id,
           //"id": "" + nama
         });
-    //print(response.body);
+    //print(response.body);`
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
@@ -262,7 +307,7 @@ class _PembayaranState extends State<PembayaranState> {
 
   @override
   Widget build(BuildContext context) {
- print(id);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back),onPressed:(){
@@ -600,6 +645,7 @@ class _PembayaranState extends State<PembayaranState> {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) => Kurir(
+                            berat:berat,
                               kabu: kabupaten,
                               tuju: tujuan,
                               totalharga: widget.totalharga,
@@ -848,9 +894,9 @@ class _PembayaranState extends State<PembayaranState> {
         child: Row(
           children: <Widget>[
             GestureDetector(onTap: (){
-
-              widget.idtrans==null?print(widget.idtrans):
-               bayarapi(widget.idtrans,getto);
+             bayarapi(widget.idtrans, getto);
+              
+               
                 HomePage();
             }, child:Container(
               width:  MediaQuery.of(context).size.width/2,
@@ -867,6 +913,7 @@ class _PembayaranState extends State<PembayaranState> {
                     height: 2,
                   ),
                   Text("Total Pembayaran"),
+                
                   Text(widget.totalharga.toString()),
                 ],
               )),

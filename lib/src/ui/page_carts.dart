@@ -133,7 +133,7 @@ int load = 0;
     Future<http.Response> daftartransaksi(keranjang) async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.jpstore.id/api/sekolah/pembayaran/tambah'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -297,13 +297,14 @@ getCredential() async {
                 // mainAxisAlignment: Main,
                 children: <Widget>[
                   Text("Total Harga"),
-Text('Rp . '+formatter.format(totalharga), style: TextStyle(fontSize: 14, color: Colors.cyan),)
+                  
+ Text('Rp . '+formatter.format(totalharga), style: TextStyle(fontSize: 14, color: Colors.cyan),)
                 ],
               ),
               GestureDetector(
                onTap: (){
-                  print(keranjang);
-                daftartransaksi(keranjang);
+                //   print(keranjang);
+                 daftartransaksi(keranjang);
                 //print(idtrans);
                 //  idtrans==null? print(idtrans):
                 //  Navigator.push(
@@ -311,7 +312,7 @@ Text('Rp . '+formatter.format(totalharga), style: TextStyle(fontSize: 14, color:
                 //             MaterialPageRoute(
                 //               builder: (BuildContext context) =>
                 //                   PembayaranState(totalharga:totalharga,
-                //                   idtrans:idtrans),
+                //                   ),
                 //             ));
                  
                },

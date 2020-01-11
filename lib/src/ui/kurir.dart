@@ -23,9 +23,10 @@ class Kurir extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
+  final String berat;
 
-  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
-  
+  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
+
  
   @override
   _KurirState createState() => _KurirState();
@@ -34,6 +35,7 @@ class Kurir extends StatefulWidget {
 class _KurirState extends State<Kurir> {
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -60,6 +62,7 @@ class _KurirState extends State<Kurir> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => KurirJNE(
+                          berat:widget.berat,
                             kabu: widget.kabu,
                             tuju: widget.tuju,
                             totalharga: widget.totalharga,
@@ -98,6 +101,7 @@ class _KurirState extends State<Kurir> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => KurirJNT(
+                          berat:widget.berat,
                             kabu: widget.kabu,
                             tuju: widget.tuju,
                             totalharga: widget.totalharga,
@@ -136,6 +140,7 @@ class _KurirState extends State<Kurir> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => KurirTIKI(
+                            berat:widget.berat,
                                 kabu: widget.kabu,
                                 tuju: widget.tuju,
                                 totalharga: widget.totalharga,
@@ -173,6 +178,7 @@ class _KurirState extends State<Kurir> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => KurirPos(
+                          berat:widget.berat,
                             kabu: widget.kabu,
                             tuju: widget.tuju,
                             totalharga: widget.totalharga,
@@ -221,8 +227,9 @@ class KurirJNE extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
+  final String berat;
 
-  const KurirJNE({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
+  const KurirJNE({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
   
   
   @override
@@ -243,7 +250,7 @@ class _KurirJneState extends State<KurirJNE> {
       body: {
         "asal": widget.kabu,
         "tujuan": widget.tuju,
-        "berat": "100",
+        "berat": widget.berat,
         "kurir": "jne",
       },
     );
@@ -390,9 +397,10 @@ class KurirJNT extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
+  final String berat;
 
-  const KurirJNT({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
- 
+  const KurirJNT({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
+
   @override
   _KurirJntState createState() => _KurirJntState();
 }
@@ -412,11 +420,11 @@ class _KurirJntState extends State<KurirJNT> {
       body: {
         'asal': widget.kabu,
         'tujuan': widget.tuju,
-        'berat': "100",
+        'berat': widget.berat,
         'kurir': 'jnt',
       },
     );
-    // print(response.body);
+     //print(response.body);
 
     setState(() {
       // ignore: deprecated_member_use
@@ -431,7 +439,6 @@ class _KurirJntState extends State<KurirJNT> {
   @override
   Widget build(BuildContext context) {
     getKurirJnt();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Kurir JNT"),
@@ -559,9 +566,9 @@ class KurirPos extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
+  final String berat;
 
-  const KurirPos({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
-
+  const KurirPos({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
   
   @override
   _KurirPosState createState() => _KurirPosState();
@@ -582,7 +589,7 @@ class _KurirPosState extends State<KurirPos> {
       body: {
         'asal': widget.kabu,
         'tujuan': widget.tuju,
-        'berat': "100",
+        'berat': widget.berat,
         'kurir': 'pos',
       },
     );
@@ -729,9 +736,9 @@ class KurirTIKI extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
+  final String berat;
 
-  const KurirTIKI({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
-  
+  const KurirTIKI({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
   @override
   _KurirTikiState createState() => _KurirTikiState();
 }
@@ -751,7 +758,7 @@ class _KurirTikiState extends State<KurirTIKI> {
       body: {
         'asal': widget.kabu,
         'tujuan': widget.tuju,
-        'berat': "100",
+        'berat': widget.berat,
         'kurir': 'tiki',
       },
     );

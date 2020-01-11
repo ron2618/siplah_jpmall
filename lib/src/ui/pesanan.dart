@@ -165,7 +165,7 @@ class _DetailPesananState extends State<DetailPesanan> {
         },
         body: {
           "user_id": "" + nama,
-          "order_id":"20010816005"
+          "order_id":order
         });
     //print(response.body);
     setState(() {
@@ -219,7 +219,7 @@ int o;
       mitra = convertDataToJson['Data'][0]['mitra'];
       produk = convertDataToJson['Data'][0]['mitra'][0]['produk'];
   o=produk.length.toInt();
- 
+
     });
   }
 
@@ -696,7 +696,7 @@ int o;
                 itemCount: 1,
                 itemBuilder: (context, i) {
                   return Row(
-                    children: <Widget>[Text("Ongkir ("+mitra[0]['kurir_kode']+")",style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+                    children: <Widget>[Text("Ongkir ("+mitra[0]['kurir_kode']!=null?"":mitra[0]['kurir_kode'].toString()+")",style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
                   );
                 }),
           ),
@@ -728,7 +728,7 @@ int o;
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(mitra[0]['alamat_pengiriman_alamat']),
+                            child: Text(mitra[0]['alamat_pengiriman_alamat']==null?"":mitra[0]['alamat_pengiriman_alamat']),
                           )
                         ],
                       )),
