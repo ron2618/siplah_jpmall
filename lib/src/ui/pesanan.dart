@@ -208,7 +208,6 @@ String merchant_id = map1['merchant_id'];
  
   }
 //getjson
-
 int o;
  String nama;
   List data,produk,mitra;
