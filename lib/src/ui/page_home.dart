@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/home/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
    getCredential();    
-   getJsonData();
+  
   }
   String nama;
   String namauser;
@@ -111,12 +111,13 @@ getCredential() async {
       level_id = pref.getString("level_id");
       foto = pref.getString("foto");
       id = pref.getString('id');
+      getJsonData();
     });
     
   }
   @override
   Widget build(BuildContext context) {
-    getJsonData();
+    
     return Scaffold(
       body: NestedScrollView(
             controller: _controller,
@@ -144,9 +145,7 @@ getCredential() async {
                   pinned: true,
                   expandedHeight: 120,
                   flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.purple, Colors.yellow])),
+                    decoration: BoxDecoration(color: Colors.blueAccent),
                     child: FlexibleSpaceBar(
                       background: MyFlexSpace(),
                     ),
@@ -177,7 +176,19 @@ getCredential() async {
                     SizedBox(
                       height: 10,
                     ),
-                  
+                       data == null ?Container():
+                   GridKategori(
+                      data: kategorilist,
+                      dataproduk: data,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+            decoration:
+                BoxDecoration(border: Border.all(width: 0.5, color: Colors.grey[400])),
+          ),
+                   
                          Container(
                             height:data == null ? 0 : 245 * data.length.toDouble(),
                             child: ListView.builder(
@@ -214,11 +225,8 @@ getCredential() async {
                     SizedBox(
                       height: 5,
                     ),
-                    data == null ?Container():
-                    GridKategori(
-                      data: kategorilist,
-                      dataproduk: data,
-                    ),
+                 
+                   
                     // RekomToko(),
                     SizedBox(
                       height: 10.0,

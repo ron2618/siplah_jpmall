@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/blog_footer'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/blog/blog_footer'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -123,6 +123,7 @@ class _ProfilePageState extends State<ProfilePage>
       double cwidth = MediaQuery.of(context).size.width / 3;
     return data==null?Container(): Scaffold(
       appBar: AppBar(
+          backgroundColor: Colors.blue[800],
         actions: <Widget>[
           Container(
             padding: const EdgeInsets.all(5),
@@ -159,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage>
                   child: Image.network(
                     foto != null
                         ? foto
-                        : ('https://siplah.mascitra.co.id/assets/images/user.ico'),
+                        : ('http://192.168.1.23/siplah/assets/images/user.ico'),
                   ),
                 ),
               ),
@@ -288,19 +289,7 @@ class _ProfilePageState extends State<ProfilePage>
                       width: 380,
                       child: DrawerHeader(
                         decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              // Where the linear gradient begins and ends
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              // Add one stop for each color. Stops should increase from 0 to 1
-                              //stops: [0.1, 0.5, 0.7, 0.9],
-                              colors: [
-                                // Colors are easy thanks to Flutter's Colors class.
-                                Colors.deepPurple[800],
-                                Colors.pink[700],
-                                Colors.yellow[500],
-                              ],
-                            ),
+                          color: Colors.blue[800],
                         
                             image: new DecorationImage(
                               
@@ -369,19 +358,7 @@ class _ProfilePageState extends State<ProfilePage>
                       width: 380,
                       child: DrawerHeader(  
                         decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              // Where the linear gradient begins and ends
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              // Add one stop for each color. Stops should increase from 0 to 1
-                              //stops: [0.1, 0.5, 0.7, 0.9],
-                              colors: [
-                                // Colors are easy thanks to Flutter's Colors class.
-                                Colors.deepPurple[800],
-                                Colors.pink[700],
-                                Colors.yellow[500],
-                              ],
-                            ),
+                           color: Colors.blue[800],
                             image: new DecorationImage(
                                 image: new  AssetImage("src/image/Icons_SIPLAH_JPSTORE_2020.png"))),
                       ),
@@ -466,7 +443,7 @@ class _PageSiteA extends State<PagesiteA> {
     //print(widget.id);
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/tampil'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/blog/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -543,7 +520,7 @@ class _PageSiteB extends State<PagesiteB> {
     //print(widget.id);
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/blog/tampil'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/blog/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",

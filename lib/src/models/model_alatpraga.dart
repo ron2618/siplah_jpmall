@@ -24,7 +24,7 @@ class Praga {
 
   static Future<List<Praga>> getUsers() async{
 
-    String apiURL = "https://siplah.mascitra.co.id/api/home/list?id=7" ;
+    String apiURL = "http://192.168.1.23/siplah/api/home/list?id=7" ;
 
  
     

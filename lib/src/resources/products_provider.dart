@@ -7,7 +7,7 @@ import 'package:siplah_jpmall/src/models/product_model.dart';
 
 class ProductProvider{
   Client client = Client();
-  final url = "https://siplah.mascitra.co.id/api/home/list";
+  final url = "http://192.168.1.23/siplah/api/home/list";
   Future<List<Products>> fetchProducts() async {
     final response = await client.get(url,headers: {"Content-Type": "application/x-www-form-urlencoded","API-App":"siplah_jpmall.id","Api-Key":"4P1_7Pm411_51p114h","API-Token":"575696f2ed816e00edbfa90f917c6f757e5ce05a"},);
     if(response.statusCode == 200){

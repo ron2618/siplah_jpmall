@@ -19,15 +19,17 @@ class _GridKategoriState extends State<GridKategori> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
-      child: ListView.builder(
+      height: 160,
+      
+      child: Container( decoration: BoxDecoration(color: Colors.blueAccent, boxShadow: [
+        BoxShadow(color: Colors.black26, offset: Offset(0, 5), blurRadius: 3), ]),child:ListView.builder(
             scrollDirection: Axis.horizontal,
             // physics: ScrollPhysics(),
             // shrinkWrap: true,
             itemCount: widget.data.length,
             itemBuilder: (context, i) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: GestureDetector(
                     onTap: ()=> Navigator.push(
               context,
@@ -38,15 +40,16 @@ class _GridKategoriState extends State<GridKategori> {
                                       child: Container(
                      
                        decoration: BoxDecoration(
-                           color: Colors.red[100],
+                         
+                          // color: Colors.red[100],
                          borderRadius: BorderRadius.circular(10),
                        ),
-            height: 100,
-            width: 110,
+            // height: 50,
+            width: 100,
             child: Center(
               child: Container(
-                height: 120,
-               child: Image.network(widget.data[i]['gambar']!=null?widget.data[i]['gambar']:'https://siplah.mascitra.co.id/assets/images/no-image.png',),
+                height: 180,
+               child: Image.network(widget.data[i]['gambar']!=null?widget.data[i]['gambar']:'http://192.168.1.23/siplah/assets/images/no-image.png',),
               ),
             ),
           ),
@@ -55,6 +58,7 @@ class _GridKategoriState extends State<GridKategori> {
        
             },
           ),
+        )
         );  }
 }
 

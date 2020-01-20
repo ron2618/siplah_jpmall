@@ -44,7 +44,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/mitra/komplain/pesan'),
+            'http://192.168.1.23/siplah/api/mitra/komplain/pesan'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -102,7 +102,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
   
   Future<http.Response> daftar_api() async {
     
-    var url = 'https://siplah.mascitra.co.id/api/mitra/komplain/tambah';
+    var url = 'http://192.168.1.23/siplah/api/mitra/komplain/tambah';
 
     Map data = {
       'transaksi_id': idx,
@@ -213,7 +213,7 @@ class _KomplainMitraState extends State<KomplainMitra>{
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/mitra/komplain/transaksi'),
+            'http://192.168.1.23/siplah/api/mitra/komplain/transaksi'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",

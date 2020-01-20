@@ -26,7 +26,7 @@ int load = 0;
  Future<http.Response> _delete(String idx) async {
     //a=a+id;
     //print(id);
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/keranjang/delete';
+    var url = 'http://192.168.1.23/siplah/api/sekolah/keranjang/delete';
 
     Map data = {'user_id': "" + id, 'id': idx};
     //encode Map to JSON
@@ -80,7 +80,7 @@ int load = 0;
    Future<http.Response> qtyjson(String id_produk,String jumlah_produk) async {
     //a=a+id;
     //print(id);
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah_stok';
+    var url = 'http://192.168.1.23/siplah/api/sekolah/keranjang/tambah_stok';
 
    
     //encode Map to JSON
@@ -133,7 +133,7 @@ int load = 0;
     Future<http.Response> daftartransaksi(keranjang) async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/sekolah/pembayaran/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -178,7 +178,7 @@ int load = 0;
    Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/isi'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/sekolah/keranjang/isi'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -254,9 +254,7 @@ getCredential() async {
         
         appBar: AppBar(
           flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.purple, Colors.yellow]))),
+                    decoration: BoxDecoration(color: Colors.blue[800])),
           actions: <Widget>[
             Center(child: Text("hapus"),),
             SizedBox(width: 10,)
@@ -424,7 +422,7 @@ getCredential() async {
                               Container(
                                   height: 50,
                                   width: 50,
-                                  child: Image.network(x[i]['produk_foto']!=null ? x[i]['produk_foto'][0]['foto']:'https://siplah.mascitra.co.id/assets/images/no-image.png')),
+                                  child: Image.network(x[i]['produk_foto']!=null ? x[i]['produk_foto'][0]['foto']:'http://192.168.1.23/siplah/assets/images/no-image.png')),
                               Column(
                                 // mainAxisAlignment: ,
                                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
 import 'package:siplah_jpmall/src/models/get_token.dart';
+import 'package:siplah_jpmall/src/ui/pembayaran.dart';
 
 class PesananState extends StatefulWidget {
   @override
@@ -15,13 +16,14 @@ class PesananState extends StatefulWidget {
 
 class _PesananState extends State<PesananState> {
   String nama;
-  List data;
+  List data,datax;
+  String trans;
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/tampil'),
+            'http://192.168.1.23/siplah/api/sekolah/pesanan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -36,6 +38,8 @@ class _PesananState extends State<PesananState> {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['Data'];
+      datax = convertDataToJson['Data'][0]['mitra'][0]['produk'];
+      trans=data[0]['id'];
     });
   }
 
@@ -58,6 +62,7 @@ class _PesananState extends State<PesananState> {
 
   @override
   Widget build(BuildContext context) {
+    
     double c_width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -92,11 +97,22 @@ class _PesananState extends State<PesananState> {
                                 onPressed: () {
                                   String iddetail;
                                   iddetail=data[i]['id'];
+                                  data[i]['status_nama']=='Success'?
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             DetailPesanan(iddetail:iddetail),
+                                      )):data[i]['status_nama']=='Penyelesaian'?Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            DetailPesanan(iddetail:iddetail))):trans==null?print(trans):
+                                       Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            PembayaranState(trans:int.parse(trans)),
                                       ));
                                 },
                               ),
@@ -149,14 +165,14 @@ class DetailPesanan extends StatefulWidget {
 
 class _DetailPesananState extends State<DetailPesanan> {
      //getdetailpem
-     
+     final myController = TextEditingController();
   
   Future<String> getDetailpem(String order) async {
     var response = await http.post(
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/status'),
+            'http://192.168.1.23/siplah/api/sekolah/pesanan/status'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -192,15 +208,17 @@ String merchant_id = map1['merchant_id'];
  
   }
 //getjson
+
 int o;
  String nama;
   List data,produk,mitra;
+  String produkid;
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/tampil'),
+            'http://192.168.1.23/siplah/api/sekolah/pesanan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -218,8 +236,9 @@ int o;
       data = convertDataToJson['Data'];
       mitra = convertDataToJson['Data'][0]['mitra'];
       produk = convertDataToJson['Data'][0]['mitra'][0]['produk'];
+      produkid = produk[0]['id'];
   o=produk.length.toInt();
-
+  getNego();
     });
   }
 
@@ -241,20 +260,158 @@ int o;
     super.initState();
     getCredential();
   }
+void shownego() {
+    // flutter defined function
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
 
+          title: new Text("Negosiasi"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                height: 150,
+                width:  MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                
+                  itemCount: negosiasi.length,
+                  itemBuilder: (context, i) {
+                    int a = i+1;
+                    return Column(
+
+                      children: <Widget>[
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.grey,
+                          height: 2,
+                        ),
+                         SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(a.toString()+"."),
+                            SizedBox(width: 10,),
+                            Container(child: Text(negosiasi[i]['nego'] +" ") ),
+                            SizedBox(width: 50,),
+                           Column(
+                              children: <Widget>[
+                              negosiasi[i]['user_setuju'] == "1"  ?   Container(
+                                  height: 30,
+                                  width: 150,
+                                  child: Center(child: Text("sekolah : Setuju",style: TextStyle(color: Colors.white),)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(50)
+                                  ),
+                                ):Container(
+                                  height: 30,
+                                  width: 150,
+                                  child: Center(child: Text("sekolah : -",style: TextStyle(color: Colors.white),)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.lightBlue,
+                                    borderRadius: BorderRadius.circular(50)
+                                  ),
+                                ),
+                                SizedBox(height: 2,),
+                                   negosiasi[i]['mitra_setuju'] == "1"  ? Container(
+                                  height: 30,
+                                  width: 150,
+                                  child: Center(child: Text("mitra : setuju",style: TextStyle(color: Colors.white),)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(50)
+                                  ),
+                                ): GestureDetector( 
+                                  onTap: (){
+                                   
+                                    setujui( negosiasi[i]['id']);
+                                  },
+                                      child:Container(
+                                  height: 30,
+                                  width: 150,
+                                  child: Center(child: Text("mitra : -",style: TextStyle(color: Colors.white),)),
+                                  decoration: BoxDecoration(
+                                    color: Colors.lightBlue,
+                                    borderRadius: BorderRadius.circular(50)
+                                  ),
+                                ),)
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
+              ),
+          
+           Row(
+             children: <Widget>[
+               Container(
+                 width: 150,
+                 child: new TextFormField(
+                   controller: myController,
+                      keyboardType: TextInputType.number, // Use email input type for emails.
+                      decoration: new InputDecoration(
+                        hintText: '100000',
+                        labelText: 'Nego Berapa'
+                      ),),
+               ),
+                 SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: (){
+       tambahnego();
+                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 100,
+                                    child: Center(child: Text("Simpan",style: TextStyle(color: Colors.white),)),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(50)
+                                    ),
+                                  ),
+                )
+             ],
+           ),
+              
+            ],
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   //detailpesanan
   void _showAlertupload(BuildContext context,String payment_code,String store,String transaction_time,String gross_amount,String currency,String order_id,String payment_type,String signature_key,String status_code,String transaction_id,String transaction_status,String status_message,String merchant_id
 ) {
   
-  
+   
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
                 title: Text("Detail Pemesanan"),
                 content: Container(
                     height: 600,
-                    width: 600,
-                    child: Column(children: <Widget>[
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView(scrollDirection: Axis.vertical, children: <Widget>[ Column(children: <Widget>[
                       Row(
                         children: <Widget>[
                           Padding(
@@ -349,9 +506,12 @@ int o;
                       ),
                       Row(
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Status Message : "+status_message),
+                          Container(
+                            width:  MediaQuery.of(context).size.width /3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Status Message : "+status_message),
+                            ),
                           )
                         ],
                       ),
@@ -363,7 +523,7 @@ int o;
                           )
                         ],
                       ),
-                    ])),
+                    ])])),
                 actions: <Widget>[
                   new FlatButton(
                     child: new Text("Back"),
@@ -376,6 +536,82 @@ int o;
  
   }
 
+//tambahnego
+Future<String> tambahnego() async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull(
+            'http://192.168.1.23/siplah/api/sekolah/pesanan/nego_tambah'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "transaksi_produk_id": produkid,
+           "harga_nego" : myController.text,
+           "user_id" : nama,
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      getNego();
+    });
+  }
+  String idnego;
+Future<String> setujui(String idvoid) async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull(
+            'http://192.168.1.23/siplah/api/sekolah/pesanan/nego_setuju'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+
+           "nego_id" :  idvoid,
+           "user_id" : nama,
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+
+    });
+  }
+List negosiasi;
+ Future<String> getNego() async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull(
+            'http://192.168.1.23/siplah/api/sekolah/pesanan/nego_tampil'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "transaksi_produk_id": produkid,
+
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      negosiasi = convertDataToJson['Data'];
+
+
+    });
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -466,7 +702,7 @@ int o;
                               radius: 30,
                               child: Center(
                                 child: Image.network(y[i]['foto']!=null?y[i]['foto']:
-                                  'https://siplah.mascitra.co.id/assets/images/user.ico',
+                                  'http://192.168.1.23/siplah/assets/images/user.ico',
                                 ),
                               ),
                             ),
@@ -508,6 +744,7 @@ int o;
           ),
           Container(
             height: 80,
+            width: MediaQuery.of(context).size.width,
             child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: data.length,
@@ -549,9 +786,11 @@ int o;
           ),
           Container(
             height: 50,
-            child: Row(
+            width: MediaQuery.of(context).size.width,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
               children: <Widget>[
-                SizedBox(width: 5,),
+                SizedBox(width: 2,),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text("No."),
@@ -577,12 +816,15 @@ int o;
                   child: Text("Harga"),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(17.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Text("Nego"),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Text("Sub. Total Bayar"),
+                Container(
+                  width: MediaQuery.of(context).size.width/5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text("Sub. Total Bayar"),
+                  ),
                 ),
               ],
             ),
@@ -617,7 +859,7 @@ int o;
                               width: 40,
                               height: 40,
                               child: Image.network(produk[i]['foto']!=null?produk[i]['foto']:
-                                  'https://siplah.mascitra.co.id/assets/images/user.ico')),
+                                  'http://192.168.1.23/siplah/assets/images/user.ico')),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -639,24 +881,24 @@ int o;
               if (node is dom.Element) {
                 switch (node.localName) {
                   case "custom_tag":
-                    return Column(children: children);
+                      return Column(children: children);
                 }
               }
             },
           ),//Text(produk[i]['deskripsi'])),
-                        )),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                              width: MediaQuery.of(context).size.width / 20,
-                              child: Text(produk[i]['jumlah'])),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                              width: MediaQuery.of(context).size.width / 10,
-                              child: Text(produk[i]['harga'])),
-                        ),
+                          )),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width / 20,
+                                child: Text(produk[i]['jumlah'])),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width / 10,
+                                child: Text(produk[i]['harga'])),
+                          ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
@@ -664,22 +906,107 @@ int o;
                               child: produk[i]['nego']!='1'? RaisedButton(
                                   color: Colors.blueGrey,
                                 onPressed: () {},
-                                child: Text("NEGO",style: TextStyle(color: Colors.white),),):RaisedButton(
+                                child: Text("NEGO",style: TextStyle(color: Colors.white,fontSize: 10),),):RaisedButton(
                                   color: Colors.blue,
-                                onPressed: () {},
-                                child: Text("NEGO",style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  shownego();
+                                },
+                                child: Text("NEGO",style: TextStyle(color: Colors.white, fontSize: 10)),
                               )),
                         ),
                         
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
-                              width: MediaQuery.of(context).size.width / 7,
+                              width: MediaQuery.of(context).size.width / 10,
                               child: Text(sub.toString())),
                         )
                       ],
                     ),
                   );
+
+//            return Container(
+//                      height: 100,
+//                      width: MediaQuery.of(context).size.width,
+//                      child: Card(
+                       
+//                       child: ListView(
+//                         scrollDirection: Axis.horizontal,
+//                         children: <Widget>[
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: Container(child: Text(a.toString())),
+//                           ),
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: Container(
+//                                 width: 40,
+//                                 height: 40,
+//                                 child: Image.network(produk[i]['foto']!=null?produk[i]['foto']:
+//                                     'https://siplah.mascitra.co.id/assets/images/user.ico')),
+//                           ),
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: Container(
+//                                 width: MediaQuery.of(context).size.width / 13,
+//                                 child: Text(produk[i]['nama'])),
+//                           ),
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: Container(
+//                                 width: MediaQuery.of(context).size.width / 7,
+//                                 child: Html(
+//             data: produk[i]['deskripsi'],
+//             //Optional parameters:
+//             onLinkTap: (url) {
+//               print("Opening $url...");
+//             },
+//             customRender: (node, children) {
+//               if (node is dom.Element) {
+//                 switch (node.localName) {
+//                   case "custom_tag":
+//                       return Column(children: children);
+//                 }
+//               }
+//             },
+//           ),//Text(produk[i]['deskripsi'])),
+//                           )),
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: Container(
+//                                 width: MediaQuery.of(context).size.width / 20,
+//                                 child: Text(produk[i]['jumlah'])),
+//                           ),
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: Container(
+//                                 width: MediaQuery.of(context).size.width / 10,
+//                                 child: Text(produk[i]['harga'])),
+//                           ),
+//                         Padding(
+//                           padding: const EdgeInsets.all(20),
+//                           child: GestureDetector(
+//                             onTap: (){
+// shownego();
+//                             },
+//                                                       child: Container(
+//                               width: 100,
+                            
+//                               color: Colors.blueAccent,
+//                               child: Center(child: Text("NEGO",style: TextStyle(color: Colors.white),)),
+//                             ),
+//                           ),
+//                         ),
+//                           Padding(
+//                             padding: const EdgeInsets.all(8.0),
+//                             child: Container(
+//                                 width: MediaQuery.of(context).size.width / 7,
+//                                 child: Text(sub.toString())),
+//                           )
+//                         ],
+//                       ),
+//                   ),
+//                    );
                 }),
           ),
           Container(
@@ -726,9 +1053,12 @@ int o;
                             child:
                                 Icon(Icons.location_on, color: Colors.black87),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(mitra[0]['alamat_pengiriman_alamat']==null?"":mitra[0]['alamat_pengiriman_alamat']),
+                          Container(
+                            width: MediaQuery.of(context).size.width/1.5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(mitra[0]['alamat_pengiriman_alamat']==null?"":mitra[0]['alamat_pengiriman_alamat']),
+                            ),
                           )
                         ],
                       )),

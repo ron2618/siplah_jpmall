@@ -107,7 +107,7 @@ class _ImageSliderState extends State<ImageSlider> {
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/admin/data_slide/list'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/admin/data_slide/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",

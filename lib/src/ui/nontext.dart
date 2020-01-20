@@ -228,7 +228,7 @@ class _NontextState extends State<Nontext> {
   void changeIndex() {
     setState(() => index = random.nextInt(3));
   }
- List colors = [Colors.deepPurple[800], Colors.deepOrange[500], Colors.pink[700]];
+ List colors = [Colors.white, Colors.white, Colors.white];
   Random random = new Random();
   var f = NumberFormat("#,##0", "en_US");
   List<String> satu = [
@@ -265,7 +265,7 @@ class _NontextState extends State<Nontext> {
                               topLeft: Radius.circular(20)),
                           image: DecorationImage(
                               image:
-                                  NetworkImage(widget.kategori!=null?widget.kategori:'https://siplah.mascitra.co.id/assets/images/no-image.png'))),
+                                  NetworkImage(widget.kategori!=null?widget.kategori:'http://192.168.1.23/siplah/assets/images/no-image.png'))),
                       child: SizedBox(
                         height: 220,
                         width: 150,
@@ -340,7 +340,7 @@ class _NontextState extends State<Nontext> {
                               topLeft: Radius.circular(20)),
                           image: DecorationImage(
                               image:
-                                  NetworkImage('https://siplah.mascitra.co.id/assets/images/no-image.png'))),
+                                  NetworkImage('http://192.168.1.23/siplah/assets/images/no-image.png'))),
                       child: SizedBox(
                         height: 220,
                         width: 150,
@@ -404,7 +404,7 @@ class _NontextState extends State<Nontext> {
                                       gambar: widget.data[index]['foto'] != null
                                           ? widget.data[index]['foto'][0]
                                               ['foto']
-                                          : 'https://siplah.mascitra.co.id/assets/images/no-image.png',
+                                          : 'http://192.168.1.23/siplah/assets/images/no-image.png',
                                       harga: widget.data[index]['harga']))),
                                     
                           child: Container(
@@ -425,7 +425,7 @@ class _NontextState extends State<Nontext> {
                                               null
                                           ? widget.data[index]['foto'][0]
                                               ['foto']
-                                          : 'https://siplah.mascitra.co.id/assets/images/no-image.png',
+                                          : 'http://192.168.1.23/siplah/assets/images/no-image.png',
                                       fit: BoxFit.cover,
                                     ),
                                     decoration: BoxDecoration(

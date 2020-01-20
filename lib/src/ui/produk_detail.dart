@@ -168,7 +168,7 @@ class _DetailProduk2State extends State<DetailProduk2>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/sekolah/keranjang/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -592,7 +592,7 @@ getCredential() async {
     //print(id);
   
     var url =
-        'https://siplah.mascitra.co.id/api/sekolah/produk_favorit/tambah';
+        'http://192.168.1.23/siplah/api/sekolah/produk_favorit/tambah';
 
     Map data = {'user_id': "" + nama, 'produk_id':id, };
     //encode Map to JSON
@@ -810,7 +810,7 @@ List data2;
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+      Uri.encodeFull('http://192.168.1.23/siplah/api/home/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -868,7 +868,7 @@ ListView.builder(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10))),
-                            child: Image.network(data2[i]['foto']==null?'https://siplah.mascitra.co.id/assets/images/no-image.png':data2[i]['foto'],
+                            child: Image.network(data2[i]['foto']==null?'http://192.168.1.23/siplah/assets/images/no-image.png':data2[i]['foto'],
                               fit: BoxFit.fill,
                             )),
                         Positioned(
