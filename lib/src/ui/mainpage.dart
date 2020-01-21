@@ -138,8 +138,8 @@ class _MainPageState extends State<MainPage> {
               // ),
             
                BottomNavigationBarItem(
-                title: Text("Feeds", style: TextStyle(fontSize: 12),),
-                icon: Icon(Icons.new_releases,)
+                title: Text("Mitra", style: TextStyle(fontSize: 12),),
+                icon: Icon(Icons.group,)
               ),
               BottomNavigationBarItem(
                 title: Text("Profile", style: TextStyle(fontSize: 12),),

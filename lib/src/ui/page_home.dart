@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/api/home/list'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -225,23 +225,10 @@ getCredential() async {
                     SizedBox(
                       height: 5,
                     ),
-                 
-                   
-                    // RekomToko(),
                     SizedBox(
                       height: 10.0,
                     ),
 
-                    // Column(
-                    //   children: List.generate(50, (p) {
-                    //     return ListTile(
-                    //       title: Text("Item Count $p"),
-                    //     );
-                    //   }),
-                    // ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
                   ]),
                 ],
               ),

@@ -996,7 +996,7 @@ class _MarketingPemState extends State<MarketingPem> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://192.168.1.23/siplah/api/mitra/marketing/tampil'),
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -1020,7 +1020,7 @@ class _MarketingPemState extends State<MarketingPem> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://192.168.1.23/siplah/api/sekolah/pembayaran/tampil'),
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",

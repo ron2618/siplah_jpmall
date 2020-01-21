@@ -251,7 +251,7 @@ class _KurirJneState extends State<KurirJNE> {
   Future<String> getKurirJne(String a, b) async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
@@ -420,7 +420,7 @@ class _KurirJntState extends State<KurirJNT> {
   Future<String> getKurirJnt() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -589,7 +589,7 @@ class _KurirPosState extends State<KurirPos> {
   Future<String> getKurirPos() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -758,7 +758,7 @@ class _KurirTikiState extends State<KurirTIKI> {
   Future<String> getKurirTiki() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",

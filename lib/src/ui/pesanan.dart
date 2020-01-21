@@ -23,7 +23,7 @@ class _PesananState extends State<PesananState> {
         //Encode the url
 
         Uri.encodeFull(
-            'http://192.168.1.23/siplah/api/sekolah/pesanan/tampil'),
+            'https://siplah.mascitra.co.id/api/sekolah/pesanan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -33,7 +33,7 @@ class _PesananState extends State<PesananState> {
         body: {
           "user_id": "" + nama,
         });
-    //print(response.body);
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
@@ -107,7 +107,8 @@ class _PesananState extends State<PesananState> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            DetailPesanan(iddetail:iddetail))):trans==null?print(trans):
+                                            DetailPesanan(iddetail:iddetail)))://print(iddetail);
+                                            trans==null?print(trans):
                                        Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -139,11 +140,19 @@ class _PesananState extends State<PesananState> {
                               ? "kosong"
                               : data[i]['tanggal']),
                         ),
+                        
                         Padding(
                           padding: const EdgeInsets.all(2.0),
-                          child: Text(data[i]['status_nama'] == null
+                          child:  data[i]['status_nama']=="Success"?
+                          Container(decoration:BoxDecoration(color: Colors.green),child: Text(data[i]['status_nama'] == null
                               ? "kosong"
-                              : data[i]['status_nama']),
+                              : data[i]['status_nama'],style: TextStyle(color: Colors.white),)):data[i]['status_nama']=="Penyelesaian"?
+                               Container(decoration:BoxDecoration(color: Colors.blue),child: Text(data[i]['status_nama'] == null
+                              ? "kosong"
+                              : data[i]['status_nama'],style: TextStyle(color: Colors.white))):
+                              Container(decoration:BoxDecoration(color: Colors.red),child: Text(data[i]['status_nama'] == null
+                              ? "kosong"
+                              : data[i]['status_nama'],style: TextStyle(color: Colors.white)))
                         ),
                       ],
                     ),
@@ -172,7 +181,7 @@ class _DetailPesananState extends State<DetailPesanan> {
         //Encode the url
 
         Uri.encodeFull(
-            'http://192.168.1.23/siplah/api/sekolah/pesanan/status'),
+            'https://siplah.mascitra.co.id/api/sekolah/pesanan/status'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -217,7 +226,7 @@ int o;
         //Encode the url
 
         Uri.encodeFull(
-            'http://192.168.1.23/siplah/api/sekolah/pesanan/tampil'),
+            'https://siplah.mascitra.co.id/api/sekolah/pesanan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -541,7 +550,7 @@ Future<String> tambahnego() async {
         //Encode the url
 
         Uri.encodeFull(
-            'http://192.168.1.23/siplah/api/sekolah/pesanan/nego_tambah'),
+            'https://siplah.mascitra.co.id/api/sekolah/pesanan/nego_tambah'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -565,7 +574,7 @@ Future<String> setujui(String idvoid) async {
         //Encode the url
 
         Uri.encodeFull(
-            'http://192.168.1.23/siplah/api/sekolah/pesanan/nego_setuju'),
+            'https://siplah.mascitra.co.id/api/sekolah/pesanan/nego_setuju'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -589,7 +598,7 @@ List negosiasi;
         //Encode the url
 
         Uri.encodeFull(
-            'http://192.168.1.23/siplah/api/sekolah/pesanan/nego_tampil'),
+            'https://siplah.mascitra.co.id/api/sekolah/pesanan/nego_tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -701,7 +710,7 @@ List negosiasi;
                               radius: 30,
                               child: Center(
                                 child: Image.network(y[i]['foto']!=null?y[i]['foto']:
-                                  'http://192.168.1.23/siplah/assets/images/user.ico',
+                                  'https://siplah.mascitra.co.id/assets/images/user.ico',
                                 ),
                               ),
                             ),
@@ -754,22 +763,22 @@ List negosiasi;
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text("No. Invoice : "+y[i]['no_invoice']),
+                          Text(y[i]['no_invoice']==null?"No. Invoice :":"No. Invoice : "+y[i]['no_invoice']),
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          Text("Purchase Order : "+y[i]['purchase_order']),
+                          Text(y[i]['purchase_order']==null?"Purchase Order :":"Purchase Order : "+y[i]['purchase_order']),
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          Text("Kode Marketing : "+y[i]['marketing_kode']),
+                          Text(y[i]['marketing_kode']==null?"Kode Marketing :":"Kode Marketing : "+y[i]['marketing_kode']),
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          Text("Nama Marketing : "+y[i]['marketing_nama']),
+                          Text(y[i]['marketing_nama']==null?"Nama Marketing : ":"Nama Marketing : "+y[i]['marketing_nama']),
                         ],
                       ),
                     ],
@@ -858,7 +867,7 @@ List negosiasi;
                               width: 40,
                               height: 40,
                               child: Image.network(produk[i]['foto']!=null?produk[i]['foto']:
-                                  'http://192.168.1.23/siplah/assets/images/user.ico')),
+                                  'https://siplah.mascitra.co.id/assets/images/user.ico')),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -1022,7 +1031,7 @@ List negosiasi;
                 itemCount: 1,
                 itemBuilder: (context, i) {
                   return Row(
-                    children: <Widget>[Text("Ongkir ("+mitra[0]['kurir_kode']!=null?"":mitra[0]['kurir_kode'].toString()+")",style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+                    children: <Widget>[Text(mitra[0]['kurir_kode']==null?"Ongkir (Internal)":"Ongkir ("+mitra[0]['kurir_kode']+")",style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
                   );
                 }),
           ),
@@ -1138,27 +1147,27 @@ List negosiasi;
                               height: 25, child: Text(mitra[0]['updated_at']))
                         ],
                       ),
-                      Row(children: <Widget>[
-                        Container(child: Row(children: <Widget>[
-                           RaisedButton(
-                               color: Colors.blue,
-                                onPressed: () {},
-                                child: Text("BAST"),
-                              ),
-                              SizedBox(width: 10,),
-                              RaisedButton(
-                                  color: Colors.green,
-                                onPressed: () {},
-                                child: Text("Invoice"),
-                              ),
-                              SizedBox(width: 10,),
-                              RaisedButton(
-                                  color: Colors.yellow,
-                                onPressed: () {},
-                                child: Text("Purchase Order"),
-                              ),
-                        ],) ,)
-                      ],)
+                      // Row(children: <Widget>[
+                      //   Container(child: Row(children: <Widget>[
+                      //      RaisedButton(
+                      //          color: Colors.blue,
+                      //           onPressed: () {},
+                      //           child: Text("BAST"),
+                      //         ),
+                      //         SizedBox(width: 10,),
+                      //         RaisedButton(
+                      //             color: Colors.green,
+                      //           onPressed: () {},
+                      //           child: Text("Invoice"),
+                      //         ),
+                      //         SizedBox(width: 10,),
+                      //         RaisedButton(
+                      //             color: Colors.yellow,
+                      //           onPressed: () {},
+                      //           child: Text("Purchase Order"),
+                      //         ),
+                      //   ],) ,)
+                      // ],)
                     ],
                   );
                 }),

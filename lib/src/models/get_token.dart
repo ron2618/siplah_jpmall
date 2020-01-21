@@ -19,7 +19,7 @@ class Token {
   }
 
   static Future<List<Token>> getTokens(String id) async{
-    String apiURL = "http://192.168.1.23/siplah/api/api/get_token?id=" + id;
+    String apiURL = "https://siplah.mascitra.co.id/api/api/get_token?id=" + id;
     
     var apiResult = await http.post(apiURL,body: {
       "app":"siplah_jpmall.id"

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:siplah_jpmall/src/ui/myappbar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FeedsPage extends StatefulWidget {
   @override
@@ -174,12 +176,36 @@ class _FeedsPageState extends State<FeedsPage> {
       ),
     );
   }
+String nama;
+  List data;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+        //Encode the url
 
+        Uri.encodeFull('http://192.168.1.23/siplah/api/admin/data_mitra/list'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "status":"1"
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['data'];
+    });
+  }
   _feeds(BuildContext context) {
-    return ListView.builder(
+    getJsonData();
+    return data==null?Column(
+                children: <Widget>[Center(child: CircularProgressIndicator())]):ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: _listfeeds.length,
+      itemCount: data.length,
       itemBuilder: (context, i) {
         return Container(
           padding: const EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0, bottom: 8.0),
@@ -197,7 +223,7 @@ class _FeedsPageState extends State<FeedsPage> {
                           CircleAvatar(
                             backgroundColor: Colors.amber,
                             maxRadius: 20,
-                            // backgroundImage: ,
+                            backgroundImage: NetworkImage(data[i]['foto']==null?"":data[i]['foto']) ,
                           ),
                           SizedBox(
                             width: 10.0,
@@ -207,7 +233,7 @@ class _FeedsPageState extends State<FeedsPage> {
                               Container(
                                 width: 200,
                                 child: Text(
-                                  _listfeeds[i].title,
+                                  data[i]['nama'],
                                   style: TextStyle(
                                       fontSize: 13, fontWeight: FontWeight.w600),
                                 ),
@@ -218,7 +244,7 @@ class _FeedsPageState extends State<FeedsPage> {
                               Container(
                                 width: 200,
                                 child: Text(
-                                  _listfeeds[i].date,
+                                  data[i]['alamat']==null?"Alamat :":"Alamat : "+data[i]['alamat'],
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: Colors.black26
@@ -230,29 +256,40 @@ class _FeedsPageState extends State<FeedsPage> {
                         ],
                       ),
                     ),
-                    Container(
-                      height: 30,
-                      width: 70,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.cyan,
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Follow",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    )
+             
+                    // Container(
+                    //   height: 30,
+                    //   width: 70,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(5),
+                    //     color: Colors.cyan,
+                    //   ),
+                    //   child: Center(
+                    //     child: Text(
+                    //       "Follow",
+                    //       style: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: 13,
+                    //           fontWeight: FontWeight.w600),
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                          height: 2,
+                          color: Colors.grey[300],
+                        ),
              ],
+             
           ),
+          
         );
+        
       },
     );
   }

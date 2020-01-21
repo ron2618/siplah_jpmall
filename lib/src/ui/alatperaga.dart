@@ -373,7 +373,7 @@ class _AlatperagaState extends State<Alatperaga> {
                   PageRouteBuilder(
                       transitionDuration: Duration(milliseconds: 350),
                       pageBuilder: (context, _, __) =>
-                          DetailProduk2(nama: widget.data[index]['produk'], gambar: widget.data[index]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'http://192.168.1.23/siplah/assets/images/no-image.png',harga: widget.data[index]['harga'],))),
+                          DetailProduk2(nama: widget.data[index]['produk'], gambar: widget.data[index]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'https://siplah.mascitra.co.id/assets/images/no-image.png',harga: widget.data[index]['harga'],))),
               
               child: Container(
                 width: 130,
@@ -388,7 +388,7 @@ class _AlatperagaState extends State<Alatperaga> {
                       height: 100,
                       width: 100,
                       child: Container(
-                        child: Image.network(widget.data[index]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'http://192.168.1.23/siplah/assets/images/no-image.png', fit: BoxFit.cover,),
+                        child: Image.network(widget.data[index]['foto'] != null ? widget.data[index]['foto'][0]['foto']: 'https://siplah.mascitra.co.id/assets/images/no-image.png', fit: BoxFit.cover,),
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(color: Colors.black26,

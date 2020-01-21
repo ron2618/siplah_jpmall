@@ -17,7 +17,7 @@ class _PenjualanState extends State<Penjualan> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://192.168.1.23/siplah/api/mitra/penjualan/tampil'),
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/penjualan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -381,7 +381,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                           Container(
                               height: 40,
                               child: Image.network(
-                                  "http://192.168.1.23/siplah/assets/images/user.ico")),
+                                  "https://siplah.mascitra.co.id/assets/images/user.ico")),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text("Bukan Dylan"),

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:siplah_jpmall/src/ui/kurir.dart';
 import 'package:siplah_jpmall/src/ui/marketing.dart';
 import 'package:siplah_jpmall/src/ui/page_home.dart';
+import 'package:siplah_jpmall/src/ui/pesanan.dart';
 
 import 'mainpage.dart';
 import 'metodebayar.dart';
@@ -41,7 +42,7 @@ class PembayaranState extends StatefulWidget {
 class _PembayaranState extends State<PembayaranState> {
 
   Future<http.Response> bayarapi(int idtr,String gettoken) async {
-    var url = 'http://192.168.1.23/siplah/api/sekolah/pembayaran/bayar';
+    var url = 'https://siplah.mascitra.co.id/api/sekolah/pembayaran/bayar';
     Map kurir ={
       'mitra_id':mitra,
       'kurir':""+widget.ketkur,
@@ -56,7 +57,7 @@ class _PembayaranState extends State<PembayaranState> {
       },
       'detail': {
       'total_ongkir': widget.cost,
-      'sub_total': widget.totalharga,
+      'sub_total': widget.totalharga==null?hargasub:widget.totalharga,
       'user_id': id,
       'token_id':""+ gettoken,
       },
@@ -91,6 +92,12 @@ class _PembayaranState extends State<PembayaranState> {
     } else {
       _berhasil(context);
      print(pay);
+      Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  PesananState(),
+                            ));
     }
     return response;
   }
@@ -111,7 +118,7 @@ class _PembayaranState extends State<PembayaranState> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text("Peringatan"),
-              content: Text("Data berhasil diubah"),
+              content: Text("Data berhasil dibeli"),
             ));
   }
   
@@ -119,7 +126,7 @@ class _PembayaranState extends State<PembayaranState> {
  Future<String> getTokenid() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/api/midtrans/api/token'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/midtrans/api/token'),
       // headers: {
       //   "Content-Type": "application/x-www-form-urlencoded",
       //   "API-App": "siplah_jpmall.id",
@@ -150,7 +157,7 @@ class _PembayaranState extends State<PembayaranState> {
   Future<String> getKurir_Jne() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -212,7 +219,7 @@ class _PembayaranState extends State<PembayaranState> {
 //     Future<http.Response> daftartransaksi(keranjang) async {
 //     var response = await http.post(
 //       //Encode the url
-//       Uri.encodeFull('http://192.168.1.23/siplah/api/sekolah/pembayaran/tambah'),
+//       Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah'),
 //       headers: {
 //         "Content-Type": "application/x-www-form-urlencoded",
 //         "API-App": "siplah_jpmall.id",
@@ -255,7 +262,7 @@ class _PembayaranState extends State<PembayaranState> {
   Future<String> getCartsData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/api/sekolah/pembayaran/tampil'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -263,7 +270,7 @@ class _PembayaranState extends State<PembayaranState> {
         "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
-        "transaksi_id": widget.trans.toString()!=null?widget.trans.toString():widget.idtrans.toString()
+        "transaksi_id": widget.idtrans.toString()!=null?widget.idtrans.toString():widget.trans.toString()!=null?widget.trans.toString():widget.idtrans.toString()
       },
     );
      print(response.body);
@@ -292,7 +299,7 @@ class _PembayaranState extends State<PembayaranState> {
         //Encode the url
 
         Uri.encodeFull(
-            'http://192.168.1.23/siplah/api/sekolah/alamat_pengiriman/list'),
+            'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -445,129 +452,7 @@ class _PembayaranState extends State<PembayaranState> {
               ),
             ),
           ),
-          // Container(
-          //   child: Column(children: <Widget>[
-          //     Row(
-          //       children: <Widget>[
-          //         Padding(
-          //           padding: const EdgeInsets.only(left: 7.0),
-          //           child: Text(
-          //             "Daftar Belanja",
-          //             style:
-          //                 TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          //           ),
-          //         )
-          //       ],
-          //     ),
-          //     SizedBox(
-          //       height: 10,
-          //     ),
-          //     Column(
-          //       children: <Widget>[
-          //         Container(
-          //           height: 400,
-          //           child: datax == null
-          //               ? Container()
-          //               : ListView.builder(
-          //                   itemCount: datax.length,
-          //                   itemBuilder: (context, i) {
-          //                     final x = datax[i]['Produk'];
-          //                     return Padding(
-          //                       padding: const EdgeInsets.only(left: 4.0),
-          //                       child: Column(
-          //                         children: <Widget>[
-          //                           Row(
-          //                             children: <Widget>[
-          //                               IconButton(
-          //                                 icon: Icon(Icons.home),
-          //                               ),
-          //                               Text(
-          //                                 x[0]['penjual_nama'],
-          //                                 style: TextStyle(
-          //                                     fontSize: 14,
-          //                                     fontWeight: FontWeight.bold),
-          //                               ),
-          //                             ],
-          //                           ),
-          //                           Column(
-          //                             children: <Widget>[
-          //                               data2 == null
-          //                                   ? Container()
-          //                                   : ListView.builder(
-          //                                       controller: _controllerProduk,
-          //                                       shrinkWrap: true,
-          //                                       physics:
-          //                                           NeverScrollableScrollPhysics(),
-          //                                       itemCount: data2.length,
-          //                                       itemBuilder: (context, i) {
-          //                                         final x = datax[0]['Produk'];
-          //                                         return Card(
-          //                                           child: Column(
-          //                                             // mainAxisAlignment: ,
-          //                                             crossAxisAlignment:
-          //                                                 CrossAxisAlignment
-          //                                                     .start,
-          //                                             children: <Widget>[
-          //                                               Image.network(
-          //                                                 x[i]['produk_foto'] !=
-          //                                                         null
-          //                                                     ? x[i]['produk_foto']
-          //                                                         [0]['foto']
-          //                                                     : 'http://192.168.1.23/siplah/assets/images/no-image.png',
-          //                                                 scale: 4,
-          //                                               ),
-          //                                               SizedBox(
-          //                                                 height: 10,
-          //                                               ),
-          //                                               Container(
-          //                                                   width: 250,
-          //                                                   child: Text(
-          //                                                     x[i][
-          //                                                         'produk_nama'],
-          //                                                     maxLines: 2,
-          //                                                     overflow:
-          //                                                         TextOverflow
-          //                                                             .ellipsis,
-          //                                                     style: TextStyle(
-          //                                                       fontSize: 14,
-          //                                                       fontWeight:
-          //                                                           FontWeight
-          //                                                               .w500,
-          //                                                     ),
-          //                                                   )),
-          //                                               Container(
-          //                                                   child: Text(
-          //                                                       x[i][
-          //                                                           'produk_harga'],
-          //                                                       style:
-          //                                                           TextStyle(
-          //                                                         fontSize:
-          //                                                             13.5,
-          //                                                         fontWeight:
-          //                                                             FontWeight
-          //                                                                 .w500,
-          //                                                         color: Colors
-          //                                                             .cyan,
-          //                                                       ))),
-          //                                               SizedBox(
-          //                                                 height: 10,
-          //                                               )
-          //                                             ],
-          //                                           ),
-          //                                         );
-          //                                       })
-          //                             ],
-          //                           ),
-          //                         ],
-          //                       ),
-          //                     );
-          //                   },
-          //                 ),
-          //         ),
-          //       ],
-          //     )
-          //   ]),
-          // ),
+         
           SizedBox(
             height: 5,
           ),
@@ -797,7 +682,7 @@ class _PembayaranState extends State<PembayaranState> {
                           width: 100,
                           height: 50,
                           child: Image.network(
-                              "http://192.168.1.23/siplah/assets/images/payment/bca.png"),
+                              "https://siplah.mascitra.co.id/assets/images/payment/bca.png"),
                         )
                       : Container(
                           width: 100,

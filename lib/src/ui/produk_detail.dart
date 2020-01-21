@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siplah_jpmall/src/bloc/state_bloc.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/models/produk_sample.dart';
+import 'package:siplah_jpmall/src/ui/page_carts.dart';
 import 'package:siplah_jpmall/src/ui/star.dart';
 // import 'package:siplah_jpmall/src/ui/star.dart';
 import 'package:http/http.dart' as http;
@@ -168,7 +169,7 @@ class _DetailProduk2State extends State<DetailProduk2>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/api/sekolah/keranjang/tambah'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -322,11 +323,21 @@ class _DetailProduk2State extends State<DetailProduk2>
          ),
          child: Row(
            children: <Widget>[
-             Container(
+             GestureDetector(
+             onTap: (){
+                Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  CartsPage(),
+                            ));
+             },
+             child:Container(
                height: 60,
-               width: MediaQuery.of(context).size.width/5,
+               width: MediaQuery.of(context).size.width/3,
                color: Colors.white,
                child: Center(child: IconButton(icon: Icon(Icons.shopping_cart,size: 30,)),),
+             ),
              ),
              GestureDetector(
                onTap: (){
@@ -335,20 +346,12 @@ class _DetailProduk2State extends State<DetailProduk2>
                },
                             child: Container(
                  height: 60,
-                 width: MediaQuery.of(context).size.width/3.5,
+                 width: MediaQuery.of(context).size.width/1.5,
                  color: Colors.pink,
                  child: Center(child: Text("Beli",style: TextStyle(fontSize: 20,     color: Colors.white),)),
                ),
              ),
-              Expanded(
-                            child: Container(
-                 height: 60,
-                 width: MediaQuery.of(context).size.width/2,
-                 color: Colors.purple,
-                   child: Center(child: Text("Negosiasi",style: TextStyle(fontSize: 20,     color: Colors.white),)),
-             
-             ),
-              ),
+            
            ],
          ),
        ):Container(
@@ -592,7 +595,7 @@ getCredential() async {
     //print(id);
   
     var url =
-        'http://192.168.1.23/siplah/api/sekolah/produk_favorit/tambah';
+        'https://siplah.mascitra.co.id/api/sekolah/produk_favorit/tambah';
 
     Map data = {'user_id': "" + nama, 'produk_id':id, };
     //encode Map to JSON
@@ -810,7 +813,7 @@ List data2;
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://192.168.1.23/siplah/api/home/list'),
+      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -868,7 +871,7 @@ ListView.builder(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10))),
-                            child: Image.network(data2[i]['foto']==null?'http://192.168.1.23/siplah/assets/images/no-image.png':data2[i]['foto'],
+                            child: Image.network(data2[i]['foto']==null?'https://siplah.mascitra.co.id/assets/images/no-image.png':data2[i]['foto'],
                               fit: BoxFit.fill,
                             )),
                         Positioned(
