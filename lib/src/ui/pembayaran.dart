@@ -42,7 +42,7 @@ class PembayaranState extends StatefulWidget {
 class _PembayaranState extends State<PembayaranState> {
 
   Future<http.Response> bayarapi(int idtr,String gettoken) async {
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/pembayaran/bayar';
+    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/bayar';
     Map kurir ={
       'mitra_id':mitra,
       'kurir':""+widget.ketkur,
@@ -85,6 +85,7 @@ class _PembayaranState extends State<PembayaranState> {
     //print("${response.body}");
     print(pay);
     Map<String, dynamic> map = jsonDecode(response.body);
+    print(kurir);
     print(map);
     print(map['pesan_usr']);
     if (map["Error"] == true || map["Error"] == "true") {
@@ -126,7 +127,7 @@ class _PembayaranState extends State<PembayaranState> {
  Future<String> getTokenid() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/midtrans/api/token'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/midtrans/api/token'),
       // headers: {
       //   "Content-Type": "application/x-www-form-urlencoded",
       //   "API-App": "siplah_jpmall.id",
@@ -157,7 +158,7 @@ class _PembayaranState extends State<PembayaranState> {
   Future<String> getKurir_Jne() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -219,7 +220,7 @@ class _PembayaranState extends State<PembayaranState> {
 //     Future<http.Response> daftartransaksi(keranjang) async {
 //     var response = await http.post(
 //       //Encode the url
-//       Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah'),
+//       Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tambah'),
 //       headers: {
 //         "Content-Type": "application/x-www-form-urlencoded",
 //         "API-App": "siplah_jpmall.id",
@@ -262,7 +263,7 @@ class _PembayaranState extends State<PembayaranState> {
   Future<String> getCartsData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -273,17 +274,17 @@ class _PembayaranState extends State<PembayaranState> {
         "transaksi_id": widget.idtrans.toString()!=null?widget.idtrans.toString():widget.trans.toString()!=null?widget.trans.toString():widget.idtrans.toString()
       },
     );
-     print(response.body);
+     //print(response.body);
 
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       datax = convertDataToJson['Data'];
-      tujuan = datax[0]['kabupaten_id'];
+      tujuan = datax[0]['tujuan_kecamatan_id'];
     berat = datax[0]['total_berat'];
     mitra = datax[0]['id'];
     hargasub = datax[0]['sub_total_produk'];
-   
+   print(tujuan);
     });
     
     keranjang = data2[0]['id'];
@@ -299,7 +300,7 @@ class _PembayaranState extends State<PembayaranState> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
+            'http://siplah.mascitra.co.id/siplah/api/sekolah/alamat_pengiriman/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -536,6 +537,7 @@ class _PembayaranState extends State<PembayaranState> {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) => Kurir(
+                            mitra:mitra,
                             berat:berat,
                               kabu: kabupaten,
                               tuju: tujuan,
@@ -602,6 +604,7 @@ class _PembayaranState extends State<PembayaranState> {
                                         child: Column(children: <Widget>[
                                           Row(
                                             children: <Widget>[
+                                               widget.imagekurir=="http://siplah.mascitra.co.id/siplah/assets/images/user.ico"?Container():
                                               Container(
                                                 width: 100,
                                                 height: 50,
@@ -610,13 +613,24 @@ class _PembayaranState extends State<PembayaranState> {
                                               ),
                                               Container(
                                                 child: Text(
-                                                  widget.cost.toString(),
+                                                  "Ongkir : "+widget.cost.toString(),
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
-                                              )
+                                              ),
+                                              SizedBox(width: 30,),
+                                              widget.imagekurir=="http://siplah.mascitra.co.id/siplah/assets/images/user.ico"?
+                                               Container(
+                                                child: Text(
+                                                  "Kurir : Internal",
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ):Container()
                                             ],
                                           ),
                                           Align(
@@ -682,7 +696,7 @@ class _PembayaranState extends State<PembayaranState> {
                           width: 100,
                           height: 50,
                           child: Image.network(
-                              "https://siplah.mascitra.co.id/assets/images/payment/bca.png"),
+                              "http://siplah.mascitra.co.id/siplah/assets/images/payment/bca.png"),
                         )
                       : Container(
                           width: 100,

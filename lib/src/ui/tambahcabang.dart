@@ -29,7 +29,7 @@ class _TambahCabangState extends State<TambahCabang> {
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
-    var url = 'https://siplah.mascitra.co.id/api/mitra/cabang/delete';
+    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/cabang/delete';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -138,7 +138,7 @@ class _TambahCabangState extends State<TambahCabang> {
   
   Future<http.Response> daftar_api() async {
     
-    var url = 'https://siplah.mascitra.co.id/api/mitra/cabang/update';
+    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/cabang/update';
 
     Map data = {
       'id': idx,
@@ -368,7 +368,7 @@ class _TambahCabangState extends State<TambahCabang> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/cabang/list'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/cabang/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -645,7 +645,7 @@ class _CabangADD extends State<CabangADD> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'http://192.168.1.8/siplah/api/mitra/cabang/add';
+    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/cabang/add';
 
     Map data = {
       'cabang_user_id': id,

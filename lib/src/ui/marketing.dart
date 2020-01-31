@@ -27,6 +27,7 @@ class _MarketingState extends State<Marketing> {
   //edit
   Future<http.Response> _edit(String idx, nama) async {
     provinceBloc.provinceFetchAll();
+    
     var katPel = ['1', '2'];
     var jeKel = ['1', '2'];
     String slctdKatPel, slctdjeKel;
@@ -52,7 +53,7 @@ class _MarketingState extends State<Marketing> {
         _imageFile = image;
       });
     }
-
+ 
     //controller
     final namamarketing = TextEditingController();
     final npwp = TextEditingController();
@@ -68,7 +69,7 @@ class _MarketingState extends State<Marketing> {
     //
 
     Future<http.Response> daftar_api() async {
-      var url = 'http://192.168.1.8/siplah/api/mitra/marketing/edit';
+      var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/marketing/edit';
 
       Map data = {
         'id': idx,
@@ -140,6 +141,11 @@ class _MarketingState extends State<Marketing> {
         builder: (context) => AlertDialog(
               title: Text("Edit Marketing"),
               content: Column(children: <Widget>[
+                // telpn.text=telepon,
+                // email.text=emailmar,
+                // npwp.text=npwpmar,
+                // alamatleng.text=alamat,
+                // namamarketing.text=namamarket,
                 CustomTile(
                   "Kategori Marketing",
                   child: DropdownButtonHideUnderline(
@@ -326,7 +332,7 @@ class _MarketingState extends State<Marketing> {
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
-    var url = 'http://192.168.1.8/siplah/api/mitra/marketing/hapus';
+    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/marketing/hapus';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -378,7 +384,7 @@ class _MarketingState extends State<Marketing> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://192.168.1.8/siplah/api/mitra/marketing/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -634,7 +640,7 @@ class _TambahMarketingState extends State<TambahMarketing> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'http://192.168.1.8/siplah/api/mitra/marketing/tambah';
+    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/marketing/tambah';
 
     Map data = {
       'user_id': id,
@@ -996,7 +1002,7 @@ class _MarketingPemState extends State<MarketingPem> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -1020,7 +1026,7 @@ class _MarketingPemState extends State<MarketingPem> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -1030,7 +1036,7 @@ class _MarketingPemState extends State<MarketingPem> {
         body: {
           "transaksi_id": widget.idtrans.toString(),
         });
-    //print(response.body);
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);

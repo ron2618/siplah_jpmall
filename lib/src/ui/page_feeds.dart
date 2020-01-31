@@ -9,6 +9,12 @@ class FeedsPage extends StatefulWidget {
 }
 
 class _FeedsPageState extends State<FeedsPage> {
+  
+  @override
+  void initState() {
+    super.initState();
+getJsonData();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,7 +188,7 @@ String nama;
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://192.168.1.23/siplah/api/admin/data_mitra/list'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -200,7 +206,7 @@ String nama;
     });
   }
   _feeds(BuildContext context) {
-    getJsonData();
+  
     return data==null?Column(
                 children: <Widget>[Center(child: CircularProgressIndicator())]):ListView.builder(
       physics: NeverScrollableScrollPhysics(),

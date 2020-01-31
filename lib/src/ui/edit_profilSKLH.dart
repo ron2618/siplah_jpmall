@@ -30,7 +30,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/profil/get'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -62,16 +62,16 @@ class _EditprofileSKL extends State<EditprofileSKL> {
     });
     //print("id profile sklh= " + nama);
   }
-@override
+
+  @override
   void initState() {
-    super.initState();  
+    super.initState();
     getCredential();
-    
   }
+
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width /2;
-  
+    double c_width = MediaQuery.of(context).size.width / 2;
 
     //print(data);
     return Scaffold(
@@ -84,213 +84,417 @@ class _EditprofileSKL extends State<EditprofileSKL> {
         ),
 
         //CODE BARU YANG DITAMBAHKAN
-        body:data==null?Container(): ListView(padding: const EdgeInsets.all(0), children: <Widget>[
-          Column(children: <Widget>[
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Row(children: <Widget>[
-                SizedBox(
-                  width: 170,
-                ),
-                CircleAvatar(
-                  radius: 50,
-                  child: Center(
-                    child: Image.network(
-                      data[0]['logo_sekolah'] != null
-                          ? data[0]['logo_sekolah']
-                          : ('https://siplah.mascitra.co.id/assets/images/no-image.png'),
-                    ),
+        body: data == null
+            ? Container()
+            : ListView(padding: const EdgeInsets.all(0), children: <Widget>[
+                Column(children: <Widget>[
+                  SizedBox(
+                    height: 20,
                   ),
-                ),
-              ]),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(
-                  children: <Widget>[Text("Nama Sekolah",style: TextStyle(fontWeight: FontWeight.bold), )],
-                ),
-                SizedBox(
-                  width: 50,
-                ),
-                Row(
-                  children: <Widget>[
-                    Text(data[0]["nama_sekolah"] != null
-                        ? ": " + data[0]["nama_sekolah"]
-                        : "Kosong"),
-                  ],
-                ),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(
-                  children: <Widget>[Text("Alamat",style: TextStyle(fontWeight: FontWeight.bold),)],
-                ),
-                SizedBox(
-                  width: 80,
-                ),
-                Container(
-                    padding: const EdgeInsets.all(16.0),
-                    width: c_width,
-                    child: new Column(children: <Widget>[
-                      Column(
-                        children:<Widget>[
-                      Text(data[0]["alamat_sekolah"] != null
-                          ? ": " + data[0]["alamat_sekolah"]
-                          : "kosong"),
-                        ])
-                    ])),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(children: <Widget>[Text("NSPN",style: TextStyle(fontWeight: FontWeight.bold),)]),
-                SizedBox(
-                  width: 105,
-                ),
-                Row(
-                  children: <Widget>[
-                    Text(data[0]["npsn"] != null
-                        ? ": " + data[0]["npsn"]
-                        : "kosong"),
-                  ],
-                ),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(children: <Widget>[Text("NPWP",style: TextStyle(fontWeight: FontWeight.bold),)]),
-                SizedBox(
-                  width: 103,
-                ),
-                Row(children: <Widget>[
-                  Text(data[0]["npwp"] != null
-                      ? ": " + data[0]["npwp"]
-                      : "kosong"),
+                  Center(
+                    child: Row(children: <Widget>[
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width/2.5,
+                      ),
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(data[0]['logo_sekolah'] !=
+                                null
+                            ? data[0]['logo_sekolah']
+                            : ('http://siplah.mascitra.co.id/siplah/assets/images/no-image.png')),
+                        radius: 50,
+                        // child: Center(
+                        //   child: ,
+                        //   child: Image.network(
+                        //     data[0]['logo_sekolah'] != null
+                        //         ? data[0]['logo_sekolah']
+                        //         : ('http://siplah.mascitra.co.id/siplah/assets/images/no-image.png'),scale: 8,
+                        //   ),
+                        // ),
+                      ),
+                    ]),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
                 ]),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(children: <Widget>[Text("Email",style: TextStyle(fontWeight: FontWeight.bold),)]),
-                SizedBox(
-                  width: 108,
-                ),
-                Row(children: <Widget>[
-                  Text(data[0]["email"] != null
-                      ? ": " + data[0]["email"]
-                      : "kosong"),
-                ]),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(children: <Widget>[Text("Telepon Kantor",style: TextStyle(fontWeight: FontWeight.bold),)]),
-                SizedBox(
-                  width: 47,
-                ),
-                Row(children: <Widget>[
-                  Text(data[0]["telepon"] != null
-                      ? ": " + data[0]["telepon"]
-                      : "kosong"),
-                ]),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(
-                  children: <Widget>[Text("Nomor Hp",style: TextStyle(fontWeight: FontWeight.bold),)],
+                //set tambah
+                Text(
+                  " Nama Sekolah",
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  width: 80,
+                  height: 4,
                 ),
-                Row(children: <Widget>[
-                  Text(data[0]["no_hp"] != null
-                      ? ": " + data[0]["no_hp"]
-                      : "kosong"),
-                ]),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(
-                  children: <Widget>[Text("Nama Kepala Sekolah",style: TextStyle(fontWeight: FontWeight.bold),)],
+                Text(data[0]["nama_sekolah"] != null
+                    ? " " + data[0]["nama_sekolah"]
+                    : "Kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
                 ),
                 SizedBox(
-                  width: 5,
+                  height: 10,
                 ),
-                Row(
-                  children: <Widget>[
-                    Text(data[0]["kepala_sekolah_nama"] != null
-                        ? ": " + data[0]["kepala_sekolah_nama"]
-                        : "kosong"),
-                  ],
-                ),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(children: <Widget>[Text("NIP Kepala Seklah",style: TextStyle(fontWeight: FontWeight.bold),)]),
-                SizedBox(
-                  width: 28,
-                ),
-                Row(
-                  children: <Widget>[
-                    Text(data[0]["kepala_sekolah_nip"] != null
-                        ? ": " + data[0]["kepala_sekolah_nip"]
-                        : "kosong"),
-                  ],
-                ),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(
-                  children: <Widget>[Text("Nama Bendahara",style: TextStyle(fontWeight: FontWeight.bold),)],
+
+                Text(
+                  " Alamat",
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  width: 35,
+                  height: 4,
                 ),
-                Row(
-                  children: <Widget>[
-                    Text(data[0]["bendahara_nama"] != null
-                        ? ": " + data[0]["bendahara_nama"]
-                        : "kosong"),
-                  ],
+                Text(data[0]["alamat_sekolah"] != null
+                    ? " " + data[0]["alamat_sekolah"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
                 ),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(children: <Widget>[
-                Row(children: <Widget>[Text("NIP Bendahara",style: TextStyle(fontWeight: FontWeight.bold),)]),
                 SizedBox(
-                  width: 50,
+                  height: 10,
                 ),
-                Row(children: <Widget>[
-                  Text(data[0]["bendahara_nip"] != null
-                      ? ": " + data[0]["bendahara_nip"]
-                      : "kosong"),
-                ]),
+
+                Text(
+                  " NSPN",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                    data[0]["npsn"] != null ? " " + data[0]["npsn"] : "kosong"),
+
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
+                Text(
+                  " NPWP",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                    data[0]["npwp"] != null ? " " + data[0]["npwp"] : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
+                Text(
+                  " Email",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(data[0]["email"] != null
+                    ? " " + data[0]["email"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  " Telepon Kantor",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(data[0]["no_hp"] != null
+                    ? " " + data[0]["no_hp"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  " Nomor Hp",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(data[0]["no_hp"] != null
+                    ? " " + data[0]["no_hp"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
+                Text(
+                  " Nama Kepala Sekolah",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(data[0]["kepala_sekolah_nama"] != null
+                    ? " " + data[0]["kepala_sekolah_nama"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  " NIP Kepala Sekolah",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(data[0]["kepala_sekolah_nip"] != null
+                    ? " " + data[0]["kepala_sekolah_nip"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  " Nama Bendahara",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(data[0]["bendahara_nama"] != null
+                    ? " " + data[0]["bendahara_nama"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  " NIP Bendahara",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(data[0]["bendahara_nip"] != null
+                    ? " " + data[0]["bendahara_nip"]
+                    : "kosong"),
+                Divider(
+                  height: 4,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+
+                //set akhir
+
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(
+                //       children: <Widget>[Text("Nama Sekolah",style: TextStyle(fontWeight: FontWeight.bold), )],
+                //     ),
+                //     SizedBox(
+                //       width: 50,
+                //     ),
+                //     Row(
+                //       children: <Widget>[
+                //         Text(data[0]["nama_sekolah"] != null
+                //             ? ": " + data[0]["nama_sekolah"]
+                //             : "Kosong"),
+                //       ],
+                //     ),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(
+                //       children: <Widget>[Text("Alamat",style: TextStyle(fontWeight: FontWeight.bold),)],
+                //     ),
+                //     SizedBox(
+                //       width: 80,
+                //     ),
+                //     Container(
+                //         padding: const EdgeInsets.all(8.0),
+                //         width: c_width,
+                //         child: new Column(children: <Widget>[
+                //           Column(
+                //             children:<Widget>[
+                //           Text(data[0]["alamat_sekolah"] != null
+                //               ? ": " + data[0]["alamat_sekolah"]
+                //               : "kosong"),
+                //             ])
+                //         ])),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(children: <Widget>[Text("NSPN",style: TextStyle(fontWeight: FontWeight.bold),)]),
+                //     SizedBox(
+                //       width: 105,
+                //     ),
+                //     Row(
+                //       children: <Widget>[
+                //         Text(data[0]["npsn"] != null
+                //             ? ": " + data[0]["npsn"]
+                //             : "kosong"),
+                //       ],
+                //     ),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(children: <Widget>[Text("NPWP",style: TextStyle(fontWeight: FontWeight.bold),)]),
+                //     SizedBox(
+                //       width: 103,
+                //     ),
+                //     Row(children: <Widget>[
+                //       Text(data[0]["npwp"] != null
+                //           ? ": " + data[0]["npwp"]
+                //           : "kosong"),
+                //     ]),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(children: <Widget>[Text("Email",style: TextStyle(fontWeight: FontWeight.bold),)]),
+                //     SizedBox(
+                //       width: 108,
+                //     ),
+                //     Row(children: <Widget>[
+                //       Text(data[0]["email"] != null
+                //           ? ": " + data[0]["email"]
+                //           : "kosong"),
+                //     ]),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(children: <Widget>[Text("Telepon Kantor",style: TextStyle(fontWeight: FontWeight.bold),)]),
+                //     SizedBox(
+                //       width: 47,
+                //     ),
+                //     Row(children: <Widget>[
+                //       Text(data[0]["telepon"] != null
+                //           ? ": " + data[0]["telepon"]
+                //           : "kosong"),
+                //     ]),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(
+                //       children: <Widget>[Text("Nomor Hp",style: TextStyle(fontWeight: FontWeight.bold),)],
+                //     ),
+                //     SizedBox(
+                //       width: 80,
+                //     ),
+                //     Row(children: <Widget>[
+                //       Text(data[0]["no_hp"] != null
+                //           ? ": " + data[0]["no_hp"]
+                //           : "kosong"),
+                //     ]),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(
+                //       children: <Widget>[Text("Nama Kepala Sekolah",style: TextStyle(fontWeight: FontWeight.bold),)],
+                //     ),
+                //     SizedBox(
+                //       width: 5,
+                //     ),
+                //     Row(
+                //       children: <Widget>[
+                //         Text(data[0]["kepala_sekolah_nama"] != null
+                //             ? ": " + data[0]["kepala_sekolah_nama"]
+                //             : "kosong"),
+                //       ],
+                //     ),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(children: <Widget>[Text("NIP Kepala Seklah",style: TextStyle(fontWeight: FontWeight.bold),)]),
+                //     SizedBox(
+                //       width: 28,
+                //     ),
+                //     Row(
+                //       children: <Widget>[
+                //         Text(data[0]["kepala_sekolah_nip"] != null
+                //             ? ": " + data[0]["kepala_sekolah_nip"]
+                //             : "kosong"),
+                //       ],
+                //     ),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(
+                //       children: <Widget>[Text("Nama Bendahara",style: TextStyle(fontWeight: FontWeight.bold),)],
+                //     ),
+                //     SizedBox(
+                //       width: 35,
+                //     ),
+                //     Row(
+                //       children: <Widget>[
+                //         Text(data[0]["bendahara_nama"] != null
+                //             ? ": " + data[0]["bendahara_nama"]
+                //             : "kosong"),
+                //       ],
+                //     ),
+                //   ]),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(children: <Widget>[
+                //     Row(children: <Widget>[Text("NIP Bendahara",style: TextStyle(fontWeight: FontWeight.bold),)]),
+                //     SizedBox(
+                //       width: 50,
+                //     ),
+                //     Row(children: <Widget>[
+                //       Text(data[0]["bendahara_nip"] != null
+                //           ? ": " + data[0]["bendahara_nip"]
+                //           : "kosong"),
+                //     ]),
+                //   ]),
+                // ),
               ]),
-            ),
-          ])
-        ]),
+
+        // ]),
         // ]
         // ),
         // ]
@@ -302,7 +506,19 @@ class _EditprofileSKL extends State<EditprofileSKL> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => FormEdit2(),
+                  builder: (BuildContext context) => FormEdit2(
+                    namasekolah: data[0]['nama_sekolah'],
+                    alamat: data[0]['alamat_sekolah'],
+                    npsn: data[0]['npsn'],
+                    npwp: data[0]['npwp'],
+                    email: data[0]['email'],
+                    telepon: data[0]['telepon'],
+                    no_hp: data[0]['no_hp'],
+                    kepalasekolah: data[0]['kepala_sekolah_nama'],
+                    kepalasekolahnip: data[0]['kepala_sekolah_nip'],
+                    bendaharanama: data[0]['bendahara_nama'],
+                    bendaharanip: data[0]['bendahara_nip'],
+                  ),
                 ));
             // Add your onPressed code here!
           },
@@ -314,6 +530,33 @@ class _EditprofileSKL extends State<EditprofileSKL> {
 }
 
 class FormEdit2 extends StatefulWidget {
+  final String namasekolah;
+  final String alamat;
+  final String npsn;
+  final String npwp;
+  final String email;
+  final String telepon;
+  final String no_hp;
+  final String kepalasekolah;
+  final String kepalasekolahnip;
+  final String bendaharanama;
+  final String bendaharanip;
+
+  const FormEdit2(
+      {Key key,
+      this.namasekolah,
+      this.alamat,
+      this.npsn,
+      this.npwp,
+      this.email,
+      this.telepon,
+      this.no_hp,
+      this.kepalasekolah,
+      this.kepalasekolahnip,
+      this.bendaharanama,
+      this.bendaharanip})
+      : super(key: key);
+
   @override
   _FormEdit2 createState() => _FormEdit2();
 }
@@ -364,7 +607,7 @@ class _FormEdit2 extends State<FormEdit2> {
   // Future<String> getJsonData() async {
   //   var response = await http.post(
   //       //Encode the url
-  //       Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/profil/get'),
+  //       Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/profil/get'),
   //       headers: {
   //         "Content-Type": "application/x-www-form-urlencoded",
   //         "API-App": "siplah_jpmall.id",
@@ -407,7 +650,20 @@ class _FormEdit2 extends State<FormEdit2> {
 
   bool _isFieldNameValid;
   bool _isFieldEmailValid;
-  bool _isFieldAgeValid;
+  bool _isFieldKepalaSekolah;
+  bool _isFieldKepalaSekolahnip;
+  bool _isFieldNamaBendahara;
+  bool _isFieldNohp;
+  bool _isFieldNpwp;
+  bool _isFieldTelepon;
+  bool _isFieldAlamat;
+  bool _isFieldProvinsi;
+  bool _isFieldKabupaten;
+  bool _isFieldKodepos;
+  bool _isFieldBendaharanip;
+  bool _isFieldAlamatsekolah;
+  bool _isFieldNamaPenanggung;
+  bool _isFieldNpsn;
 
   final nama = TextEditingController();
   final emailsekolah = TextEditingController();
@@ -439,12 +695,25 @@ class _FormEdit2 extends State<FormEdit2> {
       // alamat = pref.getString("telepon");
       // kodepos = pref.getString("kodepos");
       // telepon = pref.getString("telepon");
+      _getCurrentLocation();
     });
     //print("id profile = "+id);
   }
 
   @override
   void initState() {
+    nama.text = widget.namasekolah;
+    emailsekolah.text = widget.email;
+    nohp.text = widget.no_hp;
+    kepalasekolah.text = widget.kepalasekolah;
+    kepalasekolahnip.text = widget.kepalasekolahnip;
+    namabendahara.text = widget.bendaharanama;
+    npwp.text = widget.npwp;
+    npsn.text = widget.npsn;
+    telepon.text = widget.telepon;
+    alamatsekolah.text = widget.alamat;
+    bendaharanip.text = widget.bendaharanip;
+
     super.initState();
     provinceBloc.provinceFetchAll();
     getCredential();
@@ -469,7 +738,7 @@ class _FormEdit2 extends State<FormEdit2> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'https://siplah.mascitra.co.id/api/sekolah/profil/edit';
+    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/profil/edit';
 
     Map data = {
       'user_id': id,
@@ -522,8 +791,8 @@ class _FormEdit2 extends State<FormEdit2> {
 
   @override
   Widget build(BuildContext context) {
-  //  getJsonData();
-    _getCurrentLocation();
+    //  getJsonData();
+
     //print(_currentPosition.latitude);
     // print("id profil edit ="+id);
     return Scaffold(
@@ -619,16 +888,15 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "NPSN",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "NPSN  harus diisi",
+        errorText:
+            _isFieldNpsn == null || _isFieldNpsn ? null : "NPSN  harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldNpsn) {
+          setState(() => _isFieldNpsn = isFieldValid);
+        }
+      },
     );
   }
 
@@ -638,16 +906,15 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "NPWP",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
-            ? null
-            : "NPWP harus diisi",
+        errorText:
+            _isFieldNpwp == null || _isFieldNpwp ? null : "NPWP harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldNpwp) {
+          setState(() => _isFieldNpwp = isFieldValid);
+        }
+      },
     );
   }
 
@@ -657,16 +924,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: "Email Sekolah",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        errorText: _isFieldEmailValid == null || _isFieldEmailValid
             ? null
             : "Email harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldEmailValid) {
+          setState(() => _isFieldEmailValid = isFieldValid);
+        }
+      },
     );
   }
 
@@ -676,16 +943,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: "Telepon",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        errorText: _isFieldTelepon == null || _isFieldTelepon
             ? null
             : "Telepon harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldTelepon) {
+          setState(() => _isFieldTelepon = isFieldValid);
+        }
+      },
     );
   }
 
@@ -695,16 +962,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         labelText: "Nomer Hp / Whatsapp ",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        errorText: _isFieldNohp == null || _isFieldNohp
             ? null
             : "Nomer Hp / Whatsapp harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldNohp) {
+          setState(() => _isFieldNohp = isFieldValid);
+        }
+      },
     );
   }
 
@@ -714,16 +981,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Nama Kepala Sekolah",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        errorText: _isFieldKepalaSekolah == null || _isFieldKepalaSekolah
             ? null
             : "Nama Kepala Sekolah harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldKepalaSekolah) {
+          setState(() => _isFieldKepalaSekolah = isFieldValid);
+        }
+      },
     );
   }
 
@@ -733,16 +1000,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "NIP Kepala Sekolah",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        errorText: _isFieldKepalaSekolahnip == null || _isFieldKepalaSekolahnip
             ? null
             : "NIP Kepala Sekolah harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldKepalaSekolahnip) {
+          setState(() => _isFieldKepalaSekolahnip = isFieldValid);
+        }
+      },
     );
   }
 
@@ -752,16 +1019,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Nama Bendahara",
-        errorText: _isFieldNameValid == null || _isFieldNameValid
+        errorText: _isFieldNamaBendahara == null || _isFieldNamaBendahara
             ? null
             : "Nama Bendahara harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldNameValid) {
-      //     setState(() => _isFieldNameValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldNamaBendahara) {
+          setState(() => _isFieldNamaBendahara = isFieldValid);
+        }
+      },
     );
   }
 
@@ -771,16 +1038,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "NIP Bendahara",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
+        errorText: _isFieldBendaharanip == null || _isFieldBendaharanip
             ? null
             : "NPWP harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldEmailValid) {
-      //     setState(() => _isFieldEmailValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldBendaharanip) {
+          setState(() => _isFieldBendaharanip = isFieldValid);
+        }
+      },
     );
   }
 
@@ -790,16 +1057,16 @@ class _FormEdit2 extends State<FormEdit2> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Alamat Sekolah",
-        errorText: _isFieldEmailValid == null || _isFieldEmailValid
+        errorText: _isFieldAlamatsekolah == null || _isFieldAlamatsekolah
             ? null
             : "Alamat Sekolah harus diisi",
       ),
-      // onChanged: (value) {
-      //   bool isFieldValid = value.trim().isNotEmpty;
-      //   if (isFieldValid != _isFieldEmailValid) {
-      //     setState(() => _isFieldEmailValid = isFieldValid);
-      //   }
-      // },
+      onChanged: (value) {
+        bool isFieldValid = value.trim().isNotEmpty;
+        if (isFieldValid != _isFieldAlamatsekolah) {
+          setState(() => _isFieldAlamatsekolah = isFieldValid);
+        }
+      },
     );
   }
 

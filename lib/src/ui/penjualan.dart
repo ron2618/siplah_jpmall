@@ -17,7 +17,7 @@ class _PenjualanState extends State<Penjualan> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/penjualan/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/penjualan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -36,6 +36,55 @@ class _PenjualanState extends State<Penjualan> {
     });
   }
 
+String z;
+  Future<http.Response> _setproses(String id) async {
+
+    var url =
+        'http://siplah.mascitra.co.id/siplah/api/mitra/penjualan/prosess';
+
+    Map data = {'user_id': "" + nama, 'transaksi_id': id};
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    //print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+     z=map["Pesan_sys"]; 
+      // savedata();
+      getJsonData();
+      _berhasil1(context,z);
+    }
+    return response;
+  }
+   void _berhasil1(BuildContext context,z) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text(""+z),
+            ));
+  }
+  void _showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Peringatan"),
+              content: Text("maaf gagal edit"),
+            ));
+  }
   getCredential() async {
     final pref = await SharedPreferences.getInstance();
     setState(() {
@@ -51,6 +100,88 @@ class _PenjualanState extends State<Penjualan> {
     getCredential();
   }
 
+  String x;
+  Future<http.Response> _settolak(String id) async {
+    
+    var url =
+        'http://siplah.mascitra.co.id/siplah/api/mitra/penjualan/tolak';
+
+    Map data = {'user_id': "" + nama, 'transaksi_id': id, 'alasan':myController.text};
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+    // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    //print(map);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+     x=map["Pesan_sys"]; 
+      // savedata();
+      getJsonData();
+      _berhasil1(context,x);
+    }
+    return response;
+  }
+   final myController = TextEditingController();
+   
+  void _tolak(String id){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+                  
+           Row(
+             children: <Widget>[
+               Container(
+                 width: 150,
+                 child: new TextFormField(
+                   controller: myController,
+                      keyboardType: TextInputType.number, // Use email input type for emails.
+                      decoration: new InputDecoration(
+                        hintText: 'Contoh : Stok Kosong',
+                        labelText: 'Alasan'
+                      ),),
+               ),
+               
+                 SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: (){
+                    _settolak(id);
+                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 100,
+                                    child: Center(child: Text("Simpan",style: TextStyle(color: Colors.white),)),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(50)
+                                    ),
+                                  ),
+                )
+             ],
+           ),
+            ]
+          ),
+        );
+      }
+    );
+  }
   @override
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width / 3;
@@ -232,12 +363,7 @@ class _PenjualanState extends State<Penjualan> {
                                                   color: Colors.green,
                                                   child: Text("Terima Pesanan"),
                                                   onPressed: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                DetailPenjualan()));
+                                                    _setproses(data[i]['id']);
                                                   },
                                                 ),
                                               ),
@@ -248,12 +374,7 @@ class _PenjualanState extends State<Penjualan> {
                                                   color: Colors.red,
                                                   child: Text("Tolak"),
                                                   onPressed: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                DetailPenjualan()));
+                                                    _tolak(data[i]['id']);
                                                   },
                                                 ),
                                               )
@@ -381,7 +502,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                           Container(
                               height: 40,
                               child: Image.network(
-                                  "https://siplah.mascitra.co.id/assets/images/user.ico")),
+                                  "http://siplah.mascitra.co.id/siplah/assets/images/user.ico")),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text("Bukan Dylan"),

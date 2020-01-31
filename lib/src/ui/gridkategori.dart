@@ -49,7 +49,7 @@ class _GridKategoriState extends State<GridKategori> {
             child: Center(
               child: Container(
                 height: 180,
-               child: Image.network(widget.data[i]['gambar']!=null?widget.data[i]['gambar']:'https://siplah.mascitra.co.id/assets/images/no-image.png',),
+               child: Image.network(widget.data[i]['gambar']!=null?widget.data[i]['gambar']:'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png',),
               ),
             ),
           ),

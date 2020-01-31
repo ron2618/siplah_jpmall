@@ -24,7 +24,7 @@ class _GridProdukState extends State<GridProduk> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-  print(widget.data.length);
+  //print(widget.data.length);
     controller =
         SidekickController(vsync: this, duration: Duration(seconds: 1));
   }
@@ -51,7 +51,7 @@ class _GridProdukState extends State<GridProduk> with TickerProviderStateMixin {
               PageRouteBuilder(
                   transitionDuration: Duration(milliseconds: 350),
                   pageBuilder: (context, _, __) =>
-                       DetailProduk2(nama: widget.data[i]['produk'], gambar: widget.data[i]['foto'] != null ? widget.data[i]['foto'][0]['foto']: 'https://siplah.mascitra.co.id/assets/images/no-image.png',harga: widget.data[i]['harga'],))),
+                       DetailProduk2(nama: widget.data[i]['produk'], gambar: widget.data[i]['foto'] != null ? widget.data[i]['foto'][0]['foto']: 'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png',harga: widget.data[i]['harga'],))),
            
           child: Card(
             elevation: 2,
@@ -76,7 +76,7 @@ class _GridProdukState extends State<GridProduk> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                        widget.data[i]['foto'] != null ?widget.data[i]['foto'][0]['foto'] : 'https://siplah.mascitra.co.id/assets/images/no-image.png' 
+                                        widget.data[i]['foto'] != null ?widget.data[i]['foto'][0]['foto'] : 'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png' 
                                        
                                         )),
                                 borderRadius: BorderRadius.only(

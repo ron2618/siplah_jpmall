@@ -24,8 +24,9 @@ class Kurir extends StatefulWidget {
   final String namakur;
   final int idtrans;
   final String berat;
+  final String mitra;
 
-  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
+  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat, this.mitra}) : super(key: key);
 
  
   @override
@@ -33,8 +34,63 @@ class Kurir extends StatefulWidget {
 }
 
 class _KurirState extends State<Kurir> {
+   List datax;
+   String cost,namakur,namatuj,waktu;
+  Future<String> getCourier() async {
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/kurir/list'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+      },
+      body: {
+        "user_id":"4",
+        "id":"160"
+      },
+    );
+     print(response.body);
+
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      datax = convertDataToJson['data'];
+      cost=datax[0]['harga_satuan'];
+      namakur=datax[0]['id'];
+      namatuj=datax[0]['kabupaten_nama_tujuan'];
+      waktu=datax[0]['waktu'];
+   
+    });
+    
+   
+    
+  
+   
+    return "Success";
+  }
+  String id;
+  String kabupaten;
+  getCredential() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      id = pref.getString("id");
+      kabupaten = pref.getString('kabupaten_id');
+     getCourier();
+    });
+    
+    //print("id profile = "+id);
+  }
+  @override
+  void initState() {
+    getCredential();
+    super.initState();
+  
+  }
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -53,7 +109,66 @@ class _KurirState extends State<Kurir> {
                 height: 2,
                 color: Colors.grey,
               ),
-
+              Container(
+                height: 100,
+                child: datax==null?Container(child: Text("Kurir Internal Tidak Tersedia"),): ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: datax.length,
+                  itemBuilder: (context,i){
+                return 
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => PembayaranState(
+                                imagekurir:
+                                                                      "http://siplah.mascitra.co.id/siplah/assets/images/user.ico",
+                                                                  cost: int.parse(datax[0]['harga_satuan']),
+                                                                  totalharga: widget
+                                                                      .totalharga,
+                                                                  imagebank: widget
+                                                                      .imagebank,
+                                                                  namamar:
+                                                                      widget.namamar,
+                                                                  databank:
+                                                                      widget.databank,
+                                                                  datatype:
+                                                                      widget.datatype,
+                                                                      idmar: widget.idmar,
+                                                                      ketkur: "internal",
+                                                                      namakur: datax[0]['id'],
+                                                                      idtrans: widget.idtrans
+),
+                            ));
+                      },
+                      
+                      title: Row(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              // Padding(
+                              //   padding: const EdgeInsets.all(8.0),
+                              //   child: Text("Tujuan Barang = "+datax[0]['kabupaten_nama_tujuan']),
+                              // ),
+                              Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Ongkir : "+datax[0]['harga_satuan']),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Lama Pengiriman : "+datax[0]['waktu']),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                
+                }),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -251,7 +366,7 @@ class _KurirJneState extends State<KurirJNE> {
   Future<String> getKurirJne(String a, b) async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
       headers: {
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
@@ -279,7 +394,8 @@ class _KurirJneState extends State<KurirJNE> {
   @override
   Widget build(BuildContext context) {
     getKurirJne(widget.kabu, widget.tuju);
-
+    print(widget.kabu);
+    print(widget.tuju);
     return Scaffold(
       appBar: AppBar(
         title: Text("Kurir JNE"),
@@ -420,7 +536,7 @@ class _KurirJntState extends State<KurirJNT> {
   Future<String> getKurirJnt() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -589,7 +705,7 @@ class _KurirPosState extends State<KurirPos> {
   Future<String> getKurirPos() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -758,7 +874,7 @@ class _KurirTikiState extends State<KurirTIKI> {
   Future<String> getKurirTiki() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",

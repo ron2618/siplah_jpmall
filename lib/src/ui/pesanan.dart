@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart' as dom;
@@ -23,7 +26,7 @@ class _PesananState extends State<PesananState> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/tampil'),
+            'http://siplah.mascitra.co.id/siplah/api/sekolah/pesanan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -38,7 +41,7 @@ class _PesananState extends State<PesananState> {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['Data'];
-      datax = convertDataToJson['Data'][0]['mitra'][0]['produk'];
+      //datax = convertDataToJson['Data'][0]['mitra'][0]['produk'];
       trans=data[0]['id'];
     });
   }
@@ -173,6 +176,49 @@ class DetailPesanan extends StatefulWidget {
 }
 
 class _DetailPesananState extends State<DetailPesanan> {
+final formatter = new NumberFormat("#,###");
+File _imageFile;
+    //start class upload
+    _pilihGallery() async {
+      var image = await ImagePicker.pickImage(
+          source: ImageSource.gallery, maxHeight: 1920.0, maxWidth: 1080.0);
+      setState(() {
+        _imageFile = image;
+      });
+    }
+
+    _pilihKamera() async {
+      var image = await ImagePicker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 1920.0,
+        maxWidth: 1080.0,
+      );
+      setState(() {
+        _imageFile = image;
+      });
+    }
+  void _showAlertuploadphoto(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text("Peringatan"),
+                content: Text("Upload Photo"),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("Galery"),
+                    onPressed: () {
+                      _pilihGallery();
+                    },
+                  ),
+                  new FlatButton(
+                    child: new Text("Take A Picture"),
+                    onPressed: () async {
+                      _pilihKamera();
+                    },
+                  ),
+                ],
+              ));
+    }
      //getdetailpem
      final myController = TextEditingController();
   
@@ -181,7 +227,7 @@ class _DetailPesananState extends State<DetailPesanan> {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/status'),
+            'http://siplah.mascitra.co.id/siplah/api/sekolah/pesanan/status'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -211,7 +257,10 @@ String transaction_id = map1['transaction_id'];
 String transaction_status = map1['transaction_status'];
 String status_message = map1['status_message'];
 String merchant_id = map1['merchant_id'];
-      _showAlertupload(context,payment_code,store,transaction_time,gross_amount,currency,order_id,payment_type,signature_key,status_code,transaction_id,transaction_status,status_message,merchant_id
+String bill_key=map1['bill_key'];
+String biller_code=map1['biller_code'];
+String fraud_status = map1['fraud_status'];
+      _showAlertupload(context,payment_code,store,transaction_time,gross_amount,currency,order_id,payment_type,signature_key,status_code,transaction_id,transaction_status,status_message,merchant_id,bill_key,biller_code,fraud_status
 );
    });
  
@@ -226,7 +275,7 @@ int o;
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/tampil'),
+            'http://siplah.mascitra.co.id/siplah/api/sekolah/pesanan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -408,10 +457,10 @@ void shownego() {
     );
   }
   //detailpesanan
-  void _showAlertupload(BuildContext context,String payment_code,String store,String transaction_time,String gross_amount,String currency,String order_id,String payment_type,String signature_key,String status_code,String transaction_id,String transaction_status,String status_message,String merchant_id
+  void _showAlertupload(BuildContext context,String payment_code,String store,String transaction_time,String gross_amount,String currency,String order_id,String payment_type,String signature_key,String status_code,String transaction_id,String transaction_status,String status_message,String merchant_id,String bill_key, String biller_code, String fraud_status
 ) {
   
-   
+   store=="indomaret"?
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -539,7 +588,146 @@ void shownego() {
                       Navigator.pop(context, false);
                     },
                   ),
+                ])):
+                
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+                title: Text("Detail Pemesanan"),
+                content: Container(
+                    height: 600,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView(scrollDirection: Axis.vertical, children: <Widget>[ Column(children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Payment Type : "+payment_type),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Bill Key : "+bill_key),
+                          )
+                        ],
+                      ),
+                       Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Biller Code : "+biller_code),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Transaction Time : "+transaction_time),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Gross Amount : "+gross_amount),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Currency : "+currency),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Order Id : "+order_id),
+                          )
+                        ],
+                      ),
+                     
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width:  MediaQuery.of(context).size.width / 2,
+                          child:Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Signature key : "+signature_key),
+                          ))
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Status Code : "+status_code),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                          child:Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Transaction Id : "+transaction_id),
+                          ))
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Transaction Status : "+transaction_status),
+                          )
+                        ],
+                      ),
+                       Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Fraud Status : "+fraud_status),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width:  MediaQuery.of(context).size.width /3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Status Message : "+status_message),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Merchant Id : "+merchant_id),
+                          )
+                        ],
+                      ),
+                    ])])),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("Back"),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                  ),
                 ]));
+   
                 
  
   }
@@ -550,7 +738,7 @@ Future<String> tambahnego() async {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/nego_tambah'),
+            'http://siplah.mascitra.co.id/siplah/api/sekolah/pesanan/nego_tambah'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -574,7 +762,7 @@ Future<String> setujui(String idvoid) async {
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/nego_setuju'),
+            'http://siplah.mascitra.co.id/siplah/api/sekolah/pesanan/nego_setuju'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -598,7 +786,7 @@ List negosiasi;
         //Encode the url
 
         Uri.encodeFull(
-            'https://siplah.mascitra.co.id/api/sekolah/pesanan/nego_tampil'),
+            'http://siplah.mascitra.co.id/siplah/api/sekolah/pesanan/nego_tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -643,16 +831,16 @@ List negosiasi;
                   return Row(
                     
                     children: <Widget>[
-                      Column(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(10.10),
-                          child: Text("Order Id"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(data[i]['order_id']),
-                        )
-                      ]),
+                      // Column(children: <Widget>[
+                      //   Padding(
+                      //     padding: const EdgeInsets.all(10.10),
+                      //     child: Text("Order Id"),
+                      //   ),
+                      //   Padding(
+                      //     padding: const EdgeInsets.all(8.0),
+                      //     child: Text(data[i]['order_id']),
+                      //   )
+                      // ]),
                       Column(children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(10.15),
@@ -660,7 +848,7 @@ List negosiasi;
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(data[i]['total']),
+                          child: Text(formatter.format(int.parse(data[i]['total']))),
                         )
                       ]),
                       Row(children: <Widget>[
@@ -710,7 +898,7 @@ List negosiasi;
                               radius: 30,
                               child: Center(
                                 child: Image.network(y[i]['foto']!=null?y[i]['foto']:
-                                  'https://siplah.mascitra.co.id/assets/images/user.ico',
+                                  'http://siplah.mascitra.co.id/siplah/assets/images/user.ico',
                                 ),
                               ),
                             ),
@@ -867,7 +1055,7 @@ List negosiasi;
                               width: 40,
                               height: 40,
                               child: Image.network(produk[i]['foto']!=null?produk[i]['foto']:
-                                  'https://siplah.mascitra.co.id/assets/images/user.ico')),
+                                  'http://siplah.mascitra.co.id/siplah/assets/images/user.ico')),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -951,7 +1139,7 @@ List negosiasi;
 //                                 width: 40,
 //                                 height: 40,
 //                                 child: Image.network(produk[i]['foto']!=null?produk[i]['foto']:
-//                                     'https://siplah.mascitra.co.id/assets/images/user.ico')),
+//                                     'http://siplah.mascitra.co.id/siplah/assets/images/user.ico')),
 //                           ),
 //                           Padding(
 //                             padding: const EdgeInsets.all(8.0),
@@ -1087,7 +1275,7 @@ List negosiasi;
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
                                         children: <Widget>[
-                                          Text("Rp "+mitra[0]['kurir_ongkir']),
+                                          Text("Rp "+formatter.format(int.parse(mitra[0]['kurir_ongkir']))),
                                         ],
                                       ),
                                     ),
@@ -1118,7 +1306,7 @@ List negosiasi;
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
                                         children: <Widget>[
-                                          Text("Rp "+bayar.toString()),
+                                          Text("Rp "+formatter.format(bayar)),
                                         ],
                                       ),
                                     ),
@@ -1134,8 +1322,19 @@ List negosiasi;
                       ),
                       Row(
                         children: <Widget>[
-                          Container(
-                              height: 25, child: Text(mitra[0]['status_nama']))
+                            Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child:  mitra[i]['status_nama']=="Selesai"?
+                          Container(decoration:BoxDecoration(color: Colors.green),child: Text(mitra[i]['status_nama'] == null
+                              ? "kosong"
+                              : mitra[i]['status_nama'],style: TextStyle(color: Colors.white),)):mitra[i]['status_nama']=="Diproses"?
+                               Container(decoration:BoxDecoration(color: Colors.blue),child: Text(mitra[i]['status_nama'] == null
+                              ? "kosong"
+                              : mitra[i]['status_nama'],style: TextStyle(color: Colors.white))):
+                              Container(decoration:BoxDecoration(color: Colors.red),child: Text(mitra[i]['status_nama'] == null
+                              ? "kosong"
+                              : mitra[i]['status_nama'],style: TextStyle(color: Colors.white)))
+                        ),
                         ],
                       ),
                       SizedBox(
@@ -1147,27 +1346,30 @@ List negosiasi;
                               height: 25, child: Text(mitra[0]['updated_at']))
                         ],
                       ),
-                      // Row(children: <Widget>[
-                      //   Container(child: Row(children: <Widget>[
-                      //      RaisedButton(
-                      //          color: Colors.blue,
-                      //           onPressed: () {},
-                      //           child: Text("BAST"),
-                      //         ),
-                      //         SizedBox(width: 10,),
-                      //         RaisedButton(
-                      //             color: Colors.green,
-                      //           onPressed: () {},
-                      //           child: Text("Invoice"),
-                      //         ),
-                      //         SizedBox(width: 10,),
-                      //         RaisedButton(
-                      //             color: Colors.yellow,
-                      //           onPressed: () {},
-                      //           child: Text("Purchase Order"),
-                      //         ),
-                      //   ],) ,)
-                      // ],)
+                      Row(children: <Widget>[
+                        mitra[i]['status_nama']=="Ditolak"?Container():
+                        Container(child: Row(children: <Widget>[
+                           RaisedButton(
+                               color: Colors.blue,
+                                onPressed: () {
+                                  _showAlertuploadphoto(context);
+                                },
+                                child: Text("Upload Bukti Pembayaran"),
+                              ),
+                              SizedBox(width: 10,),
+                              RaisedButton(
+                                  color: Colors.green,
+                                onPressed: () {},
+                                child: Text("Bayar"),
+                              ),
+                              SizedBox(width: 10,),
+                              // RaisedButton(
+                              //     color: Colors.yellow,
+                              //   onPressed: () {},
+                              //   child: Text("Purchase Order"),
+                              // ),
+                        ],) ,)
+                      ],)
                     ],
                   );
                 }),

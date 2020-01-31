@@ -169,7 +169,7 @@ class _DetailProduk2State extends State<DetailProduk2>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/sekolah/keranjang/tambah'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/keranjang/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -574,6 +574,8 @@ getCredential() async {
   }
   @override
   void initState() {
+    getCredential();
+    getJsonData();
     super.initState();
     controller = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this);
@@ -595,7 +597,7 @@ getCredential() async {
     //print(id);
   
     var url =
-        'https://siplah.mascitra.co.id/api/sekolah/produk_favorit/tambah';
+        'http://siplah.mascitra.co.id/siplah/api/sekolah/produk_favorit/tambah';
 
     Map data = {'user_id': "" + nama, 'produk_id':id, };
     //encode Map to JSON
@@ -613,7 +615,7 @@ getCredential() async {
 
     // print("${response.body}");
     Map<String, dynamic> map = jsonDecode(response.body);
-    print(map);
+    //print(map);
     if (map["Error"] == true || map["Error"] == "true") {
       _showAlert(context);
     } else {
@@ -641,7 +643,7 @@ getCredential() async {
   }
   @override
   Widget build(BuildContext context) {
-    getCredential();
+    
    
     var price  = widget.harga;
     return ListView(
@@ -813,7 +815,7 @@ List data2;
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('https://siplah.mascitra.co.id/api/home/list'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/home/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -835,7 +837,7 @@ List data2;
   }
 
   _otherProduk() {
-getJsonData();
+
 data2==null?Container():
 ListView.builder(
   itemCount: data2.length,
@@ -871,7 +873,7 @@ ListView.builder(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10))),
-                            child: Image.network(data2[i]['foto']==null?'https://siplah.mascitra.co.id/assets/images/no-image.png':data2[i]['foto'],
+                            child: Image.network(data2[i]['foto']==null?'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png':data2[i]['foto'],
                               fit: BoxFit.fill,
                             )),
                         Positioned(
