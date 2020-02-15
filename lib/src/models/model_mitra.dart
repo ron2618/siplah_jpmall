@@ -20,7 +20,7 @@ class Mitra {
   }
 
   static Future<List<Mitra>> getMitra() async{
-    String apiURL = "http://siplah.mascitra.co.id/siplah/api/admin/data_mitra/list";
+    String apiURL = "http://siplah.mascitra.co.id/api/admin/data_mitra/list";
     
     var apiResult = await http.post(apiURL,headers: {
        "API-App":"siplah_jpmall.id",

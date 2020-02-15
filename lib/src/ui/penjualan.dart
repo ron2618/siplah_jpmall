@@ -17,7 +17,7 @@ class _PenjualanState extends State<Penjualan> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/penjualan/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/mitra/penjualan/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -40,7 +40,7 @@ String z;
   Future<http.Response> _setproses(String id) async {
 
     var url =
-        'http://siplah.mascitra.co.id/siplah/api/mitra/penjualan/prosess';
+        'http://siplah.mascitra.co.id/api/mitra/penjualan/prosess';
 
     Map data = {'user_id': "" + nama, 'transaksi_id': id};
     //encode Map to JSON
@@ -104,7 +104,7 @@ String z;
   Future<http.Response> _settolak(String id) async {
     
     var url =
-        'http://siplah.mascitra.co.id/siplah/api/mitra/penjualan/tolak';
+        'http://siplah.mascitra.co.id/api/mitra/penjualan/tolak';
 
     Map data = {'user_id': "" + nama, 'transaksi_id': id, 'alasan':myController.text};
     //encode Map to JSON
@@ -502,7 +502,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                           Container(
                               height: 40,
                               child: Image.network(
-                                  "http://siplah.mascitra.co.id/siplah/assets/images/user.ico")),
+                                  "http://siplah.mascitra.co.id/assets/images/user.ico")),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text("Bukan Dylan"),

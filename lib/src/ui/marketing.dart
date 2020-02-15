@@ -69,7 +69,7 @@ class _MarketingState extends State<Marketing> {
     //
 
     Future<http.Response> daftar_api() async {
-      var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/marketing/edit';
+      var url = 'http://siplah.mascitra.co.id/api/mitra/marketing/edit';
 
       Map data = {
         'id': idx,
@@ -332,7 +332,7 @@ class _MarketingState extends State<Marketing> {
   Future<http.Response> _delete(String id) async {
     //a=a+id;
     print(id);
-    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/marketing/hapus';
+    var url = 'http://siplah.mascitra.co.id/api/mitra/marketing/hapus';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -384,7 +384,7 @@ class _MarketingState extends State<Marketing> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/marketing/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -640,7 +640,7 @@ class _TambahMarketingState extends State<TambahMarketing> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/marketing/tambah';
+    var url = 'http://siplah.mascitra.co.id/api/mitra/marketing/tambah';
 
     Map data = {
       'user_id': id,
@@ -988,9 +988,11 @@ class MarketingPem extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
+   final String service;
+  final String deskkur;
 
-  const MarketingPem({Key key, this.penjual, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans}) : super(key: key);
-
+  const MarketingPem({Key key, this.penjual, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.service, this.deskkur}) : super(key: key);
+  
   @override
   _MarketingPemState createState() => _MarketingPemState();
 }
@@ -1002,7 +1004,7 @@ class _MarketingPemState extends State<MarketingPem> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/marketing/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/mitra/marketing/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -1026,7 +1028,7 @@ class _MarketingPemState extends State<MarketingPem> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tampil'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -1041,14 +1043,15 @@ class _MarketingPemState extends State<MarketingPem> {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       datax = convertDataToJson['Data'];
-      nama=datax[0]['id'];
+      nama=datax[0]['mitra_id'];
      getdatamar();
     });
   }
   void initState() {
-   
+    getJsonData();
+    getdatamar();
     super.initState();
- getJsonData();
+
   }
   //refreshcontroller
   RefreshController _refreshController =
@@ -1176,7 +1179,9 @@ print("mar="+widget.idtrans.toString());
                                                             cost: widget.cost,
                                                             namamar: data[i]
                                                                 ['nama'],
-                                                                idtrans: widget.idtrans),
+                                                                idtrans: widget.idtrans,
+                                                                    service:widget.service,
+                            deskkur:widget.deskkur),
                                                   ));
                                             },
                                           ),

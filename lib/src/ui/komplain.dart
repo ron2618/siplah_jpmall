@@ -46,7 +46,7 @@ class _KomplainState extends State<KomplainSekolah>{
         //Encode the url
 
         Uri.encodeFull(
-            'http://siplah.mascitra.co.id/siplah/api/sekolah/komplain/pesan'),
+            'http://siplah.mascitra.co.id/api/sekolah/komplain/pesan'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -104,7 +104,7 @@ class _KomplainState extends State<KomplainSekolah>{
   
   Future<http.Response> daftar_api() async {
     
-    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/komplain/tambah';
+    var url = 'http://siplah.mascitra.co.id/api/sekolah/komplain/tambah';
 
     Map data = {
       'transaksi_id': idx,
@@ -143,7 +143,7 @@ class _KomplainState extends State<KomplainSekolah>{
   //   Future<String> getJsonData() async {
   //   var response = await http.post(
   //     //Encode the url
-  //     Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/cabang/list'),
+  //     Uri.encodeFull('http://siplah.mascitra.co.id/api/mitra/cabang/list'),
   //     headers: {
   //       "Content-Type": "application/x-www-form-urlencoded",
   //       "API-App": "siplah_jpmall.id",
@@ -252,7 +252,7 @@ class _KomplainState extends State<KomplainSekolah>{
         //Encode the url
 
         Uri.encodeFull(
-            'http://siplah.mascitra.co.id/siplah/api/sekolah/komplain/transaksi'),
+            'http://siplah.mascitra.co.id/api/sekolah/komplain/transaksi'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",

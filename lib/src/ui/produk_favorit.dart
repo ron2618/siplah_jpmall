@@ -17,7 +17,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
     //a=a+id;
     print(id);
     var url =
-        'http://siplah.mascitra.co.id/siplah/api/sekolah/produk_favorit/hapus';
+        'http://siplah.mascitra.co.id/api/sekolah/produk_favorit/hapus';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -38,7 +38,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
     //print(map);
     if (map["Error"] == true || map["Error"] == "true") {
       _berhasil(context);
-      
+      ProdukFavorit();
     } else {
       // savedata();
      _showAlert(context);
@@ -61,6 +61,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
               title: Text("Peringatan"),
               content: Text("Buku telah dihapus dari daftar favorit"),
             ));
+            
   }
    String nama;
   List data, data2;
@@ -69,7 +70,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
         //Encode the url
 
         Uri.encodeFull(
-            'http://siplah.mascitra.co.id/siplah/api/sekolah/produk_favorit/tampil'),
+            'http://siplah.mascitra.co.id/api/sekolah/produk_favorit/tampil'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -156,7 +157,7 @@ class _ProdukFavoritState extends State<ProdukFavorit>{
                                 Container(
                                   padding: const EdgeInsets.all(6.0),
                                   width: c_width,
-                                  child: Image.network(data2[0]['foto']==null?'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png':data2[0]['foto'])                                ),
+                                  child: Image.network(data2[0]['foto']==null?'http://siplah.mascitra.co.id/assets/images/no-image.png':data2[0]['foto'])                                ),
                         
                         
                               ])),

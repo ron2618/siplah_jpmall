@@ -35,7 +35,7 @@ class _CartsPageState extends State<CartsPage> {
   Future<http.Response> _delete(String idx) async {
     //a=a+id;
     //print(id);
-    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/keranjang/delete';
+    var url = 'http://siplah.mascitra.co.id/api/sekolah/keranjang/delete';
 
     Map data = {'user_id': "" + id, 'id': idx};
     //encode Map to JSON
@@ -89,7 +89,7 @@ class _CartsPageState extends State<CartsPage> {
   Future<http.Response> qtyjson(String id_produk, String jumlah_produk) async {
     //a=a+id;
     //print(id);
-    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/keranjang/set_stok';
+    var url = 'http://siplah.mascitra.co.id/api/sekolah/keranjang/set_stok';
 
     //encode Map to JSON
     var body = json.encode(data);
@@ -135,15 +135,29 @@ class _CartsPageState extends State<CartsPage> {
   int idtrans;
 
   Future<http.Response> daftartransaksi(keranjang) async {
-    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tambah';
+    var url = 'http://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah';
     Map keranjangid = {"id": keranjang};
     // Map keranjangid ={
     //   "id":keranjang
-    // };
-    Map<String, String> data = {"id": keranjang};
-    var cart = json.encode(data);
-    var response = await http.post(
-      url,
+    // };\
+   
+    var myList = List(data2.length);
+  var i=0; 
+ void main(){
+    
+while(i<data2.length){
+   var a= data2[i]['id'];
+   myList[i] = {'id': a};    
+  i++;
+ 
+}
+    print(myList);   
+
+ }
+ main();
+    //Map data = {"id": keranjang};
+    var cart = json.encode(myList);
+    var response = await http.post(url,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -159,7 +173,7 @@ class _CartsPageState extends State<CartsPage> {
     Map<String, dynamic> map = jsonDecode(response.body);
     // var response = await http.post(
     //   //Encode the url
-    //   Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tambah'),
+    //   Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah'),
 
     //   headers: {
     //     "Content-Type": "application/x-www-form-urlencoded",
@@ -182,8 +196,8 @@ class _CartsPageState extends State<CartsPage> {
       _showAlert(context);
     } else {
       setState(() {
-        Map<String, dynamic> map1 = jsonDecode(response.body);
-        int payment_code = map1['Data']['transaksi_id'];
+        //Map<String, dynamic> map1 = jsonDecode(response.body);
+        int payment_code = map['Data']['transaksi_id'];
         idtrans = payment_code;
         idtrans == null
             ? print(payment_code)
@@ -204,7 +218,7 @@ class _CartsPageState extends State<CartsPage> {
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/keranjang/isi'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/keranjang/isi'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -459,7 +473,7 @@ class _CartsPageState extends State<CartsPage> {
                                   child: Image.network(x[i]['produk_foto'] !=
                                           null
                                       ? x[i]['produk_foto'][0]['foto']
-                                      : 'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png')),
+                                      : 'http://siplah.mascitra.co.id/assets/images/no-image.png')),
                               Column(
                                 // mainAxisAlignment: ,
                                 crossAxisAlignment: CrossAxisAlignment.start,

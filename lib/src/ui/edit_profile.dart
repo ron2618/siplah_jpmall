@@ -31,7 +31,7 @@ class _Editprofile extends State<Editprofile> {
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/admin/data_mitra/list'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -104,13 +104,13 @@ class _Editprofile extends State<Editprofile> {
                                 backgroundImage: NetworkImage(data[0]['foto'] !=
                                         null
                                     ? data[0]['foto']
-                                    : ('http://siplah.mascitra.co.id/siplah/assets/images/no-image.png')),
+                                    : ('http://siplah.mascitra.co.id/assets/images/no-image.png')),
                                 //   child:Center(
                                 //     child:
                                 //   Image.network(
                                 //      data[0]['foto'] != null
                                 //           ? data[0]['foto']
-                                //           : ('http://siplah.mascitra.co.id/siplah/assets/images/no-image.png'),
+                                //           : ('http://siplah.mascitra.co.id/assets/images/no-image.png'),
                                 // ),
                                 //   ),
                               ),
@@ -717,7 +717,7 @@ class _FormEdit extends State<FormEdit> {
   Future<String> getJsonData() async {
     var response = await http.post(
         //Encode the url
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/admin/data_mitra/list'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -874,7 +874,7 @@ class _FormEdit extends State<FormEdit> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'http://siplah.mascitra.co.id/siplah/api/mitra/user/profil_update';
+    var url = 'http://siplah.mascitra.co.id/api/mitra/user/profil_update';
 
     Map data = {
       'user_id': id,

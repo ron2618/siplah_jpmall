@@ -27,9 +27,10 @@ class PembayaranState extends StatefulWidget {
   final String namakur;
   final int idtrans;
   final int trans;
+   final String service;
+  final String deskkur;
 
-  const PembayaranState({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.trans}) : super(key: key);
-
+  const PembayaranState({Key key, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.trans, this.service, this.deskkur}) : super(key: key);
  
   
   
@@ -42,11 +43,13 @@ class PembayaranState extends StatefulWidget {
 class _PembayaranState extends State<PembayaranState> {
 
   Future<http.Response> bayarapi(int idtr,String gettoken) async {
-    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/bayar';
+    var url = 'http://siplah.mascitra.co.id/api/sekolah/pembayaran/bayar';
     Map kurir ={
       'mitra_id':mitra,
       'kurir':""+widget.ketkur,
       'kurir_id':""+widget.namakur,
+      "kurir_service":widget.service,
+      "kurir_service_deskripsi":widget.deskkur,
       'ongkir':widget.cost
     };
     Map data = {
@@ -127,7 +130,7 @@ class _PembayaranState extends State<PembayaranState> {
  Future<String> getTokenid() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/midtrans/api/token'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/midtrans/api/token'),
       // headers: {
       //   "Content-Type": "application/x-www-form-urlencoded",
       //   "API-App": "siplah_jpmall.id",
@@ -158,7 +161,7 @@ class _PembayaranState extends State<PembayaranState> {
   Future<String> getKurir_Jne() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -199,7 +202,7 @@ class _PembayaranState extends State<PembayaranState> {
       level_id = pref.getString("level_id");
       foto = pref.getString("foto");
       id = pref.getString('id');
-      kabupaten = pref.getString('kabupaten_id');
+      
          getCartsData();
        getAlamatData();
     getTokenid();
@@ -220,7 +223,7 @@ class _PembayaranState extends State<PembayaranState> {
 //     Future<http.Response> daftartransaksi(keranjang) async {
 //     var response = await http.post(
 //       //Encode the url
-//       Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tambah'),
+//       Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/pembayaran/tambah'),
 //       headers: {
 //         "Content-Type": "application/x-www-form-urlencoded",
 //         "API-App": "siplah_jpmall.id",
@@ -258,12 +261,12 @@ class _PembayaranState extends State<PembayaranState> {
   String id;
   List datax, data2;
   String mitra;
-  String berat;
+  int berat;
   String hargasub;
   Future<String> getCartsData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/pembayaran/tampil'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/pembayaran/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -271,7 +274,7 @@ class _PembayaranState extends State<PembayaranState> {
         "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
       },
       body: {
-        "transaksi_id": widget.idtrans.toString()!=null?widget.idtrans.toString():widget.trans.toString()!=null?widget.trans.toString():widget.idtrans.toString()
+        "transaksi_id":  widget.idtrans.toString()!=null?widget.idtrans.toString():widget.trans.toString()!=null?widget.trans.toString():widget.idtrans.toString()
       },
     );
      //print(response.body);
@@ -280,11 +283,13 @@ class _PembayaranState extends State<PembayaranState> {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       datax = convertDataToJson['Data'];
-      tujuan = datax[0]['tujuan_kecamatan_id'];
+     tujuan = datax[0]['tujuan_kecamatan_id'];
     berat = datax[0]['total_berat'];
     mitra = datax[0]['id'];
     hargasub = datax[0]['sub_total_produk'];
+    kabupaten =datax[0]['kecamatan_id'];
    print(tujuan);
+   print("ner="+berat.toString());
     });
     
     keranjang = data2[0]['id'];
@@ -300,7 +305,7 @@ class _PembayaranState extends State<PembayaranState> {
         //Encode the url
 
         Uri.encodeFull(
-            'http://siplah.mascitra.co.id/siplah/api/sekolah/alamat_pengiriman/list'),
+            'http://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -321,7 +326,9 @@ class _PembayaranState extends State<PembayaranState> {
 
   @override
   Widget build(BuildContext context) {
-    print("los="+widget.trans.toString());
+    
+    print(kabupaten.toString()+" 312 "+tujuan.toString());
+    print("los="+widget.idtrans.toString());
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back),onPressed:(){
@@ -483,7 +490,9 @@ class _PembayaranState extends State<PembayaranState> {
                         penjual: penjual,
                         ketkur:widget.ketkur,
                         namakur:widget.namakur,
-                        idtrans:widget.idtrans==null?widget.trans:widget.idtrans),
+                        idtrans:widget.idtrans==null?widget.trans:widget.idtrans,
+                            service:widget.service,
+                            deskkur:widget.deskkur),
                   ));
             },
             child: 
@@ -550,7 +559,9 @@ class _PembayaranState extends State<PembayaranState> {
                               cost: widget.cost,
                               idmar:widget.idmar,
                               ketkur:widget.ketkur,
-                              idtrans: widget.idtrans==null?widget.trans:widget.idtrans),
+                              idtrans: widget.idtrans==null?widget.trans:widget.idtrans,
+                                  service:widget.service,
+                            deskkur:widget.deskkur),
                         ));
                   },
                   child: Container(
@@ -604,7 +615,7 @@ class _PembayaranState extends State<PembayaranState> {
                                         child: Column(children: <Widget>[
                                           Row(
                                             children: <Widget>[
-                                               widget.imagekurir=="http://siplah.mascitra.co.id/siplah/assets/images/user.ico"?Container():
+                                               widget.imagekurir=="http://siplah.mascitra.co.id/assets/images/user.ico"?Container():
                                               Container(
                                                 width: 100,
                                                 height: 50,
@@ -621,7 +632,7 @@ class _PembayaranState extends State<PembayaranState> {
                                                 ),
                                               ),
                                               SizedBox(width: 30,),
-                                              widget.imagekurir=="http://siplah.mascitra.co.id/siplah/assets/images/user.ico"?
+                                              widget.imagekurir=="http://siplah.mascitra.co.id/assets/images/user.ico"?
                                                Container(
                                                 child: Text(
                                                   "Kurir : Internal",
@@ -673,7 +684,9 @@ class _PembayaranState extends State<PembayaranState> {
                         idmar:widget.idmar,
                         ketkur:widget.ketkur,
                         namakur:widget.namakur,
-                        idtrans: widget.idtrans==null?widget.trans:widget.idtrans
+                        idtrans: widget.idtrans==null?widget.trans:widget.idtrans,
+                            service:widget.service,
+                            deskkur:widget.deskkur
                         ),
                   ));
             },
@@ -696,7 +709,7 @@ class _PembayaranState extends State<PembayaranState> {
                           width: 100,
                           height: 50,
                           child: Image.network(
-                              "http://siplah.mascitra.co.id/siplah/assets/images/payment/bca.png"),
+                              "http://siplah.mascitra.co.id/assets/images/payment/bca.png"),
                         )
                       : Container(
                           width: 100,

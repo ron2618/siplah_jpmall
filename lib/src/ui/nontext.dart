@@ -265,7 +265,7 @@ class _NontextState extends State<Nontext> {
                               topLeft: Radius.circular(20)),
                           image: DecorationImage(
                               image:
-                                  NetworkImage(widget.kategori!=null?widget.kategori:'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png'))),
+                                  NetworkImage(widget.kategori!=null?widget.kategori:'http://siplah.mascitra.co.id/assets/images/no-image.png'))),
                       child: SizedBox(
                         height: 220,
                         width: 150,
@@ -340,7 +340,7 @@ class _NontextState extends State<Nontext> {
                               topLeft: Radius.circular(20)),
                           image: DecorationImage(
                               image:
-                                  NetworkImage('http://siplah.mascitra.co.id/siplah/assets/images/no-image.png'))),
+                                  NetworkImage('http://siplah.mascitra.co.id/assets/images/no-image.png'))),
                       child: SizedBox(
                         height: 220,
                         width: 150,
@@ -404,7 +404,7 @@ class _NontextState extends State<Nontext> {
                                       gambar: widget.data[index]['foto'] != null
                                           ? widget.data[index]['foto'][0]
                                               ['foto']
-                                          : 'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png',
+                                          : 'http://siplah.mascitra.co.id/assets/images/no-image.png',
                                       harga: widget.data[index]['harga']))),
                                     
                           child: Container(
@@ -425,7 +425,186 @@ class _NontextState extends State<Nontext> {
                                               null
                                           ? widget.data[index]['foto'][0]
                                               ['foto']
-                                          : 'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png',
+                                          : 'http://siplah.mascitra.co.id/assets/images/no-image.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 5.0)
+                                        ]),
+                                  ),
+                                ),
+                                Container(
+                                  height: 40,
+                                  width: 110,
+                                  child: Text(
+                                    widget.data[index]['produk'],
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                Container(
+                                  width: 110,
+                                  child: Text(
+                                     widget.data[index]['harga'] != '0'
+                                        ?"Rp " + widget.data[index]['harga']
+                                        : "harga zona",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+//nontext baru
+
+class Nontextbaru extends StatefulWidget {
+  final List data;
+  final String kategori;
+  final String level;
+  final String id;
+
+  const Nontextbaru({Key key, this.data, this.kategori, this.level, this.id}) : super(key: key);  
+
+
+
+  @override
+  _NontextStatebaru createState() => _NontextStatebaru();
+}
+
+class _NontextStatebaru extends State<Nontextbaru> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     changeIndex();
+
+  }
+  void changeIndex() {
+    setState(() => index = random.nextInt(3));
+  }
+ List colors = [Colors.white, Colors.white, Colors.white];
+  Random random = new Random();
+  var f = NumberFormat("#,##0", "en_US");
+  List<String> satu = [
+    "Buku Guru Pendidikan Jasmani Olahraga dan Kesehatan Kelas VII",
+    "",
+    "Third",
+    "4"
+  ];
+  int index = 0;
+  @override
+  Widget build(BuildContext context) {
+   
+    return Container(
+      height: 225,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(color: colors[index], boxShadow: [
+        BoxShadow(color: Colors.black26, offset: Offset(0, 3), blurRadius: 3)
+      ]),
+      child: ListView(
+        physics: ScrollPhysics(),
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              SizedBox(
+                width: 8.0,
+              ),
+
+
+    //end
+              SizedBox(
+                width: 8.0,
+              ),
+              Container(
+                height: 180,
+                decoration: BoxDecoration(
+                    color: colors[index],
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 3),
+                          blurRadius: 3)
+                    ]),
+                child: Container(
+                  height: 100,
+                  child: ListView.builder(
+                    itemCount: widget.data == null ? 0 : 5,
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, int index) {
+                     
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                  transitionDuration:
+                                      Duration(milliseconds: 350),
+                                  pageBuilder: (context, _, __) => DetailProduk2(
+                                    penjual_id:widget.data[index]['user_id'],
+                                    penjual_user_id:widget.data[index]['user_id'],
+                                    produk_id:widget.data[index]['id'],
+                                    id: widget.id,
+                                    level: widget.level,
+                                      nama: widget.data[index]['produk'],
+                                      gambar: widget.data[index]['foto'] != null
+                                          ? widget.data[index]['foto'][0]
+                                              ['foto']
+                                          : 'http://siplah.mascitra.co.id/assets/images/no-image.png',
+                                      harga: widget.data[index]['harga']))),
+                                    
+                          child: Container(
+                            width: 130,
+                            height: 100,
+                            color: Colors.white,
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 8.0,
+                                ),
+                                SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Container(
+                                    child: Image.network(
+                                      widget.data[index]['foto'] !=
+                                              null
+                                          ? widget.data[index]['foto'][0]
+                                              ['foto']
+                                          : 'http://siplah.mascitra.co.id/assets/images/no-image.png',
                                       fit: BoxFit.cover,
                                     ),
                                     decoration: BoxDecoration(

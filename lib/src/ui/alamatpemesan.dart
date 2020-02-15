@@ -42,7 +42,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
 
     Future<http.Response> update_api() async {
       var url =
-          'http://siplah.mascitra.co.id/siplah/api/sekolah/alamat_pengiriman/update';
+          'http://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/update';
 
       Map data = {
         'id': idx,
@@ -224,7 +224,7 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     //a=a+id;
     print(id);
     var url =
-        'http://siplah.mascitra.co.id/siplah/api/sekolah/alamat_pengiriman/delete';
+        'http://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/delete';
 
     Map data = {'user_id': "" + nama, 'id': id};
     //encode Map to JSON
@@ -284,7 +284,7 @@ String z;
     //print(id);
     print(a);
     var url =
-        'http://siplah.mascitra.co.id/siplah/api/sekolah/alamat_pengiriman/set_utama';
+        'http://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/set_utama';
 
     Map data = {'user_id': "" + nama, 'id': id, 'is_utama': a};
     //encode Map to JSON
@@ -319,7 +319,7 @@ String z;
         //Encode the url
 
         Uri.encodeFull(
-            'http://siplah.mascitra.co.id/siplah/api/sekolah/alamat_pengiriman/list'),
+            'http://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -598,7 +598,7 @@ class _Tambahalamat extends State<Tambahalamat> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/alamat_pengiriman/add';
+    var url = 'http://siplah.mascitra.co.id/api/sekolah/alamat_pengiriman/add';
 
     Map data = {
       'user_id': id,

@@ -188,7 +188,7 @@ String nama;
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/admin/data_mitra/list'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/admin/data_mitra/list'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",

@@ -30,7 +30,7 @@ class _EditprofileSKL extends State<EditprofileSKL> {
     var response = await http.post(
         //Encode the url
 
-        Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/profil/get'),
+        Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/profil/get'),
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "API-App": "siplah_jpmall.id",
@@ -100,14 +100,14 @@ class _EditprofileSKL extends State<EditprofileSKL> {
                         backgroundImage: NetworkImage(data[0]['logo_sekolah'] !=
                                 null
                             ? data[0]['logo_sekolah']
-                            : ('http://siplah.mascitra.co.id/siplah/assets/images/no-image.png')),
+                            : ('http://siplah.mascitra.co.id/assets/images/no-image.png')),
                         radius: 50,
                         // child: Center(
                         //   child: ,
                         //   child: Image.network(
                         //     data[0]['logo_sekolah'] != null
                         //         ? data[0]['logo_sekolah']
-                        //         : ('http://siplah.mascitra.co.id/siplah/assets/images/no-image.png'),scale: 8,
+                        //         : ('http://siplah.mascitra.co.id/assets/images/no-image.png'),scale: 8,
                         //   ),
                         // ),
                       ),
@@ -607,7 +607,7 @@ class _FormEdit2 extends State<FormEdit2> {
   // Future<String> getJsonData() async {
   //   var response = await http.post(
   //       //Encode the url
-  //       Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/profil/get'),
+  //       Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/profil/get'),
   //       headers: {
   //         "Content-Type": "application/x-www-form-urlencoded",
   //         "API-App": "siplah_jpmall.id",
@@ -738,7 +738,7 @@ class _FormEdit2 extends State<FormEdit2> {
   }
 
   Future<http.Response> daftar_api() async {
-    var url = 'http://siplah.mascitra.co.id/siplah/api/sekolah/profil/edit';
+    var url = 'http://siplah.mascitra.co.id/api/sekolah/profil/edit';
 
     Map data = {
       'user_id': id,

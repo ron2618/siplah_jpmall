@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage>
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/blog/blog_footer'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/blog/blog_footer'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -160,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage>
                         child: Image.network(
                           foto != null
                               ? foto
-                              : ('http://siplah.mascitra.co.id/siplah/assets/images/user.ico'),
+                              : ('http://siplah.mascitra.co.id/assets/images/user.ico'),
                         ),
                       ),
                     ),
@@ -261,24 +261,24 @@ class _ProfilePageState extends State<ProfilePage>
                                     ),
                             ),
 
-                            Container(
-                              color: Colors.white,
-                              child: ListTile(
-                                onTap: () {
-                                  _showAlert(context);
-                                },
-                                title: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      "LOGOUT",
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            // Container(
+                            //   color: Colors.white,
+                            //   child: ListTile(
+                            //     onTap: () {
+                            //       _showAlert(context);
+                            //     },
+                            //     title: Column(
+                            //       children: <Widget>[
+                            //         Text(
+                            //           "LOGOUT",
+                            //           style: TextStyle(
+                            //               color: Colors.red,
+                            //               fontWeight: FontWeight.bold),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
 //     //batas bawah
 
                             //lol
@@ -427,6 +427,25 @@ class _ProfilePageState extends State<ProfilePage>
                                   ));
                             },
                           ),
+                          ListTile(
+                            title: Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.exit_to_app,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text('Logout'),
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                             _showAlert(context);
+                            },
+                          ),
                         ])
                       : Column(children: <Widget>[
                           SizedBox(
@@ -559,6 +578,25 @@ class _ProfilePageState extends State<ProfilePage>
                                   ));
                             },
                           ),
+                          ListTile(
+                            title: Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.exit_to_app,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text('Logout'),
+                                ],
+                              ),
+                            ),
+                            onTap: () {
+                             _showAlert(context);
+                            },
+                          ),
                         ])
                 ],
               ),
@@ -587,7 +625,7 @@ class _PageSiteA extends State<PagesiteA> {
     //print(widget.id);
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/blog/tampil'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/blog/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -663,7 +701,7 @@ class _PageSiteB extends State<PagesiteB> {
     //print(widget.id);
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/blog/tampil'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/blog/tampil'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",

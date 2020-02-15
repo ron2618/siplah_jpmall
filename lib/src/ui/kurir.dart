@@ -23,11 +23,12 @@ class Kurir extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
-  final String berat;
+  final int berat;
   final String mitra;
+  final String service;
+  final String deskkur;
 
-  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat, this.mitra}) : super(key: key);
-
+  const Kurir({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat, this.mitra, this.service, this.deskkur}) : super(key: key);
  
   @override
   _KurirState createState() => _KurirState();
@@ -39,7 +40,7 @@ class _KurirState extends State<Kurir> {
   Future<String> getCourier() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/mitra/kurir/list'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/mitra/kurir/list'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -90,7 +91,7 @@ class _KurirState extends State<Kurir> {
   }
   @override
   Widget build(BuildContext context) {
-    
+    print(widget.kabu.toString()+" 31 "+widget.tuju.toString());
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -104,14 +105,18 @@ class _KurirState extends State<Kurir> {
           height: MediaQuery.of(context).size.height,
           child: ListView(
             children: <Widget>[
-              Text("Internal"),
+              Text("Internal",style: TextStyle(fontWeight: FontWeight.bold,fontSize:13),),
               Divider(
                 height: 2,
                 color: Colors.grey,
               ),
               Container(
                 height: 100,
-                child: datax==null?Container(child: Text("Kurir Internal Tidak Tersedia"),): ListView.builder(
+                child: datax==null?Container(child: Row(
+                  children: <Widget>[SizedBox(width: 150,),
+                    Text("Kurir Internal Tidak Tersedia",style: TextStyle(fontWeight: FontWeight.bold,fontSize:15),),
+                  ],
+                ),): ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: datax.length,
                   itemBuilder: (context,i){
@@ -123,7 +128,7 @@ class _KurirState extends State<Kurir> {
                             MaterialPageRoute(
                               builder: (BuildContext context) => PembayaranState(
                                 imagekurir:
-                                                                      "http://siplah.mascitra.co.id/siplah/assets/images/user.ico",
+                                                                      "http://siplah.mascitra.co.id/assets/images/user.ico",
                                                                   cost: int.parse(datax[0]['harga_satuan']),
                                                                   totalharga: widget
                                                                       .totalharga,
@@ -176,7 +181,7 @@ class _KurirState extends State<Kurir> {
                 height: 2,
                 color: Colors.grey,
               ),
-              Text("Eksternal"),
+              Text("Eksternal",style: TextStyle(fontWeight: FontWeight.bold,fontSize:13),),
               Divider(
                 height: 2,
                 color: Colors.grey,
@@ -200,7 +205,9 @@ class _KurirState extends State<Kurir> {
                             idmar:widget.idmar,
                             ketkur:widget.ketkur,
                             namakur:widget.namakur,
-                            idtrans: widget.idtrans),
+                            idtrans: widget.idtrans,
+                            service:widget.service,
+                            deskkur:widget.deskkur),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -239,7 +246,9 @@ class _KurirState extends State<Kurir> {
                             idmar:widget.idmar,
                             ketkur:widget.ketkur,
                             namakur:widget.namakur,
-                            idtrans: widget.idtrans),
+                            idtrans: widget.idtrans,
+                            service:widget.service,
+                            deskkur:widget.deskkur),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -278,7 +287,9 @@ class _KurirState extends State<Kurir> {
                                 idmar:widget.idmar,
                                 ketkur:widget.ketkur,
                                 namakur:widget.namakur,
-                                idtrans: widget.idtrans
+                                idtrans: widget.idtrans,
+                                service:widget.service,
+                                deskkur:widget.deskkur
                               )));
                 },
                 leading: ConstrainedBox(
@@ -316,7 +327,9 @@ class _KurirState extends State<Kurir> {
                             idmar:widget.idmar,
                             ketkur:widget.ketkur,
                             namakur:widget.namakur,
-                            idtrans: widget.idtrans),
+                            idtrans: widget.idtrans,
+                            service:widget.service,
+                            deskkur:widget.deskkur),
                       ));
                 },
                 leading: ConstrainedBox(
@@ -352,9 +365,11 @@ class KurirJNE extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
-  final String berat;
+  final int berat;
+  final String service;
+  final String deskkur;
 
-  const KurirJNE({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
+  const KurirJNE({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat, this.service, this.deskkur}) : super(key: key);
   
   
   @override
@@ -363,10 +378,10 @@ class KurirJNE extends StatefulWidget {
 
 class _KurirJneState extends State<KurirJNE> {
   List datajne, pnjngjne;
-  Future<String> getKurirJne(String a, b) async {
+  Future<String> getKurirJne() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "API-App": "siplah_jpmall.id",
         "Api-Key": "4P1_7Pm411_51p114h",
@@ -375,7 +390,7 @@ class _KurirJneState extends State<KurirJNE> {
       body: {
         "asal": widget.kabu,
         "tujuan": widget.tuju,
-        "berat": widget.berat,
+        "berat": widget.berat.toString(),
         "kurir": "jne",
       },
     );
@@ -390,12 +405,16 @@ class _KurirJneState extends State<KurirJNE> {
 
     return "Success";
   }
+ @override
+  void initState() {
+   getKurirJne();
+    super.initState();
 
+  }
   @override
   Widget build(BuildContext context) {
-    getKurirJne(widget.kabu, widget.tuju);
-    print(widget.kabu);
-    print(widget.tuju);
+
+    print(widget.kabu.toString()+" 30 "+widget.tuju.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text("Kurir JNE"),
@@ -490,7 +509,9 @@ class _KurirJneState extends State<KurirJNE> {
                                                                 idmar: widget.idmar,
                                                                 ketkur:"eksternal",
                                                                 namakur: "jne",
-                                                                idtrans: widget.idtrans
+                                                                idtrans: widget.idtrans,
+                                                                service:x[i]['service'],
+                                                                deskkur:x[i]['description']
                                                           ),
                                                         ));
                                                   },
@@ -523,9 +544,11 @@ class KurirJNT extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
-  final String berat;
+  final int berat;
+   final String service;
+  final String deskkur;
 
-  const KurirJNT({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
+  const KurirJNT({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat, this.service, this.deskkur}) : super(key: key);
 
   @override
   _KurirJntState createState() => _KurirJntState();
@@ -536,7 +559,7 @@ class _KurirJntState extends State<KurirJNT> {
   Future<String> getKurirJnt() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -546,11 +569,11 @@ class _KurirJntState extends State<KurirJNT> {
       body: {
         'asal': widget.kabu,
         'tujuan': widget.tuju,
-        'berat': widget.berat,
+        'berat': widget.berat.toString(),
         'kurir': 'jnt',
       },
     );
-     //print(response.body);
+     print(response.body);
 
     setState(() {
       // ignore: deprecated_member_use
@@ -561,10 +584,16 @@ class _KurirJntState extends State<KurirJNT> {
 
     return "Success";
   }
+ @override
+  void initState() {
+     getKurirJnt();
+    super.initState();
 
+  }
   @override
   Widget build(BuildContext context) {
-    getKurirJnt();
+ 
+    print(widget.kabu);
     return Scaffold(
       appBar: AppBar(
         title: Text("Kurir JNT"),
@@ -659,7 +688,9 @@ class _KurirJntState extends State<KurirJNT> {
                                                                 idmar: widget.idmar,
                                                                 ketkur: "eksternal",
                                                                 namakur: "jnt",
-                                                                idtrans: widget.idtrans
+                                                                idtrans: widget.idtrans,
+                                                                service:x[i]['service'],
+                                                                deskkur:x[i]['description']
                                                           ),
                                                         ));
                                                   },
@@ -692,9 +723,11 @@ class KurirPos extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
-  final String berat;
+  final int berat;
+ final String service;
+  final String deskkur;
 
-  const KurirPos({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
+  const KurirPos({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat, this.service, this.deskkur}) : super(key: key);
   
   @override
   _KurirPosState createState() => _KurirPosState();
@@ -705,7 +738,7 @@ class _KurirPosState extends State<KurirPos> {
   Future<String> getKurirPos() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -730,10 +763,15 @@ class _KurirPosState extends State<KurirPos> {
 
     return "Success";
   }
+ @override
+  void initState() {
+     getKurirPos();
+    super.initState();
 
+  }
   @override
   Widget build(BuildContext context) {
-    getKurirPos();
+    
     print(datapos);
     return Scaffold(
       appBar: AppBar(
@@ -829,7 +867,9 @@ class _KurirPosState extends State<KurirPos> {
                                                                 idmar: widget.idmar,
                                                                 ketkur: "eksternal",
                                                                 namakur: "pos",
-                                                                idtrans: widget.idtrans
+                                                                idtrans: widget.idtrans,
+                                                                service:x[i]['service'],
+                                                                deskkur:x[i]['description']
                                                           ),
                                                         ));
                                                   },
@@ -862,10 +902,12 @@ class KurirTIKI extends StatefulWidget {
   final String ketkur;
   final String namakur;
   final int idtrans;
-  final String berat;
+  final int berat;
+ final String service;
+  final String deskkur;
 
-  const KurirTIKI({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat}) : super(key: key);
-  @override
+  const KurirTIKI({Key key, this.kabu, this.tuju, this.imagebank, this.datatype, this.databank, this.totalharga, this.namamar, this.imagekurir, this.cost, this.idmar, this.ketkur, this.namakur, this.idtrans, this.berat, this.service, this.deskkur}) : super(key: key);
+   @override
   _KurirTikiState createState() => _KurirTikiState();
 }
 
@@ -874,7 +916,7 @@ class _KurirTikiState extends State<KurirTIKI> {
   Future<String> getKurirTiki() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/rajaongkir/ongkir/kurir'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/rajaongkir/ongkir/kurir'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -883,8 +925,8 @@ class _KurirTikiState extends State<KurirTIKI> {
       },
       body: {
         'asal': widget.kabu,
-        'tujuan': widget.tuju,
-        'berat': widget.berat,
+        'tujuan': widget.tuju.toString(),
+        'berat': widget.berat.toString(),
         'kurir': 'tiki',
       },
     );
@@ -899,11 +941,16 @@ class _KurirTikiState extends State<KurirTIKI> {
 
     return "Success";
   }
+ @override
+  void initState() {
+     getKurirTiki();
+    super.initState();
 
+  }
   @override
   Widget build(BuildContext context) {
-    getKurirTiki();
-print(widget.kabu +" an "+ widget.tuju);
+    
+print(widget.kabu +" an "+ widget.tuju.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text("Kurir Tiki"),
@@ -998,7 +1045,9 @@ print(widget.kabu +" an "+ widget.tuju);
                                                                 idmar: widget.idmar,
                                                                 ketkur: "eksternal",
                                                                 namakur: "tiki",
-                                                                idtrans: widget.idtrans
+                                                                idtrans: widget.idtrans,
+                                                                service:x[i]['service'],
+                                                                deskkur:x[i]['description']
                                                           ),
                                                         ));
                                                   },

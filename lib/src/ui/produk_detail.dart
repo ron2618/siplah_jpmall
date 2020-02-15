@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
+// import 'package:share/share.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siplah_jpmall/main.dart';
 import 'package:siplah_jpmall/src/bloc/state_bloc.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
 import 'package:siplah_jpmall/src/models/produk_sample.dart';
+import 'package:siplah_jpmall/src/ui/nontext.dart';
 import 'package:siplah_jpmall/src/ui/page_carts.dart';
 import 'package:siplah_jpmall/src/ui/star.dart';
 // import 'package:siplah_jpmall/src/ui/star.dart';
@@ -34,6 +38,11 @@ class _DetailProdukState extends State<DetailProduk>
     );
  
   }
+//  share(BuildContext context) {
+//   final RenderBox box = context.findRenderObject();
+
+//   Share.share("http://www.google.com");
+// }
  
   @override
   Widget build(BuildContext context) {
@@ -51,10 +60,18 @@ class _DetailProdukState extends State<DetailProduk>
               )),
           elevation: 0.0,
           actions: <Widget>[
+            
             Container(
               margin: EdgeInsets.only(right: 25),
-              child: Icon(Icons.share),
+              child: IconButton(
+                onPressed: () => print("lolo"),
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.black,
+                ),
+              ),
             )
+          
           ],
         ),
         backgroundColor: Colors.white,
@@ -163,13 +180,26 @@ class _DetailProduk2State extends State<DetailProduk2>
    
 
   }
+  
+  Future<void> share() async {
+    String a=widget.nama;
+    await FlutterShare.share(
+      title: widget.nama,
+      text: widget.nama,
+      linkUrl: "http://siplah.mascitra.co.id/search/?q="+widget.nama.replaceAll(" ", "+").replaceAll(",", "%2C").replaceAll(":", "%3A"),
+      chooserTitle: widget.nama
+      
+    );
+    
+  }
+  
    List data;
   List data2;
   List kategorilist;
   Future<String> getJsonData() async {
     var response = await http.post(
       //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/sekolah/keranjang/tambah'),
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/sekolah/keranjang/tambah'),
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "API-App": "siplah_jpmall.id",
@@ -218,6 +248,7 @@ class _DetailProduk2State extends State<DetailProduk2>
               ],
             ));
   }
+  
   @override
   Widget build(BuildContext context) {
 
@@ -235,9 +266,15 @@ class _DetailProduk2State extends State<DetailProduk2>
               )),
           elevation: 0.0,
           actions: <Widget>[
-            Container(
+             Container(
               margin: EdgeInsets.only(right: 25),
-              child: Icon(Icons.share),
+              child: IconButton(
+                onPressed: () => share(),
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.black,
+                ),
+              ),
             )
           ],
         ),
@@ -259,7 +296,7 @@ class _DetailProduk2State extends State<DetailProduk2>
                                 });
                               },
                               controller: pageController,
-                              children: List.generate(5, (f){
+                              children: List.generate(2, (f){
                                 return Container(
                                   height: 300,
                                   width: double.infinity,
@@ -283,7 +320,7 @@ class _DetailProduk2State extends State<DetailProduk2>
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: List.generate(5, (i){
+                          children: List.generate(2, (i){
                             return Padding(
                               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                               child: Container(
@@ -569,13 +606,15 @@ getCredential() async {
     setState(() {
       nama = pref.getString("id");
        level_id = pref.getString("level_id");
+     getJsonData();
     });
     //print("id profile sklh= " + nama);
+   
   }
   @override
   void initState() {
     getCredential();
-    getJsonData();
+    
     super.initState();
     controller = AnimationController(
         duration: const Duration(milliseconds: 200), vsync: this);
@@ -597,7 +636,7 @@ getCredential() async {
     //print(id);
   
     var url =
-        'http://siplah.mascitra.co.id/siplah/api/sekolah/produk_favorit/tambah';
+        'http://siplah.mascitra.co.id/api/sekolah/produk_favorit/tambah';
 
     Map data = {'user_id': "" + nama, 'produk_id':id, };
     //encode Map to JSON
@@ -641,13 +680,40 @@ getCredential() async {
               content: Text("Buku Telah Masuk Dalam Menu Favorit"),
             ));
   }
+ List data6;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+      //Encode the url
+      Uri.encodeFull('http://siplah.mascitra.co.id/api/home/list'),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "API-App": "siplah_jpmall.id",
+        "Api-Key": "4P1_7Pm411_51p114h",
+        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+      },
+      body: {
+        'user_id':nama,
+        'id':'7'
+      }
+    );
+    //print(response.body);
+    //print(data6[0]['foto']);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      
+      data6 = convertDataToJson['Data'];
+     
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    
+  
    
     var price  = widget.harga;
     return ListView(
       children: <Widget>[
+        
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -713,62 +779,62 @@ getCredential() async {
               Divider(
                 color: Colors.black26,
               ),
-              Container(
-                  height: 20,
-                  // color: Colors.red,
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Stok Terbatas! ",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                      ),
-                      20 > 50
-                          ? Text(
-                              "Tersedia > 50",
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            )
-                          : Text(
-                              "Tersedia < 50",
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
+              // Container(
+              //     height: 20,
+              //     // color: Colors.red,
+              //     child: Row(
+              //       children: <Widget>[
+              //         Text(
+              //           "Stok Terbatas! ",
+              //           style: TextStyle(
+              //               fontSize: 12, fontWeight: FontWeight.w500),
+              //         ),
+              //         20 > 50
+              //             ? Text(
+              //                 "Tersedia > 50",
+              //                 style: TextStyle(
+              //                   fontSize: 12,
+              //                 ),
+              //               )
+              //             : Text(
+              //                 "Tersedia < 50",
+              //                 style: TextStyle(
+              //                   fontSize: 12,
+              //                 ),
+              //               ),
+              //       ],
+              //     )),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // Container(
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //     children: <Widget>[
                     
-                    _diskusi(12),
-                    _pengiriman()
-                  ],
-                ),
-              ),
+              //       _diskusi(12),
+              //       _pengiriman()
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: 15,
               ),
-              Container(
-                height: 60,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.black12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    _dilihat(2000),
-                    _transaksi(90, 100),
-                    _wishlist(200)
-                  ],
-                ),
-              )
+              // Container(
+              //   height: 60,
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(10),
+              //       color: Colors.black12),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //     // crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: <Widget>[
+              //       _dilihat(200),
+              //       _transaksi(90, 100),
+              //       _wishlist(200)
+              //     ],
+              //   ),
+              // )
             ]),
           ),
         ),
@@ -786,21 +852,73 @@ getCredential() async {
           padding: EdgeInsets.only(left: 20, top: 20, bottom: 8.0),
           width: double.infinity,
           color: Colors.white,
-          child: Text(
-            "Produk Lainnya",
-            textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-          ),
+          child: 
+              Text(
+                "Produk Lainnya",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+              ),
+         
         ),
-        Container(
-            padding: const EdgeInsets.only(left: 20),
-            width: double.infinity,
-            color: Colors.white,
-            child: _otherProduk()
-            ),
-        Container(
-          height: 100,
-        )
+        
+        // Container(
+        //   height: 200,
+        //   child: prefix0.Kategori(data: data6[i]['produk'],)
+        //   // ListView.builder(itemCount: 2,
+        //   // scrollDirection: Axis.horizontal,
+        //   // itemBuilder: (context,i){
+        //   //   return Row(children: <Widget>[
+        //   //     Text(data6[i]['foto'])
+        //   //   ],);
+        //   // }),
+        // ),
+   
+      Container(
+                            height:data6 == null ? 0 : 100 * data6.length.toDouble(),
+                            child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount:
+                                        data6 == null ? 0 : 1,
+                                    itemBuilder: (context, i) {
+                                      return Container(
+                                          child: Column(
+                                        children: <Widget>[
+                                          data6 != null
+                                              ? Nontextbaru(
+                                                
+                                                level: level_id,
+                                                id:nama,
+                                                  data: data6[i]['produk'],
+                                                  
+                                                )
+                                              : CircularProgressIndicator(),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          //Pendamping(data: data2,kategori: kategorilist,),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      ));
+                                    },
+                                  ),
+                          ),
+      
+
+        //  Container(
+        //     padding: const EdgeInsets.only(left: 20),
+        //     width: double.infinity,
+        //     color: Colors.white,
+        //     child: _otherProduk()
+        //     )
+             
+ 
+         
+      
+        // Container(
+        //   height: 100,
+        // ),
         // Column(
         //   children: List.generate(100, (p) {
         //     return ListTile(
@@ -811,37 +929,142 @@ getCredential() async {
       ],
     );
   }
-List data2;
-  Future<String> getJsonData() async {
-    var response = await http.post(
-      //Encode the url
-      Uri.encodeFull('http://siplah.mascitra.co.id/siplah/api/home/list'),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "API-App": "siplah_jpmall.id",
-        "Api-Key": "4P1_7Pm411_51p114h",
-        "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
-      },
-      body: {
-        "user_id":widget.penjual_user_id,
-      }
-    );
-    //print(response.body);
-    setState(() {
-      // ignore: deprecated_member_use
-      var convertDataToJson = json.decode(response.body);
-      
-      data2 = convertDataToJson['Data'][0]["produk"];
+
+
+//   _otherProduk() {
+// getJsonData();
+// data6==null?Container(child: Text("data"),):
+// new ListView.builder(
+//   scrollDirection: Axis.horizontal,
+//   itemCount: data6.length,
+//   itemBuilder: (context,i){
+//     return Container(
+//       height: 300,
+//       width: double.infinity,
+//       child: Row(
+//         children: <Widget>[
+//           Container(
+//             padding: const EdgeInsets.only(left: 5),
+//             height: 260,
+//             width: 150,
+//             child: Card(
+//               elevation: 2,
+//               shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(10.0)),
+//               child: Container(
+//                 decoration: BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.circular(10.0)),
+//                 height: 100,
+//                 width: 120,
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: <Widget>[
+//                     Stack(
+//                       children: <Widget>[
+//                         Container(
+//                             height: 120,
+//                             width: double.infinity,
+//                             decoration: BoxDecoration(
+//                                 borderRadius: BorderRadius.only(
+//                                     topLeft: Radius.circular(10),
+//                                     topRight: Radius.circular(10))),
+//                             child: Image.network(data6[i]['foto']==null?'http://siplah.mascitra.co.id/assets/images/no-image.png':data6[i]['foto'],
+//                               fit: BoxFit.fill,
+//                             )),
+//                         Positioned(
+//                           right: 10,
+//                           top: 10,
+//                           child: CircleAvatar(
+//                             backgroundColor: Colors.white,
+//                             foregroundColor: Colors.grey,
+//                             child: Icon(
+//                               Icons.favorite_border,
+//                             ),
+//                           ),
+//                         )
+//                       ],
+//                     ),
+//                     SizedBox(height: 8.0),
+//                     Container(
+//                       width: 100,
+//                       height: 50,
+//                       // color: Colors.black,
+//                       child: Text(
+//                         "Belajar Berbahagia",
+//                         style: TextStyle(
+//                             fontSize: 17, fontWeight: FontWeight.w600),
+//                         maxLines: 2,
+//                         overflow: TextOverflow.ellipsis,
+//                       ),
+//                     ),
+//                     Container(
+//                       width: 100,
+//                       // color: Colors.black,
+//                       child: Text(
+//                         "Rp " + f.format(140000),
+//                         style: TextStyle(
+//                           fontSize: 15,
+//                         ),
+//                         maxLines: 2,
+//                         overflow: TextOverflow.ellipsis,
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height: 8.0,
+//                     ),
+//                     Container(
+//                       width: 100,
+//                       height: 20,
+//                       child: Row(
+//                         children: <Widget>[
+//                           CircleAvatar(
+//                             child: Icon(
+//                               Icons.store,
+//                               size: 15,
+//                               color: Colors.red,
+//                             ),
+//                             minRadius: 10,
+//                             backgroundColor: Colors.amber,
+//                             foregroundColor: Colors.red,
+//                           ),
+//                           SizedBox(width: 5.0),
+//                           Text(
+//                             "Sumatera",
+//                             style: TextStyle(
+//                               fontSize: 11,
+//                             ),
+//                           )
+//                         ],
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       height: 5.0,
+//                     ),
+//                     Container(
+//                         width: 100,
+//                         child: StarDisplay(
+//                           size: 10,
+//                           value: 4,
+//                         ))
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//     }
+// );
+//   }
+
+ _otherProduk() {
+  //  getJsonData();
+  //  ListView.builder(itemCount: data6.length,
+  //  itemBuilder: (context,i){
      
-    });
-  }
-
-  _otherProduk() {
-
-data2==null?Container():
-ListView.builder(
-  itemCount: data2.length,
-  itemBuilder: (context,i){
+   
     return Container(
       height: 300,
       width: double.infinity,
@@ -873,7 +1096,8 @@ ListView.builder(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10))),
-                            child: Image.network(data2[i]['foto']==null?'http://siplah.mascitra.co.id/siplah/assets/images/no-image.png':data2[i]['foto'],
+                            child: Image.network(
+                               "https://ecs7.tokopedia.net/img/cache/700/product-1/2019/5/3/370667535/370667535_e643982c-71ee-49f4-99a6-8e96f30f5038_1080_1080.jpg",
                               fit: BoxFit.fill,
                             )),
                         Positioned(
@@ -959,8 +1183,7 @@ ListView.builder(
         ],
       ),
     );
-    }
-);
+   // });
   }
 
  
@@ -989,7 +1212,7 @@ ListView.builder(
             height: 100,
             width: double.infinity,
             child: Text(
-          'deskripsi '+ widget.nama,
+           widget.nama,
               overflow: TextOverflow.ellipsis,
               maxLines: 5,
               textAlign: TextAlign.left,
