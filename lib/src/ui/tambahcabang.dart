@@ -76,7 +76,17 @@ class _TambahCabangState extends State<TambahCabang> {
   }
 
   //end
-
+//controller
+  final namacab = TextEditingController();
+  final namapenanggung = TextEditingController();
+  final email = TextEditingController();
+  final telpn = TextEditingController();
+  final provinsi = TextEditingController();
+  final kabupaten = TextEditingController();
+  final alamatleng = TextEditingController();
+  final password = TextEditingController();
+  final konfirmasipass = TextEditingController();
+  final logo = TextEditingController();
   //edit
   Future<http.Response> _edit(String idx,nama) async {
     
@@ -122,17 +132,7 @@ class _TambahCabangState extends State<TambahCabang> {
     }
       _getCurrentLocation();
 
-  //controller
-  final namacab = TextEditingController();
-  final namapenanggung = TextEditingController();
-  final email = TextEditingController();
-  final telpn = TextEditingController();
-  final provinsi = TextEditingController();
-  final kabupaten = TextEditingController();
-  final alamatleng = TextEditingController();
-  final password = TextEditingController();
-  final konfirmasipass = TextEditingController();
-  final logo = TextEditingController();
+  
 
   //
   
@@ -379,11 +379,18 @@ class _TambahCabangState extends State<TambahCabang> {
           "user_id": "" + nama,
           //"id": "" + nama
         });
-    //print(response.body);
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['data'];
+       namacab.text= data[0]['nama'];
+      namapenanggung.text=data[0]['nama_penanggung_jawab'];
+ email.text=data[0]['email'];
+ telpn.text=data[0]['telepon'];
+  alamatleng.text=data[0]['alamat'];
+  
+
     });
   }
 

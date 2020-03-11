@@ -23,14 +23,7 @@ class AlamatPemesan extends StatefulWidget {
 
 class _AlamatPemesan extends State<AlamatPemesan> {
   //edit
-  Future<http.Response> _edit(String idx, nama) async {
-    provinceBloc.provinceFetchAll();
-
-    var placeholder = ['Loading...', 'Loading...', 'Loading...'];
-    String prop, kab, kec;
-
-    //controller
-    final namaket = TextEditingController();
+   final namaket = TextEditingController();
     final namapenerima = TextEditingController();
     final telppenerima = TextEditingController();
     final kodepospenerima = TextEditingController();
@@ -38,6 +31,14 @@ class _AlamatPemesan extends State<AlamatPemesan> {
     final kabupaten = TextEditingController();
     final alamatleng = TextEditingController();
 
+  Future<http.Response> _edit(String idx, nama) async {
+    provinceBloc.provinceFetchAll();
+
+    var placeholder = ['Loading...', 'Loading...', 'Loading...'];
+    String prop, kab, kec;
+
+    //controller
+   
     //
 
     Future<http.Response> update_api() async {
@@ -330,11 +331,17 @@ String z;
           "user_id": "" + nama,
           //"id": "" + nama
         });
-    //print(response.body);
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['data'];
+       namaket.text=data[0]['nama'];
+       namapenerima.text=data[0]['penerima_nama'];
+       kodepospenerima.text=data[0]['kode_pos'];
+       telppenerima.text=data[0]['penerima_no_hp'];
+       alamatleng.text=data[0]['alamat'];
+
     });
   }
 

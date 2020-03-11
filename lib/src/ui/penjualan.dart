@@ -347,7 +347,7 @@ String z;
                                               MaterialPageRoute(
                                                   builder:
                                                       (BuildContext context) =>
-                                                          DetailPenjualan()));
+                                                          DetailPenjualan(id:int.parse(data[i]['id']))));
                                         },
                                       ),
                                     ),
@@ -391,11 +391,319 @@ String z;
 }
 
 class DetailPenjualan extends StatefulWidget {
+  final int id;
+
+  const DetailPenjualan({Key key, this.id}) : super(key: key);
   @override
   _DetailPenjualanState createState() => _DetailPenjualanState();
 }
 
 class _DetailPenjualanState extends State<DetailPenjualan> {
+  String nama;
+  List data, data2;
+  Future<String> getJsonData() async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull('https://siplah.mascitra.co.id/api/mitra/penjualan/tampil'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "user_id": "" + nama,
+          "id":widget.id.toString()
+        });
+    print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      data = convertDataToJson['Data'];
+      data2 = convertDataToJson['Data'][0]['produk'];
+    });
+  }
+  getCredential() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      nama = pref.getString("id");
+      getJsonData();
+    });
+    //print("id o= " + nama);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCredential();
+  }
+    String produkid;
+//tambahnego
+  Future<String> tambahnego(String id) async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull(
+            'http://siplah.mascitra.co.id/api/sekolah/pesanan/nego_tambah'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "transaksi_produk_id": id,
+          "harga_nego": myController.text,
+          "user_id": nama,
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      getNego(id);
+    });
+  }
+
+  final myController = TextEditingController();
+  String idnego;
+  Future<String> setujui(String idvoid) async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull(
+            'http://siplah.mascitra.co.id/api/sekolah/pesanan/nego_setuju'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "nego_id": idvoid,
+          "user_id": nama,
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+    });
+  }
+
+  List negosiasi;
+  Future<String> getNego(String id) async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull(
+            'http://siplah.mascitra.co.id/api/mitra/penjualan/nego_tampil'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "transaksi_produk_id": id,
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      negosiasi = convertDataToJson['Data'];
+    });
+  }
+  
+  void shownego(id) {
+     Future<String> getNego(String id) async {
+    var response = await http.post(
+        //Encode the url
+
+        Uri.encodeFull(
+            'http://siplah.mascitra.co.id/api/mitra/penjualan/nego_tampil'),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: {
+          "transaksi_produk_id": id,
+        });
+    //print(response.body);
+    setState(() {
+      // ignore: deprecated_member_use
+      var convertDataToJson = json.decode(response.body);
+      negosiasi = convertDataToJson['Data'];
+    });
+  }
+  print(negosiasi.length.toString());
+    // flutter defined function
+ getNego(id);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Negosiasi"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                height: 150,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                    itemCount: negosiasi.length,
+                    itemBuilder: (context, i) {
+                      int a = i + 1;
+                      return Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.grey,
+                            height: 2,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text(a.toString() + "."),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                  child: Text(negosiasi[i]['nego'] + " ")),
+                              SizedBox(
+                                width: 50,
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  negosiasi[i]['user_setuju'] == "1"
+                                      ? Container(
+                                          height: 30,
+                                          width: 150,
+                                          child: Center(
+                                              child: Text(
+                                            "sekolah : Setuju",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                          decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                        )
+                                      : Container(
+                                          height: 30,
+                                          width: 150,
+                                          child: Center(
+                                              child: Text(
+                                            "sekolah : -",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                          decoration: BoxDecoration(
+                                              color: Colors.lightBlue,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                        ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  negosiasi[i]['mitra_setuju'] == "1"
+                                      ? Container(
+                                          height: 30,
+                                          width: 150,
+                                          child: Center(
+                                              child: Text(
+                                            "mitra : setuju",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                          decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            setujui(negosiasi[i]['id']);
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: 150,
+                                            child: Center(
+                                                child: Text(
+                                              "mitra : -",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightBlue,
+                                                borderRadius:
+                                                    BorderRadius.circular(50)),
+                                          ),
+                                        )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 150,
+                    child: new TextFormField(
+                      controller: myController,
+                      keyboardType: TextInputType
+                          .number, // Use email input type for emails.
+                      decoration: new InputDecoration(
+                          hintText: '100000', labelText: 'Nego Berapa'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      tambahnego(id);
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 100,
+                      child: Center(
+                          child: Text(
+                        "Simpan",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(50)),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -403,13 +711,14 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Detail Penjualan", style: TextStyle(color: Colors.white)),
       ),
-      body: ListView(
+      body: data==null?Container():data2==null?Container():ListView(
         children: <Widget>[
           Container(
             height: 100,
             child: ListView.builder(
-                itemCount: 1,
+                itemCount: data.length,
                 itemBuilder: (context, i) {
+                 
                   return Row(
                     children: <Widget>[
                       Padding(
@@ -422,7 +731,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("PO-1"),
+                              child: Text(data[i]['purchase_order']==null?"":data[i]['purchase_order']),
                             )
                           ],
                         ),
@@ -438,7 +747,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "INV-201912250951",
+                                data[i]['no_invoice']==null?"":data[i]['no_invoice'],
                                 style: TextStyle(fontSize: 12),
                               ),
                             )
@@ -455,7 +764,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("JBR0002878743",
+                              child: Text(data[i]['no_resi']==null?"":data[i]['no_resi'],
                                   style: TextStyle(fontSize: 12)),
                             )
                           ],
@@ -489,10 +798,10 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
             height: 10,
           ),
           Container(
-            height: 300,
+            height: 100*data2.length.toDouble(),
             child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
-                itemCount: 3,
+                itemCount: data2.length,
                 itemBuilder: (context, i) {
                   return Card(
                       child: Row(
@@ -502,34 +811,37 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                           Container(
                               height: 40,
                               child: Image.network(
-                                  "http://siplah.mascitra.co.id/assets/images/user.ico")),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Bukan Dylan"),
+                                  data2[i]['foto']==null?"":data2[i]['foto'])),
+                          Container(
+                            width: MediaQuery.of(context).size.width/3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(data2[i]['nama']==null?"":data2[i]['nama'],maxLines: 4,),
+                            ),
                           )
                         ],
                       ),
                       Column(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(2.0),
                             child: Text("Jumlah"),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("1"),
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(data2[i]['jumlah']==null?"":data2[i]['jumlah']),
                           ),
                         ],
                       ),
                       Column(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(2.0),
                             child: Text("Harga Barang"),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Rp. 70000"),
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(data2[i]['harga']==null?"":data2[i]['harga']),
                           ),
                         ],
                       ),
@@ -537,20 +849,45 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                       Column(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(2.0),
                             child: Text("Total"),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(2.0),
                             child: Text("Rp. 70000"),
                           ),
                         ],
                       ),
                       SizedBox(width: 5,),
-                      RaisedButton(
-                        child: Text("Nego"),
-                        onPressed: () {},
-                      ),
+                     Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                7,
+                                        child: data2[i]['nego'] != '1'
+                                            ? RaisedButton(
+                                                color: Colors.blueGrey,
+                                                onPressed: () {},
+                                                child: Text(
+                                                  "NEGO",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 10),
+                                                ),
+                                              )
+                                            : RaisedButton(
+                                                color: Colors.blue,
+                                                onPressed: () {
+                                                  getNego(data2[i]['id']);
+                                                  shownego(data2[i]['id']);
+                                                },
+                                                child: Text("NEGO",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 10)),
+                                              )),
+                                  ),
                     ],
                   ));
                 }),
@@ -563,30 +900,62 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
             height: 10,
           ),
 
-          Container(height: 600, child: ListView.builder(
+          Container(height: 600,
+          width: MediaQuery.of(context).size.width, child: ListView.builder(
+            scrollDirection: Axis.vertical,
             itemCount: 1,
             itemBuilder: (context,i){
               return Container(
-                child: Row(children: <Widget>[
-                  Container(width: MediaQuery.of(context).size.width/2, child: Column(children: <Widget>[
-                    Text("SMK PGRI 5 Jember "),
-                    Text("Jl. Krakatau No.60, Pd. Waluh, Kencong, Kabupaten Jember, Jawa Timur 68167")
+                child: Column(children: <Widget>[
+                  Container( child: Row(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(data[i]['data_alamat_pengiriman_penerima_nama']==null?"":data[i]['data_alamat_pengiriman_penerima_nama']),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(data[i]['data_alamat_pengiriman_alamat']==null?"":data[i]['data_alamat_pengiriman_alamat']),
+                    )
                   ],),),
-                  Container(child: Column(children: <Widget>[
-                    Text("Kurir"),
-                    Text("JNT")
+                  Container(child: Row(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Kurir"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(data[i]['data_kurir_nama']==null?"":data[i]['data_kurir_nama']),
+                    )
                   ],),),
-                    Container(child: Column(children: <Widget>[
-                    Text("Ongkos Kirim"),
-                    Text("Rp. 7000")
+                    Container(child: Row(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Ongkos Kirim"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(data[i]['kurir_ongkir']==null?"":data[i]['kurir_ongkir']),
+                    )
                   ],),),
-                    Container(child: Column(children: <Widget>[
-                    Text("Kode Marketing"),
-                    Text("191029052437")
+                    Container(child: Row(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Kode Marketing"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(data[i]['marketing_kode']==null?"":data[i]['marketing_kode']),
+                    )
                   ],),),
-                    Container(child: Column(children: <Widget>[
-                    Text("Nama Marketing"),
-                    Text("M. Nur Wahyu")
+                    Container(child: Row(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Nama Marketing"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(data[i]['marketing_nama']==null?"":data[i]['marketing_nama']),
+                    )
                   ],),),
                     
 

@@ -465,25 +465,29 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       children: <Widget>[
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.white70,
+                              color: Colors.blue,
                               borderRadius: BorderRadius.circular(20)),
                           padding: const EdgeInsets.all(20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
+                               Container(
+                                height: 80,
+                                width: 20,
+                                decoration: new BoxDecoration(
+                                    image: new DecorationImage(
+                                        image:
+                                            AssetImage("src/image/Icons_SIPLAH_JPSTORE_2020.png"),
+                                        fit: BoxFit.fill)),
+                              ),
                               RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(children: [
-                                  TextSpan(
-                                      text: "SIPLAH",
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 30)),
+                                
                                   TextSpan(
                                       text:
-                                          "\nDistributor Buku-Buku K13 Temprina",
+                                          "\nMasukkan Akun Kamu Disini",
                                       style: TextStyle(
                                           color: Colors.black54,
                                           fontWeight: FontWeight.w400,
@@ -546,19 +550,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 ),
                               ), //Login
 //                        SizedBox(height:),
-                              MaterialButton(
-                                onPressed: () {},
-                                color: Color(0xFFDBD529),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    "Login Dapodik",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ), //Login Dapodik button
+                              
                               SizedBox(height: 10),
                               Center(
                                 child: Row(
@@ -592,7 +584,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       TextSpan(
                                           text: "Daftar disini.",
                                           style: TextStyle(
-                                              color: Color(0xFF3FCB9B),
+                                              color: Colors.white,
                                               fontWeight: FontWeight.w500),
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () => Navigator.push(
@@ -652,10 +644,19 @@ class _RegisterState extends State<Register> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                   Container(
+                                height: 80,
+                              width: 300,
+                                decoration: new BoxDecoration(
+                                    image: new DecorationImage(
+                                        image:
+                                            AssetImage("src/image/Icons_SIPLAH_JPSTORE_2020.png"),
+                                        fit: BoxFit.fill)),
+                              ),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
-                      "Register SIPLAH JPSTORE",
+                      "Daftarkan Akunmu Disini",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 25,

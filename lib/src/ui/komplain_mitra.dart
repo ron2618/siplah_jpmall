@@ -215,15 +215,16 @@ class _KomplainMitraState extends State<KomplainMitra>{
         Uri.encodeFull(
             'http://siplah.mascitra.co.id/api/mitra/komplain/transaksi'),
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          
           "API-App": "siplah_jpmall.id",
           "Api-Key": "4P1_7Pm411_51p114h",
           "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
         },
         body: {
-          "mitra_id": "" + nama,
+          "mitra_id": nama,
         });
-    //print(response.body);
+        print(nama);
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
@@ -235,8 +236,9 @@ class _KomplainMitraState extends State<KomplainMitra>{
     final pref = await SharedPreferences.getInstance();
     setState(() {
       nama = pref.getString("id");
-      getJsonData();
+      
     });
+    getJsonData();
     //print("id o= " + nama);
   }
       RefreshController _refreshController =

@@ -25,6 +25,19 @@ class Marketing extends StatefulWidget {
 
 class _MarketingState extends State<Marketing> {
   //edit
+  
+    //controller
+    final namamarketing = TextEditingController();
+    final npwp = TextEditingController();
+    final email = TextEditingController();
+    final telpn = TextEditingController();
+    final provinsi = TextEditingController();
+    final kabupaten = TextEditingController();
+    final alamatleng = TextEditingController();
+    final jeniskel = TextEditingController();
+    final logo = TextEditingController();
+    final kategori = TextEditingController();
+
   Future<http.Response> _edit(String idx, nama) async {
     provinceBloc.provinceFetchAll();
     
@@ -54,18 +67,6 @@ class _MarketingState extends State<Marketing> {
       });
     }
  
-    //controller
-    final namamarketing = TextEditingController();
-    final npwp = TextEditingController();
-    final email = TextEditingController();
-    final telpn = TextEditingController();
-    final provinsi = TextEditingController();
-    final kabupaten = TextEditingController();
-    final alamatleng = TextEditingController();
-    final jeniskel = TextEditingController();
-    final logo = TextEditingController();
-    final kategori = TextEditingController();
-
     //
 
     Future<http.Response> daftar_api() async {
@@ -395,11 +396,19 @@ class _MarketingState extends State<Marketing> {
           "user_id": "" + nama,
           //"id": "" + nama
         });
-    //print(response.body);
+    print(response.body);
     setState(() {
       // ignore: deprecated_member_use
       var convertDataToJson = json.decode(response.body);
       data = convertDataToJson['data'];
+ namamarketing.text=data[0]['nama'];
+ npwp.text=data[0]['npwp'];
+ email.text =data[0]['email'];
+     telpn.text = data[0]['no_telepon'];
+     alamatleng.text = data[0]['alamat'];
+     jeniskel.text   = data[0]['jenis_kelamin'];
+    kategori.text = data[0]['kategori'];
+
     });
   }
 
@@ -408,7 +417,7 @@ class _MarketingState extends State<Marketing> {
     setState(() {
       nama = pref.getString("id");
     });
-    //print("id o= " + nama);
+    getJsonData();
   }
 
   //refreshcontroller
@@ -420,11 +429,15 @@ class _MarketingState extends State<Marketing> {
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
-
+ @override
+  void initState() {
+    super.initState();
+    getCredential();
+  }
   @override
   Widget build(BuildContext context) {
-    getCredential();
-    getJsonData();
+   
+    
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
