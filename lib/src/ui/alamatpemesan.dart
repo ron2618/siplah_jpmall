@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:siplah_jpmall/src/bloc/kabupaten_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/kecamatan_bloc.dart';
 import 'package:siplah_jpmall/src/bloc/provinsi_bloc.dart';
@@ -396,8 +397,15 @@ String z;
                   style: TextStyle(color: Colors.white)),
             ),
             body: data == null
-                      ? Column(
-                children: <Widget>[Center(child: CircularProgressIndicator())])
+                      ?
+                      Center(
+                        child: Shimmer.fromColors(
+                          child: Text("Loading...", style: TextStyle(fontSize: 15),),
+                          baseColor: Colors.white,
+                          highlightColor: Colors.grey),
+                      )
+                //       Column(
+                // children: <Widget>[Center(child: CircularProgressIndicator())])
                       : SmartRefresher(
                     enablePullDown: true,
                     enablePullUp: true,
@@ -405,7 +413,6 @@ String z;
                     controller: _refreshController,
                     onRefresh: _onRefresh,
                     child: Container(
-                     
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
                         // physics: ScrollPhysics(),

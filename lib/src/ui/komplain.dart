@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 import 'package:siplah_jpmall/src/models/get_token.dart';
 
 class  KomplainSekolah extends StatefulWidget{
@@ -302,7 +304,9 @@ class _KomplainState extends State<KomplainSekolah>{
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Komplain", style: TextStyle(color: Colors.white)),
       ),  
-      body:data==null?Container(): SmartRefresher(
+      body:data==null?
+      Center(child: Shimmer.fromColors(child: Text("Loading...", style: TextStyle(fontSize: 15),), baseColor: Colors.white, highlightColor: Colors.grey))
+      : SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
           header: WaterDropHeader(),
@@ -321,10 +325,10 @@ class _KomplainState extends State<KomplainSekolah>{
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
                   child: SizedBox(
-                      height: 115,
-                      width: 100,
+                      height: 107,
+                      width: MediaQuery.of(context).size.width,
                       child: Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: const EdgeInsets.only(left:5.0),
                         child: Column(children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.all(3.0),
@@ -336,7 +340,8 @@ class _KomplainState extends State<KomplainSekolah>{
                                       children: <Widget>[
                                         Align(
                                           alignment: Alignment.topLeft,
-                                          child: Text(data[i]['komplain_id']==null?"":data[i]['komplain_id']),
+                                          child: Text(
+                                            data[i]['komplain_id']==null?"":data[i]['komplain_id']),
                                         )
                                       ],
                                     ),
@@ -344,7 +349,7 @@ class _KomplainState extends State<KomplainSekolah>{
                                       children: <Widget>[
                                         Align(
                                           alignment: Alignment.topLeft,
-                                          child: Text(data[i]['no_invoice']),
+                                          child: Text("No Invoice:           "+data[i]['no_invoice']),
                                         )
                                       ],
                                     ),
@@ -367,7 +372,7 @@ class _KomplainState extends State<KomplainSekolah>{
                                     child: Container(
                                       child: IconButton(
                                         icon: Icon(
-                                          Icons.remove_red_eye,
+                                          CupertinoIcons.eye_solid,
                                           color: Colors.blue,
                                         ),
                                         onPressed: () {
