@@ -181,7 +181,7 @@ class _LihatCabang extends State<LihatCabang> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          "List Mitra",
+          "List Cabang Mitra",
           style: TextStyle(color: Colors.white),
         ),
       ),
