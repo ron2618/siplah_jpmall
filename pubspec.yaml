@@ -37,8 +37,8 @@ dependencies:
   image_picker: ^0.6.2+1
   flutter_html: ^0.8.1
   pull_to_refresh: ^1.5.7
-  
-  
+  shimmer: ^1.0.1
+
 
 dev_dependencies:
   flutter_test:
