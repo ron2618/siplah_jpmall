@@ -2468,6 +2468,40 @@ class _DetailPesananState extends State<DetailPesanan> {
                                                               ),
                                                             ),
                                                             Padding(
+                                                              padding: EdgeInsets.only(top:5),
+                                                              child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: <Widget>[
+                                                                  Text("status Nego: "),
+                                                                  Container(
+                                                                    // width:
+                                                                    //     MediaQuery.of(context).size.width /
+                                                                    //         7,
+                                                                    child: produk[i]['nego'] != '1'
+                                                                        ? RaisedButton(
+                                                                            color: Colors.blueGrey,
+                                                                            onPressed: () {},
+                                                                            child: Text(
+                                                                              "NEGO",
+                                                                              style: TextStyle(
+                                                                                  color: Colors.white,
+                                                                                  fontSize: 10),
+                                                                            ),
+                                                                          )
+                                                                        : RaisedButton(
+                                                                            color: Colors.blue,
+                                                                            onPressed: () {
+                                                                              shownego();
+                                                                            },
+                                                                            child: Text("NEGO",
+                                                                                style: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                    fontSize: 10)),
+                                                                          )),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
@@ -2570,34 +2604,7 @@ class _DetailPesananState extends State<DetailPesanan> {
                                                           //           //         10,
                                                           // child: Text(produk[i]['harga'])),
                                                           //     ),
-                                                          //     Padding(
-                                                          //       padding: const EdgeInsets.all(8.0),
-                                                          //       child: Container(
-                                                          //           // width:
-                                                          //           //     MediaQuery.of(context).size.width /
-                                                          //           //         7,
-                                                          //           child: produk[i]['nego'] != '1'
-                                                          //               ? RaisedButton(
-                                                          //                   color: Colors.blueGrey,
-                                                          //                   onPressed: () {},
-                                                          //                   child: Text(
-                                                          //                     "NEGO",
-                                                          //                     style: TextStyle(
-                                                          //                         color: Colors.white,
-                                                          //                         fontSize: 10),
-                                                          //                   ),
-                                                          //                 )
-                                                          //               : RaisedButton(
-                                                          //                   color: Colors.blue,
-                                                          //                   onPressed: () {
-                                                          //                     shownego();
-                                                          //                   },
-                                                          //                   child: Text("NEGO",
-                                                          //                       style: TextStyle(
-                                                          //                           color: Colors.white,
-                                                          //                           fontSize: 10)),
-                                                          //                 )),
-                                                          //     ),
+                                                             
                                                           // Padding(
                                                           //   padding: const EdgeInsets.all(8.0),
                                                           //   child: Container(
