@@ -862,6 +862,7 @@ class _DetailPenjualanState extends State<DetailPenjualan> {
                      Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
+                                      
                                         width:
                                             MediaQuery.of(context).size.width /
                                                 7,

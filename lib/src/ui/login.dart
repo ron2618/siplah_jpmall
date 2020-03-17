@@ -619,20 +619,43 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+    bool _status = true;
+  final FocusNode myFocusNode = FocusNode();
+   bool _isButtonDisabled = true;
    bool _obscureText = true;
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
+   void Ubah(String nilai){
+    setState(() {
+      check = nilai;
+      switch (nilai) {
+        case 'Mitra' :
+          pilihan = nilai;
+          _status= false;
+          break;
+        case 'Sekolah':
+        pilihan = nilai;
+        _status = true;
+        break;
+        default :
+        pilihan = null;
+      }
+      debugPrint(pilihan);
+    });
+  }
   var katPel = ['1', '2'];
   var codetlp = ['+62', '+81'];
+  
+  final npsn = TextEditingController();
   final nama = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
   final konfirmasi = TextEditingController();
   final telp = TextEditingController();
-  String slctdKatPel, code;
+  String slctdKatPel, code, check,pilihan;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -666,6 +689,46 @@ class _RegisterState extends State<Register> {
                   SizedBox(
                     height: 10,
                   ),
+                   Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 25.0,
+                                              right: 25.0,
+                                              top: 20.0),
+                                          child: new Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: <Widget>[
+                                              new Flexible(
+                                                child: 
+                                                 new Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      new Radio(
+                                                        value: 'Mitra',
+                                                        groupValue: check,
+                                                        onChanged: Ubah,
+                                                      ),
+                                                      new Text('Mitra'),
+                                                      new Radio(
+                                                        value: 'Sekolah',
+                                                        groupValue:check,
+                                                        onChanged: Ubah,
+                                                      ),
+                                                      new Text('Sekolah'),
+                                                      ]
+                                                ) 
+                                                    ),
+                                            ],
+                                          )),
+                                  
+                       
+                                                  _status?        
+                                             CustomTile(
+                    "No NPSN",
+                    child: TextField(
+                      controller: npsn,
+                      decoration: InputDecoration(border: InputBorder.none),
+                    ),
+                  ):
                   CustomTile(
                     "Kategori Pelanggan",
                     child: DropdownButtonHideUnderline(
@@ -685,6 +748,10 @@ class _RegisterState extends State<Register> {
                           }),
                     ),
                   ),
+                  
+
+                                              
+               
                   CustomTile(
                     "Nama",
                     child: TextField(
@@ -809,12 +876,14 @@ class _RegisterState extends State<Register> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => Register2(
+                                  npsn : npsn.text,
                                   nama: nama.text,
                                   email: email.text,
                                   konfirmasi: konfirmasi.text,
                                   password: password.text,
                                   telp: telp.text,
-                                  ketpel :slctdKatPel
+                                  ketpel :slctdKatPel,
+                                  pilihan : pilihan
                                 )),
                         (_) => false),
                     child: Text(
@@ -828,6 +897,38 @@ class _RegisterState extends State<Register> {
           ),
         ));
   }
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+
+    myFocusNode.dispose();
+
+    super.dispose();
+  }
+  Widget _getEditIcon() {
+    return new GestureDetector(
+      child: new Container(
+          // backgroundColor: Colors.red,
+          // radius: 14.0,
+          child: new Row(
+        children: <Widget>[
+          Icon(
+            Icons.edit,
+            color: Colors.green,
+            size: 20.0,
+          ),
+          Text("Edit")
+        ],
+      )),
+      onTap: () {
+        setState(() {
+          _isButtonDisabled = false;
+          _status = false;
+        });
+      },
+    );
+  }
+
 }
 
 class CustomTile extends StatelessWidget {
@@ -903,6 +1004,8 @@ class CustomTile extends StatelessWidget {
 }
 
 class Register2 extends StatefulWidget {
+  final String npsn;
+  final String pilihan;
   final String nama;
   final String email;
   final String password;
@@ -910,7 +1013,9 @@ class Register2 extends StatefulWidget {
   final String telp;
   final String ketpel;
 
-  const Register2({Key key, this.nama, this.email, this.password, this.konfirmasi, this.telp, this.ketpel}) : super(key: key);
+  const Register2({Key key, this.npsn, this.pilihan, this.nama, this.email, this.password, this.konfirmasi, this.telp, this.ketpel}) : super(key: key);
+
+ 
 
   @override
   _Register2State createState() => _Register2State();
@@ -976,6 +1081,48 @@ class _Register2State extends State<Register2> {
     // print("${response.statusCode}");
 
     // print("${response.body}");
+    Map<String, dynamic> map = jsonDecode(response.body);
+    if (map["Error"] == true || map["Error"] == "true") {
+      _showAlert(context);
+    } else {
+      // savedata();
+      _berhasil(context);
+    }
+    return response;
+  }
+  
+  Future<http.Response> daftarsekolah() async {
+    var url = 'http://siplah.mascitra.co.id/api/user/daftar_sekolah';
+
+    Map data = {
+      'npsn':widget.npsn,
+      'nama': widget.nama,
+      'email': widget.email,
+      'password': widget.password,
+      'password_konfirmasi': widget.konfirmasi,
+      'provinsi_id': prop,
+      'kabupaten_id': kab,
+      'kecamatan_id': kec,
+      'alamat': alamat.text,
+      'kode_pos': kodepos.text,
+      'telepon': widget.telp,
+      'kategori_pelanggan': 2,
+      'type': widget.ketpel
+    };
+    //encode Map to JSON
+    var body = json.encode(data);
+
+    var response = await http.post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "API-App": "siplah_jpmall.id",
+          "Api-Key": "4P1_7Pm411_51p114h",
+          "API-Token": "575696f2ed816e00edbfa90f917c6f757e5ce05a"
+        },
+        body: body);
+    // print("${response.statusCode}");
+
+     print("${response.body}");
     Map<String, dynamic> map = jsonDecode(response.body);
     if (map["Error"] == true || map["Error"] == "true") {
       _showAlert(context);
@@ -1206,7 +1353,9 @@ class _Register2State extends State<Register2> {
                       ),
                       MaterialButton(
                         onPressed: () {
-                          daftar_api();
+                          widget.pilihan=="Mitra"?
+                          daftar_api():
+                          daftarsekolah();
                         },
                         child: Text(
                           "Selesai",
